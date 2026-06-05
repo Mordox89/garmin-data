@@ -50,10 +50,20 @@ def plan_start():
 
 
 def api(path, params=None):
-    r = requests.get(BASE + path, params=params or {}, auth=("API_KEY", KEY), timeout=30)
+    r = requests.get(
+        BASE + path,
+        params=params or {},
+        auth=("API_KEY", KEY),
+        timeout=30
+    )
+
+    if not r.ok:
+        print("URL:", r.url)
+        print("STATUS:", r.status_code)
+        print("BODY:", r.text)
+
     r.raise_for_status()
     return r.json()
-
 
 def hms(seconds):
     s = int(round(seconds)); return f"{s//3600}:{(s%3600)//60:02d}:{s%60:02d}"
