@@ -92,12 +92,17 @@ def main():
     race = dt.date.fromisoformat(DEF_RACE)
     weeks_done = max(1, min(WEEKS, (monday(today) - start).days // 7 + 1))
 
+    # The API requires oldest <= newest. Before the block starts (today < start)
+    # there is no data yet, so query a valid (empty) range instead of crashing.
+    api_oldest = min(start, today).isoformat()
+    api_newest = today.isoformat()
+
     acts = api(f"/athlete/{ATHLETE}/activities",
-               {"oldest": start.isoformat(), "newest": today.isoformat(),
+               {"oldest": api_oldest, "newest": api_newest,
                 "fields": "name,type,start_date_local,distance,moving_time,elapsed_time,"
                           "icu_training_load,average_heartrate,decoupling,icu_hr_zone_times"})
     well = api(f"/athlete/{ATHLETE}/wellness",
-               {"oldest": start.isoformat(), "newest": today.isoformat()})
+               {"oldest": api_oldest, "newest": api_newest})
 
     # ---------- volume / load / consistency ----------
     vol = [0.0] * WEEKS; longrun = [0.0] * WEEKS; tss = [0.0] * WEEKS
