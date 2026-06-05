@@ -107,6 +107,11 @@ def main():
     api_oldest = min(start, today).isoformat()
     api_newest = today.isoformat()
 
+    print("START =", start)
+    print("TODAY =", today)
+    print("API_OLDEST =", api_oldest)
+    print("API_NEWEST =", api_newest)
+
     acts = api(f"/athlete/{ATHLETE}/activities",
                {"oldest": api_oldest, "newest": api_newest,
                 "fields": "name,type,start_date_local,distance,moving_time,elapsed_time,"
