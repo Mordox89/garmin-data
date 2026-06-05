@@ -2,7 +2,7 @@ name: Sync training data
 
 on:
   schedule:
-    - cron: "0 5 * * *"        # every day at 05:00 UTC (~06:00–07:00 NL)
+    - cron: "0 8 * * *"        # every day at 08:00 UTC (~10:00–11:00 NL)
   workflow_dispatch:            # lets you run it by hand from the Actions tab
 
 permissions:
