@@ -8,7 +8,7 @@ Secrets / config (env vars; sensible defaults baked in for this block):
   INTERVALS_API_KEY      required
   PLAN_START   default 2026-06-08   (first Monday of the block)
   RACE_DATE    default 2026-10-11
-  PLAN_WEEKS   default 18
+  PLAN_WEEKS   default 18W
   UNIT         default km           ("km" or "mi")
   HR_TARGET    default 150          (bpm reference for the pace-at-fixed-HR panel)
   PLAN_MILEAGE optional comma list of planned weekly distance (the grey plan curve)
