@@ -1,1 +1,41 @@
+name: Sync training data
 
+on:
+  schedule:
+    - cron: "0 11 * * *"      # 13:00 Amsterdam (summer) / 12:00 (winter)
+  workflow_dispatch:            # lets you run it by hand from the Actions tab
+
+permissions:
+  contents: write               # needed to commit the refreshed data.json
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - name: Fetch intervals.icu data
+        env:
+          INTERVALS_ATHLETE_ID: ${{ secrets.INTERVALS_ATHLETE_ID }}
+          INTERVALS_API_KEY:    ${{ secrets.INTERVALS_API_KEY }}
+          # optional overrides — set as repo Variables (Settings > Variables) if you want:
+          PLAN_START:   ${{ vars.PLAN_START }}
+          PLAN_WEEKS:   ${{ vars.PLAN_WEEKS }}
+          RACE_DATE:    ${{ vars.RACE_DATE }}
+          UNIT:         ${{ vars.UNIT }}
+          PLAN_MILEAGE: ${{ vars.PLAN_MILEAGE }}
+        run: python fetch_data.py
+
+      - name: Commit updated data.json
+        run: |
+          git config user.name  "telemetry-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data.json
+          git diff --staged --quiet || git commit -m "Daily data sync: $(date -u +%Y-%m-%d)"
+          git push
