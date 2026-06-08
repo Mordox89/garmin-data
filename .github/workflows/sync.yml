@@ -3,7 +3,6 @@ name: Sync training data
 on:
   schedule:
     - cron: "0 11 * * *"      # 13:00 Amsterdam (summer) / 12:00 (winter)
-  workflow_dispatch:            # lets you run it by hand from the Actions tab
 
 permissions:
   contents: write               # needed to commit the refreshed data.json
