@@ -203,7 +203,6 @@
   </div></div>
 
   <div class="panel-set" id="body"><div class="grid">
-    <div class="card c5"><h2><span class="dot cy"></span>Shoe Mileage Log</h2><div class="cap">Rotation life + race-shoe break-in window (~50–80 km: broken in, not dead).</div><div class="shoe" id="shoe"></div></div>
     <div class="card c4"><h2><span class="dot"></span>Habits &amp; Recovery</h2><div class="cap">Strength 2×/wk · daily mobility, foam roll &amp; hydration.</div><div class="heat" id="heat"></div><div class="streak" id="m-streak"></div></div>
     <div class="card c3"><h2><span class="dot"></span>Weight Trend</h2><div class="cap">Tracking toward race-weight zone.</div><div class="chart-h sm"><canvas id="wtChart"></canvas></div><div style="display:flex;align-items:baseline;gap:8px;margin-top:10px"><span class="big" id="m-wt">—</span><span class="unit">kg</span></div></div>
   </div></div>
@@ -233,7 +232,6 @@ const SAMPLE={
   consistency:[['rest','easy','qual','easy','rest','easy','long'],['easy','qual','easy','rest','easy','easy','long'],['rest','easy','qual','easy','easy','rest','long'],['easy','rest','easy','qual','rest','easy','long'],['easy','qual','easy','easy','rest','easy','long'],['easy','qual','easy','easy','easy','qual','long'],['rest','easy','qual','easy','rest','easy','long'],['easy','qual','easy','miss','rest','easy','long']],
   runcount:'47 runs · 12 rest days · 1 missed',
   week7:[{d:'Today',t:'easy',ds:'Easy aerobic',km:'8 km · Z2'},{d:'Tue',t:'qual',ds:'Intervals',km:'6×1km @ thr'},{d:'Wed',t:'easy',ds:'Recovery',km:'6 km'},{d:'Thu',t:'qual',ds:'Tempo',km:'10 km w/ 5 @ MP'},{d:'Fri',t:'rest',ds:'Rest + mobility',km:'—'},{d:'Sat',t:'easy',ds:'Easy aerobic',km:'8 km'},{d:'Sun',t:'long',ds:'Long run',km:'30 km'}],
-  shoes:[{nm:'ASICS Metaspeed Sky Tokyo',rc:'race',km:22,max:65,st:'breaking in · 43 km to go',col:'#45c8e0'},{nm:'Daily Trainer',rc:'daily',km:412,max:700,st:'healthy',col:'#34e07d'},{nm:'Tempo / workout',rc:'work',km:286,max:600,st:'healthy',col:'#34e07d'},{nm:'Easy / recovery',rc:'daily',km:548,max:650,st:'retire soon',col:'#ffb43a'}],
   habits:[{nm:'Strength',cells:[['hit','✓✓'],['hit','✓✓'],['half','✓'],['hit','✓✓'],['hit','✓✓'],['hit','✓✓'],['hit','✓✓'],['hit','✓✓']]},{nm:'Mobility',cells:[['hit','7'],['hit','7'],['hit','6'],['half','5'],['hit','7'],['hit','7'],['hit','7'],['hit','7']]},{nm:'Foam roll',cells:[['hit','6'],['hit','7'],['half','4'],['hit','6'],['hit','7'],['hit','6'],['hit','7'],['hit','7']]},{nm:'Hydration',cells:[['hit','✓'],['hit','✓'],['hit','✓'],['hit','✓'],['half','~'],['hit','✓'],['hit','✓'],['hit','✓']]}],
   streak:'23 day mobility streak · 15/16 strength hit'
 };
@@ -337,7 +335,6 @@ const builders={
     document.getElementById('m-hrv').innerHTML=hrv+' <s>ms</s>';document.getElementById('m-hrvbar').style.width=Math.min(100,hrv)+'%';
   },
   body(){
-    document.getElementById('shoe').innerHTML=DATA.shoes.map(s=>{const pct=Math.min(100,s.km/s.max*100);const role=s.rc==='race'?'Race':s.rc==='work'?'Workout':'Daily';return `<div><div class="top"><span class="nm"><b>${s.nm}</b></span><span class="role ${s.rc}">${role}</span></div><div class="track"><i style="width:${pct}%;background:${s.col}"></i></div><div class="meta"><span>${s.km} / ${s.max} km</span><span style="color:${s.col};font-weight:500">${s.st}</span></div></div>`;}).join('');
     let heat='';DATA.habits.forEach(h=>{heat+=`<div class="hr"><span class="lab">${h.nm}</span>`+h.cells.map(c=>`<div class="cell ${c[0]}">${c[1]}</div>`).join('')+`</div>`;});
     heat+=`<div class="hr"><span class="lab" style="color:var(--dim)">Week</span>`+DATA.habits[0].cells.map((_,i)=>`<div class="cell" style="background:none;color:var(--dim)">${i+1}</div>`).join('')+`</div>`;
     document.getElementById('heat').innerHTML=heat;
