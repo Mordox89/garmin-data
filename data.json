@@ -7,7 +7,7 @@
     "predicted": "3:49:50",
     "predictedRange": "3:46:23–3:53:17",
     "predictedPace": "5:26/km",
-    "vo2": 48.0,
+    "vo2": 48,
     "updated": "2026-06-08",
     "live": true,
     "unit": "km"
@@ -45,27 +45,27 @@
   ],
   "volume": {
     "plan": [
-      53.0,
-      60.0,
-      66.0,
-      55.0,
-      68.0,
-      72.0,
-      79.0,
-      68.0,
-      80.0,
-      85.0,
-      72.0,
-      87.0,
-      89.0,
-      72.0,
-      89.0,
-      77.0,
-      58.0,
-      42.0
+      53,
+      60,
+      66,
+      55,
+      68,
+      72,
+      79,
+      68,
+      80,
+      85,
+      72,
+      87,
+      89,
+      72,
+      89,
+      77,
+      58,
+      42
     ],
     "done": [
-      13.0,
+      13,
       null,
       null,
       null,
@@ -85,7 +85,7 @@
       null
     ],
     "longrun": [
-      13.0,
+      13,
       null,
       null,
       null,
@@ -120,7 +120,7 @@
     81
   ],
   "vo2": [
-    48.0
+    48
   ],
   "rhr": [
     52
@@ -194,7 +194,7 @@
       154
     ],
     "drift": [
-      5.0,
+      5,
       4.4,
       4.1,
       3.6
@@ -205,20 +205,14 @@
   ],
   "predictorInputs": [
     {
-      "l": "Threshold pace",
-      "v": "3:58/km",
-      "s": "↓ from 4:04 · W1",
-      "cy": true
-    },
-    {
       "l": "VO₂max",
-      "v": "59",
-      "s": "↑ +3"
+      "v": "48",
+      "s": "intervals.icu"
     },
     {
       "l": "Best long-run effic.",
-      "v": "4.1% drift",
-      "s": "aerobic"
+      "v": "—",
+      "s": "no long run with HR yet"
     },
     {
       "l": "Last tune-up",
@@ -240,80 +234,10 @@
   "runcount": "1 runs · 6 rest days",
   "week7": [
     {
-      "d": "Today",
-      "t": "easy",
-      "ds": "Easy aerobic",
-      "km": "8 km · Z2"
-    },
-    {
-      "d": "Tue",
-      "t": "qual",
-      "ds": "Intervals",
-      "km": "6×1km @ thr"
-    },
-    {
-      "d": "Wed",
-      "t": "easy",
-      "ds": "Recovery",
-      "km": "6 km"
-    },
-    {
-      "d": "Thu",
-      "t": "qual",
-      "ds": "Tempo",
-      "km": "10 km w/ 5 @ MP"
-    },
-    {
-      "d": "Fri",
+      "d": "—",
       "t": "rest",
-      "ds": "Rest + mobility",
-      "km": "—"
-    },
-    {
-      "d": "Sat",
-      "t": "easy",
-      "ds": "Easy aerobic",
-      "km": "8 km"
-    },
-    {
-      "d": "Sun",
-      "t": "long",
-      "ds": "Long run",
-      "km": "30 km"
-    }
-  ],
-  "shoes": [
-    {
-      "nm": "ASICS Metaspeed Sky Tokyo",
-      "rc": "race",
-      "km": 22,
-      "max": 65,
-      "st": "breaking in · 43 km to go",
-      "col": "#45c8e0"
-    },
-    {
-      "nm": "Daily Trainer",
-      "rc": "daily",
-      "km": 412,
-      "max": 700,
-      "st": "healthy",
-      "col": "#34e07d"
-    },
-    {
-      "nm": "Tempo / workout",
-      "rc": "work",
-      "km": 286,
-      "max": 600,
-      "st": "healthy",
-      "col": "#34e07d"
-    },
-    {
-      "nm": "Easy / recovery",
-      "rc": "daily",
-      "km": 548,
-      "max": 650,
-      "st": "retire soon",
-      "col": "#ffb43a"
+      "ds": "No plan in intervals.icu yet",
+      "km": "sync TrainingPeaks"
     }
   ],
   "habits": [
