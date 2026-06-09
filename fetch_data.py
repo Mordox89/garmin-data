@@ -390,15 +390,16 @@ def main():
     ev_by_day = {}
     for e in ev:
         cat = (e.get("category") or "").upper()
-        if cat and not (cat == "WORKOUT" or cat.startswith("RACE")):
+        if cat == "NOTE":          # skip pure notes; accept WORKOUT, RACE_*, "" and anything else
             continue
-        d = (e.get("start_date_local") or "")[:10]
+        d = (e.get("start_date_local") or e.get("start_date") or e.get("date") or "")[:10]
         if not d:
             continue
         dist_m = e.get("distance") or e.get("icu_distance") or e.get("distance_target") or 0
         dist_km = round(dist_m / M_PER_UNIT) if dist_m else None
-        name = e.get("name") or e.get("description") or "Workout"
+        name = e.get("name") or e.get("description") or e.get("type") or "Workout"
         ev_by_day.setdefault(d, []).append((name, dist_km, cat.startswith("RACE")))
+    print(f"events: {len(ev)} fetched, {len(ev_by_day)} unique days with events")
  
     DOW = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     horizon = [today + dt.timedelta(days=o) for o in range(7)]
