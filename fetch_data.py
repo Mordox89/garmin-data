@@ -2,7 +2,7 @@
 """
 fetch_data.py — pull training data from the intervals.icu API and write data.json
 for the marathon telemetry dashboard. Runs daily in GitHub Actions.
- 
+
 Secrets / config (env vars; sensible defaults baked in for this block):
   INTERVALS_ATHLETE_ID   required  (intervals.icu > Settings > Developer)
   INTERVALS_API_KEY      required
@@ -12,18 +12,18 @@ Secrets / config (env vars; sensible defaults baked in for this block):
   UNIT         default km           ("km" or "mi")
   HR_TARGET    default 150          (bpm reference for the pace-at-fixed-HR panel)
   PLAN_MILEAGE optional comma list of planned weekly distance (the grey plan curve)
- 
+
 Auth: HTTP Basic, username "API_KEY", password = your key.
 """
- 
+
 import os, sys, json, re, statistics, datetime as dt
 from collections import defaultdict
- 
+
 try:
     import requests
 except ImportError:
     sys.exit("Missing dependency: pip install requests")
- 
+
 BASE = "https://intervals.icu/api/v1"
 ATHLETE = os.environ.get("INTERVALS_ATHLETE_ID", "").strip()
 KEY = os.environ.get("INTERVALS_API_KEY", "").strip()
@@ -36,36 +36,36 @@ M_PER_UNIT = 1609.344 if UNIT == "mi" else 1000.0
 RUN_TYPES = {"Run", "TrailRun", "VirtualRun"}
 ZONE_COLORS = ["#2f7d52", "#34e07d", "#ffb43a", "#ff8a4a", "#ff5e6c"]
 ZONE_NAMES = ["Z1 recovery", "Z2 aerobic", "Z3 tempo", "Z4 threshold", "Z5 VO2"]
- 
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(HERE, "data.json")) as f:
     OUT = json.load(f)   # baseline so the JSON always stays complete
- 
- 
+
+
 def monday(d): return d - dt.timedelta(days=d.weekday())
- 
- 
+
+
 def plan_start():
     return monday(dt.date.fromisoformat(DEF_START))
- 
- 
+
+
 def api(path, params=None):
     r = requests.get(BASE + path, params=params or {}, auth=("API_KEY", KEY), timeout=30)
     r.raise_for_status()
     return r.json()
- 
- 
+
+
 def hms(seconds):
     s = int(round(seconds)); return f"{s//3600}:{(s%3600)//60:02d}:{s%60:02d}"
- 
- 
+
+
 def first(d, *keys):
     for k in keys:
         if d.get(k) is not None:
             return d[k]
     return None
- 
- 
+
+
 def riegel_predict(activities):
     best = None
     cutoff = dt.date.today() - dt.timedelta(weeks=6)
@@ -80,30 +80,30 @@ def riegel_predict(activities):
         proj = t * (42195.0 / dist) ** 1.06
         best = proj if best is None else min(best, proj)
     return best
- 
- 
+
+
 def main():
     if not ATHLETE or not KEY:
         print("No credentials set — leaving sample data.json untouched.")
         return
- 
+
     start = plan_start()
     today = dt.date.today()
     race = dt.date.fromisoformat(DEF_RACE)
     weeks_done = max(1, min(WEEKS, (monday(today) - start).days // 7 + 1))
- 
+
     # The API requires oldest <= newest. Before the block starts (today < start)
     # there is no data yet, so query a valid (empty) range instead of crashing.
     api_oldest = min(start, today).isoformat()
     api_newest = today.isoformat()
- 
+
     acts = api(f"/athlete/{ATHLETE}/activities",
                {"oldest": api_oldest, "newest": api_newest,
-                "fields": "name,type,start_date_local,distance,moving_time,elapsed_time,"
+                "fields": "name,type,workout_type,start_date_local,distance,moving_time,elapsed_time,"
                           "icu_training_load,average_heartrate,decoupling,icu_hr_zone_times"})
     well = api(f"/athlete/{ATHLETE}/wellness",
                {"oldest": api_oldest, "newest": api_newest})
- 
+
     # ---------- volume / load / consistency ----------
     vol = [0.0] * WEEKS; longrun = [0.0] * WEEKS; tss = [0.0] * WEEKS
     long_decouple = [None] * WEEKS
@@ -127,7 +127,7 @@ def main():
             longrun[wk] = km
             long_decouple[wk] = a.get("decoupling")
             day_kind[d] = "long"
- 
+
     # ---------- zone distribution (80/20), last 28 days ----------
     zone_secs = [0.0] * 5
     cut28 = today - dt.timedelta(days=28)
@@ -142,7 +142,7 @@ def main():
             continue
         for i, sec in enumerate(z):
             zone_secs[min(i, 4)] += sec or 0
- 
+
     # ---------- pace @ ~HR_TARGET (activity-level, per week) ----------
     pace_at_hr = [None] * WEEKS
     for wk in range(weeks_done):
@@ -162,7 +162,7 @@ def main():
         if cands:
             cands.sort()
             pace_at_hr[wk] = round(cands[0][1])
- 
+
     # ---------- wellness: CTL/ATL/RHR/HRV/weight/VO2max ----------
     well_by_date = {w.get("id"): w for w in well if w.get("id")}
     ctl = atl = None
@@ -182,16 +182,16 @@ def main():
             v = first(w, "vo2max", "VO2max")
             if v: vo2[i] = round(v, 1)
             break
- 
+
     trim = lambda arr: arr[:weeks_done]
     keep = lambda arr: [x for x in trim(arr) if x is not None]
- 
+
     # ---------- assemble ----------
     m = OUT["meta"]
     m["unit"] = UNIT; m["week"] = weeks_done; m["totalWeeks"] = WEEKS
     m["daysToRace"] = max(0, (race - today).days); m["updated"] = today.isoformat(); m["live"] = True
     OUT["weeks"] = [f"W{i+1}" for i in range(WEEKS)]
- 
+
     plan_env = os.environ.get("PLAN_MILEAGE", "").strip()
     if plan_env:
         plan = [float(x) for x in plan_env.split(",")]
@@ -200,7 +200,7 @@ def main():
     OUT["volume"]["longrun"] = [round(longrun[i], 1) if (i < weeks_done and longrun[i]) else None for i in range(WEEKS)]
     OUT["longRunPct"] = [round(longrun[i] / vol[i] * 100) if vol[i] else 0 for i in range(weeks_done)]
     OUT["tss"] = [round(tss[i]) for i in range(weeks_done)]
- 
+
     if keep(ctl) and keep(atl):
         OUT["pmc"]["ctl"] = keep(ctl); OUT["pmc"]["atl"] = keep(atl)[:len(keep(ctl))]
     if keep(rhr): OUT["rhr"] = keep(rhr)
@@ -208,7 +208,7 @@ def main():
     if keep(weight): OUT["weight"] = keep(weight)
     if keep(vo2):
         OUT["vo2"] = keep(vo2); m["vo2"] = keep(vo2)[-1]
- 
+
     # zones / 80-20
     if sum(zone_secs) > 0:
         tot = sum(zone_secs)
@@ -216,12 +216,12 @@ def main():
         OUT["zones"] = [{"n": ZONE_NAMES[i], "v": pct[i], "c": ZONE_COLORS[i]} for i in range(5)]
         easy = pct[0] + pct[1]
         OUT["kpi"]["easyHard"] = f"{easy}/{100 - easy}"
- 
+
     # decoupling (live) + pace@HR (best-effort)
     OUT["aero"]["decoupling"] = [round(long_decouple[i], 1) if long_decouple[i] is not None else None for i in range(weeks_done)]
     if any(p is not None for p in trim(pace_at_hr)):
         OUT["aero"]["paceAtHR"] = [pace_at_hr[i] for i in range(weeks_done)]
- 
+
     # consistency heatmap from real run days
     cons = []
     for i in range(weeks_done):
@@ -229,7 +229,7 @@ def main():
     if cons:
         OUT["consistency"] = cons
         OUT["runcount"] = f"{runs_total} runs · {sum(r.count('rest') for r in cons)} rest days"
- 
+
     # KPIs
     OUT["kpi"]["totalVol"] = str(round(sum(vol[:weeks_done])))
     OUT["kpi"]["volAvg"] = f"{weeks_done} wks · {round(sum(vol[:weeks_done])/weeks_done)}/wk avg"
@@ -239,7 +239,7 @@ def main():
         OUT["kpi"]["ramp"] = f"+{ramp}"
         OUT["kpi"]["rampSt"] = "coral" if ramp > 7 else "amber" if ramp > 5 else "go"
         OUT["kpi"]["rampNote"] = "back off" if ramp > 7 else "upper safe (<6–7)" if ramp > 5 else "safe (<6–7)"
- 
+
     # ===== extra analytics =====
     ck = keep(ctl); ak = keep(atl)
     # Form / TSB + readiness label
@@ -248,7 +248,7 @@ def main():
         OUT["pmc"]["form"] = [round(ck[i] - ak[i], 1) for i in range(n)]
         cf = OUT["pmc"]["form"][-1]
         OUT["kpi"]["readiness"] = "Fresh" if cf > 5 else ("Loaded" if cf < -15 else "On track")
- 
+
     # daily load (all sports) + weekly strength/mobility session counts
     daily = defaultdict(float)
     STRENGTH_TYPES = {"WeightTraining"}
@@ -267,7 +267,7 @@ def main():
             strength_wk[wk] += 1
         elif typ in MOBILITY_TYPES or any(w in nm for w in ("mobilit", "stretch", "yoga", "foam")):
             mobility_wk[wk] += 1
- 
+
     # Monotony & strain (Foster): needs the 7 daily loads per week
     mono = []; strain = []
     for i in range(weeks_done):
@@ -279,7 +279,7 @@ def main():
         strain.append(round(wk_sum * mn) if mn else None)
     OUT["monotony"] = mono
     OUT["strain"] = strain
- 
+
     # Efficiency factor: metres/min per bpm, weekly mean over runs with HR
     ef_acc = [[] for _ in range(WEEKS)]
     for a in acts:
@@ -295,7 +295,7 @@ def main():
         if hr and dist > 0 and t > 0:
             ef_acc[wk].append((dist / t) * 60.0 / hr)
     OUT["ef"] = [round(sum(ef_acc[i]) / len(ef_acc[i]), 2) if ef_acc[i] else None for i in range(weeks_done)]
- 
+
     # Best efforts / pace curve: fastest avg pace over completed runs >= each distance
     DIST_BUCKETS = [(3000, "3 km"), (5000, "5 km"), (10000, "10 km"), (15000, "15 km"), (21097, "Half")]
     best = {}
@@ -316,7 +316,7 @@ def main():
             p, d = best[lab]
             be.append({"d": lab, "pace": f"{int(p // 60)}:{int(p % 60):02d}/km", "on": d})
     OUT["bestEfforts"] = be
- 
+
     # Sleep & subjective wellness (weekly latest value)
     sleep = [None] * WEEKS; soreness = [None] * WEEKS
     for i in range(WEEKS):
@@ -335,7 +335,7 @@ def main():
     OUT["soreness"] = [soreness[i] for i in range(weeks_done)]
     OUT["strength"] = [strength_wk[i] for i in range(weeks_done)]
     OUT["mobility"] = [mobility_wk[i] for i in range(weeks_done)]
- 
+
     # predictor
     pred = riegel_predict(acts)
     if pred:
@@ -346,7 +346,7 @@ def main():
         if ck:
             base = ck[0] or 1
             OUT["predictorSeconds"] = [round(pred * (ck[-1] / (c or base))) for c in ck]
- 
+
     # ---------- predictor-input panel (live; replaces the old demo block) ----------
     inputs = []
     vk = keep(vo2)
@@ -366,7 +366,50 @@ def main():
         inputs.append({"l": "Best long-run effic.", "v": "—", "s": "no long run with HR yet"})
     inputs.append({"l": "Last tune-up", "v": "—", "s": "none yet · feeds model"})
     OUT["predictorInputs"] = inputs   # NB: threshold pace removed (not available via intervals.icu)
- 
+
+    # ---------- tune-up race detection + predictor override ----------
+    DIST_LABELS = [(42195,"Marathon"),(21097,"Half"),(15000,"15 km"),(10000,"10 km"),(5000,"5 km"),(3000,"3 km")]
+    race_acts = []
+    for a in acts:
+        if a.get("type") not in RUN_TYPES:
+            continue
+        nm = (a.get("name") or "").lower()
+        if a.get("workout_type") != 1 and "race" not in nm and "wedstrijd" not in nm:
+            continue
+        dist = a.get("distance") or 0
+        t    = a.get("moving_time") or a.get("elapsed_time") or 0
+        d    = (a.get("start_date_local") or "")[:10]
+        if dist < 3000 or t <= 0 or not d:
+            continue
+        wk_num = (monday(dt.date.fromisoformat(d)) - start).days // 7 + 1
+        lbl    = next((l for thresh, l in DIST_LABELS if dist >= thresh * 0.97),
+                      f"{round(dist/1000,1)} km")
+        h, rem = divmod(round(t), 3600); mm, ss = divmod(rem, 60)
+        tstr   = f"{h}:{mm:02d}:{ss:02d}" if h else f"{mm}:{ss:02d}"
+        race_acts.append({"d": d, "dist": dist, "t": t, "lbl": lbl,
+                          "tstr": tstr, "wk": wk_num,
+                          "proj": t * (42195.0 / dist) ** 1.06})
+    race_acts.sort(key=lambda r: r["d"])
+
+    if race_acts:
+        last_r = race_acts[-1]
+        best_r = min(race_acts, key=lambda r: r["proj"])
+        rp     = best_r["proj"]
+        # update "Last tune-up" row with most recent race result + best projection
+        inputs[-1] = {"l": "Last tune-up", "v": last_r["tstr"],
+                      "s": f"{last_r['lbl']} · W{last_r['wk']} → proj {hms(rp)}"}
+        OUT["predictorInputs"] = inputs
+        # override predictor: race-based Riegel covers full block (no 6-week limit)
+        pace_sec = round(rp / 42.195)
+        OUT["meta"]["predicted"]      = hms(rp)
+        OUT["meta"]["predictedPace"]  = f"{pace_sec // 60}:{pace_sec % 60:02d}/km"
+        OUT["meta"]["predictedRange"] = f"{hms(rp - 120)}–{hms(rp + 120)}"
+        if ck:
+            base = ck[0] or 1
+            OUT["predictorSeconds"] = [round(rp * (ck[-1] / (c or base))) for c in ck]
+        print(f"tune-up races found: {len(race_acts)} | best proj {hms(rp)} "
+              f"from {best_r['lbl']} W{best_r['wk']}")
+
     # ---------- next 7 days from intervals.icu planned events ----------
     try:
         ev = api(f"/athlete/{ATHLETE}/events",
@@ -374,7 +417,7 @@ def main():
                   "newest": (today + dt.timedelta(days=6)).isoformat()})
     except Exception as e:
         print("events fetch failed:", e); ev = []
- 
+
     def classify(name, dist_km, is_race):
         if is_race:
             return "qual"
@@ -386,7 +429,7 @@ def main():
         if any(w in n for w in ("rest", "day off", "recovery day")):
             return "rest"
         return "easy"
- 
+
     ev_by_day = {}
     for e in ev:
         cat = (e.get("category") or "").upper()
@@ -400,7 +443,7 @@ def main():
         name = e.get("name") or e.get("description") or e.get("type") or "Workout"
         ev_by_day.setdefault(d, []).append((name, dist_km, cat.startswith("RACE")))
     print(f"events: {len(ev)} fetched, {len(ev_by_day)} unique days with events")
- 
+
     DOW = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     horizon = [today + dt.timedelta(days=o) for o in range(7)]
     if any(day.isoformat() in ev_by_day for day in horizon):
@@ -418,7 +461,7 @@ def main():
     else:
         OUT["week7"] = [{"d": "—", "t": "rest",
                          "ds": "No plan in intervals.icu yet", "km": "sync TrainingPeaks"}]
- 
+
     # ---------- adherence: planned workouts vs completed runs (live) ----------
     run_dates = {d for d, v in day_kind.items() if v != "rest"}
     hit = tot = 0
@@ -440,14 +483,14 @@ def main():
     else:
         OUT["kpi"]["adherence"] = "—"
         OUT["kpi"]["adherenceDetail"] = "no plan synced yet"
- 
+
     # ---------- marathon-pace analytics (live) ----------
     def is_mp(name):
         n = (name or "").lower()
         if "marathon pace" in n or "marathon-pace" in n:
             return True
         return "mp" in re.findall(r"[a-z0-9]+", n)
- 
+
     mp_runs = []
     for a in acts:
         if a.get("type") not in RUN_TYPES:
@@ -463,18 +506,18 @@ def main():
         "hr": [round(h) if h else None for _, h, _ in mp_runs],
         "drift": [round(dr, 1) if dr is not None else None for _, _, dr in mp_runs],
     }
- 
+
     # Habits grid & mobility streak removed — not tracked in intervals.icu
     OUT.pop("habits", None); OUT.pop("streak", None)
     # gear/shoes intentionally removed — no Garmin -> intervals.icu sync available
     OUT.pop("shoes", None)
- 
+
     with open(os.path.join(HERE, "data.json"), "w") as f:
         json.dump(OUT, f, indent=2, ensure_ascii=False)
     print(f"Wrote data.json — week {weeks_done}/{WEEKS}, {runs_total} runs, "
           f"CTL pts {len(ck)}, VO2 pts {len(keep(vo2))}, "
           f"zones {'yes' if sum(zone_secs)>0 else 'no'}, predicted {m.get('predicted')}")
- 
- 
+
+
 if __name__ == "__main__":
     main()
