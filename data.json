@@ -3,25 +3,25 @@
     "phase": "Build phase",
     "week": 1,
     "totalWeeks": 18,
-    "daysToRace": 125,
+    "daysToRace": 124,
     "predicted": "3:49:50",
     "predictedRange": "3:46:23–3:53:17",
     "predictedPace": "5:26/km",
     "vo2": 48.0,
-    "updated": "2026-06-08",
+    "updated": "2026-06-09",
     "live": true,
     "unit": "km"
   },
   "kpi": {
-    "adherence": "—",
-    "adherenceDetail": "no plan synced yet",
+    "adherence": "100%",
+    "adherenceDetail": "1/1 sessions hit",
     "ramp": "+5.0",
     "rampNote": "upper safe (<6–7)",
     "rampSt": "amber",
     "easyHard": "32/68",
     "totalVol": "13",
     "volAvg": "1 wks · 13/wk avg",
-    "readiness": "On track"
+    "readiness": "Loaded"
   },
   "weeks": [
     "W1",
@@ -110,13 +110,13 @@
   ],
   "pmc": {
     "ctl": [
-      2.3
+      4.3
     ],
     "atl": [
-      12.7
+      20.9
     ],
     "form": [
-      -10.4
+      -16.6
     ]
   },
   "tss": [
@@ -126,20 +126,13 @@
     48.0
   ],
   "rhr": [
-    52
+    51
   ],
   "hrv": [
-    58,
-    60,
-    61,
-    64,
-    63,
-    67,
-    69,
-    71
+    66.0
   ],
   "weight": [
-    87.9
+    88.2
   ],
   "zones": [
     {
@@ -193,11 +186,6 @@
   ],
   "predictorInputs": [
     {
-      "l": "VO₂max",
-      "v": "48",
-      "s": "intervals.icu"
-    },
-    {
       "l": "Best long-run effic.",
       "v": "—",
       "s": "no long run with HR yet"
@@ -222,24 +210,76 @@
   "runcount": "1 runs · 6 rest days",
   "week7": [
     {
-      "d": "—",
+      "d": "Today",
       "t": "rest",
-      "ds": "No plan in intervals.icu yet",
-      "km": "sync TrainingPeaks"
+      "ds": "Rest / unplanned",
+      "km": "—"
+    },
+    {
+      "d": "Wed",
+      "t": "easy",
+      "ds": "Aerobic 14km",
+      "km": "14 km"
+    },
+    {
+      "d": "Thu",
+      "t": "rest",
+      "ds": "Rest / unplanned",
+      "km": "—"
+    },
+    {
+      "d": "Fri",
+      "t": "easy",
+      "ds": "Recovery 6km",
+      "km": "6 km"
+    },
+    {
+      "d": "Sat",
+      "t": "long",
+      "ds": "Long Run 19km",
+      "km": "19 km"
+    },
+    {
+      "d": "Sun",
+      "t": "rest",
+      "ds": "Rest / unplanned",
+      "km": "—"
+    },
+    {
+      "d": "Mon",
+      "t": "easy",
+      "ds": "Aerobic + Strides 13km",
+      "km": "12 km"
     }
   ],
   "monotony": [
-    null
+    0.41
   ],
   "strain": [
-    null
+    33
   ],
   "ef": [
-    null
+    1.23
   ],
-  "bestEfforts": [],
+  "bestEfforts": [
+    {
+      "d": "3 km",
+      "pace": "5:04/km",
+      "on": "2026-06-08"
+    },
+    {
+      "d": "5 km",
+      "pace": "5:04/km",
+      "on": "2026-06-08"
+    },
+    {
+      "d": "10 km",
+      "pace": "5:04/km",
+      "on": "2026-06-08"
+    }
+  ],
   "sleep": [
-    null
+    8.1
   ],
   "soreness": [
     null
