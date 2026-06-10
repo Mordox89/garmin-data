@@ -1,5 +1,5 @@
 {
   "generated": "2026-06-10",
-  "feedback": "AI feedback niet beschikbaar.",
-  "status": "skipped"
+  "feedback": "API fout: 404 Client Error: Not Found for url: https://api.anthropic.com/v1/messages",
+  "status": "error"
 }
