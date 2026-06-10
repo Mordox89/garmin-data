@@ -23,7 +23,7 @@ ZONE_NAMES = ["Z1 herstel", "Z2 aerobic", "Z3 tempo", "Z4 drempel", "Z5 VO2max"]
 
 ATHLETE_CONTEXT = """
 Atletenprofiel:
-- Doel: sub-3:00 marathon op 11 oktober 2026
+- Doel: zo snel mogelijk lopen op 11 oktober 2026 — geen vaste tijddrempel, maximale prestatie op basis van de data
 - Race-gewicht doel: 78 kg
 - Max HR: 190 BPM | LTHR: 173–174 BPM
 - Marathonpace doel: 4:15/km
@@ -153,7 +153,7 @@ Analyseer als Pfitzinger-coach. Vergelijk de uitgevoerde training met de gepland
 1. Zone-uitvoering: zat de run in de voorgeschreven Pfitzinger-zone? Was het tempo consistent met de bedoeling (easy, MP, LT, VO2max)?
 2. Cadans en loopeconomie: afwijking van 180 spm doel, signalen van compensatie of asymmetrie rechts
 3. Aerobe progressie: efficiency factor trend, decoupling op de lange duurlopen
-4. Belasting en herstel: CTL/ATL/TSB in context van Pfitzinger-opbouw richting de race — is de ramp rate verantwoord?
+4. Belasting en herstel: CTL/ATL/TSB in context van Pfitzinger-opbouw richting de race — is de ramp rate verantwoord? Gebruik de voorspelde eindtijd als leidraad, niet een vaste doeltijd.
 Vermeld geen locaties. Sluit af met exact één concrete instructie voor de volgende geplande training."""
 
 
@@ -237,4 +237,4 @@ def main():
 
 if __name__ == "__main__":
     main()
- 
+    
