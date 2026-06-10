@@ -3,24 +3,24 @@
 analyze_run.py — AI post-run coaching feedback via Anthropic API.
 Reads data.json (written by fetch_data.py) and writes ai_feedback.json.
 Runs as second step in the GitHub Actions workflow (after fetch_data.py).
-
+ 
 Required secret:  ANTHROPIC_API_KEY
 """
-
+ 
 import os, sys, json, datetime as dt
-
+ 
 try:
     import requests
 except ImportError:
     sys.exit("Missing dependency: pip install requests")
-
+ 
 ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()
 HERE      = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(HERE, "data.json")
 OUT_PATH  = os.path.join(HERE, "ai_feedback.json")
-
+ 
 ZONE_NAMES = ["Z1 herstel", "Z2 aerobic", "Z3 tempo", "Z4 drempel", "Z5 VO2max"]
-
+ 
 ATHLETE_CONTEXT = """
 Atletenprofiel:
 - Doel: sub-3:00 marathon op 11 oktober 2026 (Eindhoven)
@@ -32,13 +32,13 @@ Atletenprofiel:
 - Huidige focus: gluteus-activatie, heupstabiliteit, core (2×/week krachtraining)
 - Cadans doelstelling: ~180 spm (nu ~83–85 spm halfcadans = 166–170 spm)
 """.strip()
-
-
+ 
+ 
 def load_data():
     with open(DATA_PATH) as f:
         return json.load(f)
-
-
+ 
+ 
 def fmt_zone_pct(zone_pct):
     if not zone_pct:
         return "geen zone-data"
@@ -47,15 +47,15 @@ def fmt_zone_pct(zone_pct):
         if i < len(ZONE_NAMES):
             parts.append(f"{ZONE_NAMES[i]} {pct}%")
     return ", ".join(parts)
-
-
+ 
+ 
 def build_prompt(data):
     meta  = data.get("meta", {})
     kpi   = data.get("kpi", {})
     pmc   = data.get("pmc", {})
     vol   = data.get("volume", {})
     runs  = data.get("recentActivities", [])
-
+ 
     # --- trainingsstatus ---
     week         = meta.get("week", "?")
     total_weeks  = meta.get("totalWeeks", 18)
@@ -66,18 +66,18 @@ def build_prompt(data):
     ramp         = kpi.get("ramp", "—")
     ramp_note    = kpi.get("rampNote", "—")
     adherence    = kpi.get("adherence", "—")
-
+ 
     ctl_list  = pmc.get("ctl", [])
     atl_list  = pmc.get("atl", [])
     form_list = pmc.get("form", [])
     ctl  = ctl_list[-1]  if ctl_list  else None
     atl  = atl_list[-1]  if atl_list  else None
     form = form_list[-1] if form_list else None
-
+ 
     done     = vol.get("done", [])
     vol_last = done[-1] if done else None
     vol_prev = done[-2] if len(done) >= 2 else None
-
+ 
     weight_list   = data.get("weight", [])
     sleep_list    = data.get("sleep", [])
     soreness_list = data.get("soreness", [])
@@ -87,7 +87,7 @@ def build_prompt(data):
     soreness = soreness_list[-1] if soreness_list  else None
     ef       = ef_list[-1]       if ef_list        else None
     ef_prev  = ef_list[-2]       if len(ef_list) >= 2 else None
-
+ 
     # --- recente runs ---
     runs_block = ""
     if runs:
@@ -106,19 +106,19 @@ def build_prompt(data):
         runs_block = "Recente runs (nieuwste eerst):\n" + "\n".join(lines)
     else:
         runs_block = "Geen individuele run-data beschikbaar (nog geen activiteiten in het blok)."
-
+ 
     # --- upcoming ---
     week7 = data.get("week7", [])
     upcoming = "; ".join(
         f"{w['d']}: {w['ds']} ({w.get('km','—')})"
         for w in week7 if w.get("t") != "rest"
     ) or "geen geplande workouts"
-
+ 
     ef_trend = ""
     if ef and ef_prev:
         diff = round(ef - ef_prev, 3)
         ef_trend = f" (vorige week {ef_prev}, trend {'↑' if diff > 0 else '↓'} {abs(diff):+.3f})"
-
+ 
     status = f"""Trainingsstatus:
 - Week {week}/{total_weeks}, {days_to_race} dagen tot de race
 - Voorspelde marathon: {predicted}
@@ -129,21 +129,21 @@ def build_prompt(data):
 - Efficiency factor: {ef}{ef_trend}
 - Gewicht: {weight} kg | Slaap: {sleep} u | Soreness: {soreness}/5
 - Komende workouts: {upcoming}"""
-
+ 
     return f"""{ATHLETE_CONTEXT}
-
+ 
 {status}
-
+ 
 {runs_block}
-
+ 
 Geef post-run coaching feedback. Analyseer:
 1. Of de laatste run(s) in de juiste HR-zone zaten (Z2-check of kwaliteitswork naar verwachting)
 2. Cadanspatroon — signalen van been-asymmetrie of compensatie (let op grote variatie of afwijking van ~180 spm doel)
 3. Efficiency factor trend — verbetert de aerobe motor?
 4. Belasting vs herstel in context van de marathon op 11 oktober (form/TSB, ramp, soreness)
 Sluit af met precies één concrete aanbeveling voor de volgende training."""
-
-
+ 
+ 
 def call_anthropic(prompt):
     resp = requests.post(
         "https://api.anthropic.com/v1/messages",
@@ -153,7 +153,7 @@ def call_anthropic(prompt):
             "content-type":       "application/json",
         },
         json={
-            "model":      "claude-sonnet-4-20250514",
+            "model":      "claude-sonnet-4-6",
             "max_tokens": 900,
             "system": (
                 "Je bent een elite marathon-trainingscoach. "
@@ -167,8 +167,8 @@ def call_anthropic(prompt):
     )
     resp.raise_for_status()
     return resp.json()
-
-
+ 
+ 
 def main():
     # Always produce a valid ai_feedback.json — dashboard must never 404
     placeholder = {
@@ -176,22 +176,22 @@ def main():
         "feedback":  "AI feedback niet beschikbaar.",
         "status":    "skipped",
     }
-
+ 
     if not ANTHROPIC_KEY:
         print("ANTHROPIC_API_KEY not set — writing placeholder.")
         with open(OUT_PATH, "w") as f:
             json.dump(placeholder, f, indent=2)
         return
-
+ 
     if not os.path.exists(DATA_PATH):
         print("data.json not found — run fetch_data.py first.")
         with open(OUT_PATH, "w") as f:
             json.dump(placeholder, f, indent=2)
         return
-
+ 
     data   = load_data()
     prompt = build_prompt(data)
-
+ 
     print("Calling Anthropic API…")
     try:
         result = call_anthropic(prompt)
@@ -202,11 +202,11 @@ def main():
         with open(OUT_PATH, "w") as f:
             json.dump(placeholder, f, indent=2)
         return
-
+ 
     text = "".join(
         b["text"] for b in result.get("content", []) if b.get("type") == "text"
     ).strip()
-
+ 
     out = {
         "generated": dt.date.today().isoformat(),
         "feedback":  text,
@@ -216,9 +216,9 @@ def main():
     }
     with open(OUT_PATH, "w") as f:
         json.dump(out, f, indent=2, ensure_ascii=False)
-
+ 
     print(f"ai_feedback.json written — {len(text)} chars")
-
-
+ 
+ 
 if __name__ == "__main__":
     main()
