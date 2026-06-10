@@ -3,24 +3,24 @@
     "phase": "Build phase",
     "week": 1,
     "totalWeeks": 18,
-    "daysToRace": 124,
+    "daysToRace": 123,
     "predicted": "3:49:50",
     "predictedRange": "3:46:23–3:53:17",
     "predictedPace": "5:26/km",
     "vo2": 48.0,
-    "updated": "2026-06-09",
+    "updated": "2026-06-10",
     "live": true,
     "unit": "km"
   },
   "kpi": {
     "adherence": "100%",
-    "adherenceDetail": "1/1 sessions hit",
+    "adherenceDetail": "2/2 sessions hit",
     "ramp": "+5.0",
     "rampNote": "upper safe (<6–7)",
     "rampSt": "amber",
-    "easyHard": "32/68",
-    "totalVol": "13",
-    "volAvg": "1 wks · 13/wk avg",
+    "easyHard": "24/76",
+    "totalVol": "27",
+    "volAvg": "1 wks · 27/wk avg",
     "readiness": "Loaded"
   },
   "weeks": [
@@ -65,7 +65,7 @@
       42.0
     ],
     "done": [
-      13.0,
+      27.0,
       null,
       null,
       null,
@@ -85,7 +85,7 @@
       null
     ],
     "longrun": [
-      13.0,
+      14.0,
       null,
       null,
       null,
@@ -106,71 +106,64 @@
     ]
   },
   "longRunPct": [
-    100
+    52
   ],
   "pmc": {
     "ctl": [
       4.3
     ],
     "atl": [
-      20.9
+      21.4
     ],
     "form": [
-      -16.6
+      -17.1
     ]
   },
   "tss": [
-    81
+    170
   ],
   "vo2": [
     48.0
   ],
   "rhr": [
-    51
+    48
   ],
   "hrv": [
     66.0
   ],
   "weight": [
-    88.2
+    86.9
   ],
   "zones": [
     {
       "n": "Z1 recovery",
-      "v": 7,
+      "v": 6,
       "c": "#2f7d52"
     },
     {
       "n": "Z2 aerobic",
-      "v": 25,
+      "v": 18,
       "c": "#34e07d"
     },
     {
       "n": "Z3 tempo",
-      "v": 32,
+      "v": 59,
       "c": "#ffb43a"
     },
     {
       "n": "Z4 threshold",
-      "v": 25,
+      "v": 12,
       "c": "#ff8a4a"
     },
     {
       "n": "Z5 VO2",
-      "v": 11,
+      "v": 5,
       "c": "#ff5e6c"
     }
   ],
   "aero": {
     "paceAtHR": [
-      305,
-      301,
-      298,
-      296,
-      292,
-      290,
-      288,
-      287
+      330
     ],
     "decoupling": [
       null
@@ -186,6 +179,11 @@
   ],
   "predictorInputs": [
     {
+      "l": "VO₂max",
+      "v": "48",
+      "s": "intervals.icu"
+    },
+    {
       "l": "Best long-run effic.",
       "v": "—",
       "s": "no long run with HR yet"
@@ -198,25 +196,19 @@
   ],
   "consistency": [
     [
+      "easy",
+      "rest",
       "long",
-      "rest",
-      "rest",
       "rest",
       "rest",
       "rest",
       "rest"
     ]
   ],
-  "runcount": "1 runs · 6 rest days",
+  "runcount": "2 runs · 5 rest days",
   "week7": [
     {
       "d": "Today",
-      "t": "rest",
-      "ds": "Rest / unplanned",
-      "km": "—"
-    },
-    {
-      "d": "Wed",
       "t": "easy",
       "ds": "Aerobic 14km",
       "km": "14 km"
@@ -250,16 +242,22 @@
       "t": "easy",
       "ds": "Aerobic + Strides 13km",
       "km": "12 km"
+    },
+    {
+      "d": "Tue",
+      "t": "rest",
+      "ds": "Rest / unplanned",
+      "km": "—"
     }
   ],
   "monotony": [
-    0.41
+    0.63
   ],
   "strain": [
-    33
+    107
   ],
   "ef": [
-    1.23
+    1.2
   ],
   "bestEfforts": [
     {
@@ -279,7 +277,7 @@
     }
   ],
   "sleep": [
-    8.1
+    6.6
   ],
   "soreness": [
     null
