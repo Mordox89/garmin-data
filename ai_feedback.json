@@ -1,5 +1,18 @@
 {
   "generated": "2026-06-10",
-  "feedback": "API fout: 404 Client Error: Not Found for url: https://api.anthropic.com/v1/messages",
-  "status": "error"
+  "feedback": "De aerobe run van vandaag (14 km @ 5:29/km, HR gem 157) liet 81% van de tijd in Z3 zien — dat is te intensief voor wat een echte Z2-duurloop had moeten zijn. Bij jouw zones hoort een aerobe easy run gemiddeld in Z2 (144–160), maar de bulk zat boven de 161. Waarschijnlijk speelt het heuvelachtige parcours in Apeldoorn mee, maar het signaal is duidelijk: het tempo van 5:29/km ligt voor jou op dit moment nog niet comfortabel in Z2. De LT-training van maandag was inhoudelijk beter — 36% in Z4+Z5 is acceptabel voor een drempelrun — maar ook daar zat meer dan een derde buiten de doelzone, wat wijst op moeite met pacing discipline of een te ambitieus tempo voor week 1.\n\nDe cadans van 167 spm (vandaag) en 170 spm (maandag) bevestigt dat je richting 180 spm beweegt maar er nog zo'n 10–13 spm van verwijderd bent. Wat me opvalt is dat de cadans op de langzamere run (5:29/km) lager ligt dan op de snellere LT-run — dat is fysiologisch logisch, maar voor jouw gluteus/piriformis-voorgeschiedenis is het een attentiepunt: bij lagere cadans vergroot de stap, neemt de belasting op heup en piriformis toe, en vergroot je het risico op compensatiepatronen juist in de easy kilometers. Geen asymmetriesignaal direct zichtbaar in de data, maar bij 167 spm en een historische kramp rechts blijft dit een aandachtspunt om actief op te monitoren.\n\nDe efficiency factor van 1.2 is aan de lage kant voor een sub-3:00 profiel (streef richting 1.35–1.45 op Z2-runs), maar week 1 met een CTL van slechts 4.3 maakt vergelijking nog betekenisloos — er is simpelweg nog geen baseline. Wat wél relevant is: jouw ramp rate van +5.0 zit net onder de veilige grens, terwijl je TSB op -17.1 staat met een ATL van 21.4 ten opzichte van een CTL van 4.3. Dat is een scheve verhouding die aangeeft dat je lichaam relatief veel vermoeidheid draagt voor de hoeveelheid basisconditie die er staat — begrijpelijk in week 1, maar een reden om de vrijdagherstelrun écht als herstel te behandelen en zaterdag de long run niet te laten ontsporen in tempo.\n\n**Aanbeveling voor de vrijdag-herstelrun (6 km):** Loop uitsluitend in Z1 (onder 144 BPM) op gevoel — accepteer daarvoor een tempo van 6:00–6:30/km of trager als dat nodig is — en focus bewust op een cadans van minimaal 172–174 spm met korte, lichte stappen om de heupbelasting laag te houden en je gluteus-activatiepatroon vanuit de krachtsessies te verankeren in je loopbeweging.",
+  "status": "ok",
+  "model": "claude-sonnet-4-6",
+  "usage": {
+    "input_tokens": 932,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 0
+    },
+    "output_tokens": 834,
+    "service_tier": "standard",
+    "inference_geo": "global"
+  }
 }
