@@ -287,5 +287,47 @@
   ],
   "mobility": [
     0
+  ],
+  "recentActivities": [
+    {
+      "date": "2026-06-10",
+      "name": "Apeldoorn - Aerobic 14km",
+      "type": "Run",
+      "dist_km": 14.01,
+      "moving_time_s": 4616,
+      "pace": "5:29/km",
+      "avg_hr": 157,
+      "max_hr": 166,
+      "cadence_spm": 167,
+      "load": 89,
+      "decoupling": null,
+      "zone_pct": [
+        5,
+        13,
+        81,
+        1,
+        0
+      ]
+    },
+    {
+      "date": "2026-06-08",
+      "name": "Apeldoorn - Lactate threshold 13km",
+      "type": "Run",
+      "dist_km": 13.0,
+      "moving_time_s": 3960,
+      "pace": "5:04/km",
+      "avg_hr": 160,
+      "max_hr": 177,
+      "cadence_spm": 170,
+      "load": 81,
+      "decoupling": null,
+      "zone_pct": [
+        7,
+        25,
+        32,
+        25,
+        11
+      ]
+    }
   ]
 }
