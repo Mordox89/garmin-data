@@ -670,7 +670,7 @@ def build_lt_runs(raw_acts):
         if date < PLAN_START:
             continue
         hr = a.get("averageHR") or 0
-        if hr < 160:  # alleen runs met substantieel threshold werk
+        if hr < 170:  # alleen echte threshold runs (LTHR 173–174)
             continue
         speed = a.get("averageSpeed") or 0
         lt_runs.append({

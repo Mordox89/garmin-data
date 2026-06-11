@@ -633,7 +633,8 @@ const builders={
       ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>c.datasetIndex===0?'Pace: '+secToPace(c.raw):'HR: '+c.raw+' bpm'}}},scales:{x:{...G,grid:{display:false}},y:{...G,reverse:true,ticks:{color:C.amber,callback:v=>secToPace(v)}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:155,suggestedMax:185,ticks:{color:C.coral}}}}});
     }
     // HR vs Pace scatter
-    const ecoRuns=(DATA.recentActivities||[]).filter(r=>r.avg_hr&&r.pace).reverse();
+    const planStart='2026-06-08';
+    const ecoRuns=(DATA.recentActivities||[]).filter(r=>r.avg_hr&&r.pace&&r.date>=planStart).reverse();
     if(ecoRuns.length){
       const paceToSec2=p=>{if(!p)return null;const pts=p.split(':');return pts.length>=2?parseInt(pts[0])*60+parseInt(pts[1]):null;};
       new Chart(hrPaceChart,{type:'scatter',data:{datasets:[{label:'HR vs Pace',data:ecoRuns.map(r=>({x:r.avg_hr,y:paceToSec2(r.pace),lbl:r.date?r.date.slice(5):''})),backgroundColor:C.cyan,pointRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const s=c.raw.y;return c.raw.lbl+' · HR '+c.raw.x+' · '+Math.floor(s/60)+':'+(s%60).toString().padStart(2,'0')+'/km';}}}},scales:{x:{...G,grid:{display:false}},y:{...G,reverse:true,ticks:{callback:v=>Math.floor(v/60)+':'+(v%60).toString().padStart(2,'0')}}}}});

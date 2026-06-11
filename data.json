@@ -870,7 +870,7 @@
     {
       "date": "2026-06-11",
       "charged": 52,
-      "drained": 28,
+      "drained": 30,
       "level": null
     }
   ],
@@ -1441,16 +1441,7 @@
       "name": "Apeldoorn - Aerobic 14km"
     }
   ],
-  "ltRuns": [
-    {
-      "date": "2026-06-08",
-      "name": "Apeldoorn - Lactate threshold 13km",
-      "avg_hr": 160,
-      "max_hr": 177,
-      "pace": "5:04/km",
-      "dist_km": 13.0
-    }
-  ],
+  "ltRuns": [],
   "strengthMobility": {
     "1": {
       "strength": [],
