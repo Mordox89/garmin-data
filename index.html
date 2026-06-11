@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,10 +10,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root{
-    --bg:#0a0d11; --panel:#12161d; --panel2:#161b24; --line:rgba(255,255,255,.06);
-    --text:#e8edf3; --muted:#7d889a; --dim:#525c6b;
-    --go:#34e07d; --go-dim:#1c8a4f; --amber:#ffb43a; --coral:#ff5e6c;
-    --cyan:#45c8e0; --violet:#9a87ff;
+    --bg:#0a0d11;--panel:#12161d;--panel2:#161b24;--line:rgba(255,255,255,.06);
+    --text:#e8edf3;--muted:#7d889a;--dim:#525c6b;
+    --go:#34e07d;--go-dim:#1c8a4f;--amber:#ffb43a;--coral:#ff5e6c;
+    --cyan:#45c8e0;--violet:#9a87ff;
     --mono:'IBM Plex Mono',ui-monospace,monospace;
     --disp:'Saira Condensed','Arial Narrow',sans-serif;
     --body:'IBM Plex Sans',system-ui,sans-serif;
@@ -40,9 +40,9 @@
   .progress .taper s{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:var(--amber);text-decoration:none}
   .ptags{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:16px;opacity:0;animation:rise .55s .08s forwards}
   .chips{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:16px;opacity:0;animation:rise .55s .12s forwards}
-  .chip{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px 13px;position:relative;overflow:visible}
+  .chip{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px 13px;position:relative}
   .chip::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--st,var(--go));border-radius:11px 0 0 11px}
-  .chip .l{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+  .chip .l{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:6px}
   .chip .v{font-family:var(--mono);font-weight:600;font-size:22px;margin-top:6px}
   .chip .s{font-size:10px;color:var(--dim);margin-top:2px}
   .chip .s b{color:var(--st,var(--go))}
@@ -50,64 +50,33 @@
   .tabs::-webkit-scrollbar{display:none}
   .tab{flex:none;background:none;border:none;color:var(--muted);font-family:var(--disp);font-weight:600;font-size:16px;letter-spacing:.05em;text-transform:uppercase;padding:11px 16px 13px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;white-space:nowrap;display:flex;align-items:center;gap:8px}
   .tab .n{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--dim)}
-  .tab:hover{color:var(--text)}
-  .tab.active{color:var(--text);border-bottom-color:var(--cyan)}
-  .tab.active .n{color:var(--cyan)}
+  .tab:hover{color:var(--text)}.tab.active{color:var(--text);border-bottom-color:var(--cyan)}.tab.active .n{color:var(--cyan)}
   .panel-set{display:none;animation:fade .35s}.panel-set.active{display:block}
   @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 17px 17px;position:relative}
   .card h2{font-family:var(--disp);font-weight:600;font-size:17px;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:9px}
   .card h2 .dot{width:7px;height:7px;border-radius:50%;background:var(--go);box-shadow:0 0 9px var(--go)}
-  .card h2 .info{margin-left:auto;flex:none;width:16px;height:16px;border-radius:50%;border:1px solid var(--dim);color:var(--dim);font-family:var(--mono);font-size:10px;font-weight:500;font-style:normal;letter-spacing:0;text-transform:none;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;position:relative;opacity:0;transition:opacity .15s,color .15s,border-color .15s}
-  .card:hover .info{opacity:.5}
-  .info:hover,.info.open{opacity:1 !important;color:var(--cyan);border-color:var(--cyan)}
-  .info .tip{position:absolute;top:calc(100% + 9px);right:-2px;width:250px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-weight:400;font-size:12.5px;line-height:1.5;letter-spacing:.01em;text-transform:none;color:var(--muted);box-shadow:0 12px 32px rgba(0,0,0,.5);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s,transform .16s;z-index:60;text-align:left;pointer-events:none}
-  .info .tip b{color:var(--text);font-weight:600}
-  .info:hover .tip,.info.open .tip{opacity:1;visibility:visible;transform:translateY(0)}
-  .info .tip::after{content:'';position:absolute;bottom:100%;right:5px;border:5px solid transparent;border-bottom-color:var(--line)}
-  @media(max-width:560px){.info .tip{width:210px}}
-  #chips .chip{position:relative}
-  .chip .info{position:relative;margin-left:auto;flex:none;width:16px;height:16px;border-radius:50%;border:1px solid var(--dim);color:var(--dim);font-family:var(--mono);font-size:10px;font-weight:500;font-style:normal;letter-spacing:0;text-transform:none;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .15s,color .15s,border-color .15s}
-  .chip:hover .info{opacity:.5}
-  .chip .l{display:flex;align-items:center;gap:6px}
-  .chip .info .tip{bottom:calc(100% + 9px);top:auto}
-  .chip .info .tip::after{bottom:auto;top:100%;border-bottom-color:transparent;border-top-color:var(--line)}
-  #chips .chip:first-child .info .tip{left:-2px;right:auto;transform:translateY(-4px)}
-  #chips .chip:first-child .info:hover .tip,#chips .chip:first-child .info.open .tip{transform:translateY(0)}
-  #chips .chip:first-child .info .tip::after{left:12px;right:auto;transform:none}
-  #chips .chip:last-child .info .tip{right:-2px;left:auto;transform:translateY(-4px)}
-  #chips .chip:last-child .info:hover .tip,#chips .chip:last-child .info.open .tip{transform:translateY(0)}
-  #chips .chip:last-child .info .tip::after{right:12px;left:auto;transform:none}
-  @media(max-width:1080px){
-   #chips .chip:nth-child(3n+1) .info .tip{left:-2px;right:auto;transform:translateY(-4px)}
-   #chips .chip:nth-child(3n+1) .info:hover .tip,#chips .chip:nth-child(3n+1) .info.open .tip{transform:translateY(0)}
-   #chips .chip:nth-child(3n+1) .info .tip::after{left:12px;right:auto;transform:none}
-   #chips .chip:nth-child(3n) .info .tip{right:-2px;left:auto;transform:translateY(-4px)}
-   #chips .chip:nth-child(3n) .info:hover .tip,#chips .chip:nth-child(3n) .info.open .tip{transform:translateY(0)}
-   #chips .chip:nth-child(3n) .info .tip::after{right:12px;left:auto;transform:none}
-  }
-  @media(max-width:560px){
-   #chips .chip:nth-child(2n+1) .info .tip{left:-2px;right:auto;transform:translateY(-4px)}
-   #chips .chip:nth-child(2n+1) .info:hover .tip,#chips .chip:nth-child(2n+1) .info.open .tip{transform:translateY(0)}
-   #chips .chip:nth-child(2n+1) .info .tip::after{left:12px;right:auto;transform:none}
-   #chips .chip:nth-child(2n) .info .tip{right:-2px;left:auto;transform:translateY(-4px)}
-   #chips .chip:nth-child(2n) .info:hover .tip,#chips .chip:nth-child(2n) .info.open .tip{transform:translateY(0)}
-   #chips .chip:nth-child(2n) .info .tip::after{right:12px;left:auto;transform:none}
-  }
   .card h2 .dot.cy{background:var(--cyan);box-shadow:0 0 9px var(--cyan)}
   .card h2 .dot.am{background:var(--amber);box-shadow:0 0 9px var(--amber)}
+  .card h2 .dot.vl{background:var(--violet);box-shadow:0 0 9px var(--violet)}
+  .card h2 .dot.co{background:var(--coral);box-shadow:0 0 9px var(--coral)}
+  .card h2 .info{margin-left:auto;flex:none;width:16px;height:16px;border-radius:50%;border:1px solid var(--dim);color:var(--dim);font-family:var(--mono);font-size:10px;font-weight:500;font-style:normal;letter-spacing:0;text-transform:none;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;position:relative;opacity:0;transition:opacity .15s,color .15s,border-color .15s}
+  .card:hover .info{opacity:.5}.info:hover,.info.open{opacity:1!important;color:var(--cyan);border-color:var(--cyan)}
+  .info .tip{position:absolute;top:calc(100% + 9px);right:-2px;width:250px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-family:system-ui;font-weight:400;font-size:12.5px;line-height:1.5;letter-spacing:.01em;text-transform:none;color:var(--muted);box-shadow:0 12px 32px rgba(0,0,0,.5);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s,transform .16s;z-index:60;text-align:left;pointer-events:none}
+  .info .tip b{color:var(--text)}.info:hover .tip,.info.open .tip{opacity:1;visibility:visible;transform:translateY(0)}
+  .info .tip::after{content:'';position:absolute;bottom:100%;right:5px;border:5px solid transparent;border-bottom-color:var(--line)}
+  .chip .info{position:relative;margin-left:auto;flex:none;width:16px;height:16px;border-radius:50%;border:1px solid var(--dim);color:var(--dim);font-family:var(--mono);font-size:10px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .15s}
+  .chip:hover .info{opacity:.5}.chip .info .tip{bottom:calc(100% + 9px);top:auto}
+  .chip .info .tip::after{bottom:auto;top:100%;border-bottom-color:transparent;border-top-color:var(--line)}
   .card .cap{font-size:11.5px;color:var(--muted);margin:3px 0 13px}
-  .c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}.c12{grid-column:span 12}
-  .chart-h{position:relative;height:200px}.chart-h.tall{height:230px}.chart-h.sm{height:150px}
+  .c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}.c9{grid-column:span 9}.c12{grid-column:span 12}
+  .chart-h{position:relative;height:200px}.chart-h.tall{height:230px}.chart-h.sm{height:150px}.chart-h.xs{height:110px}
   .big{font-family:var(--mono);font-weight:600;font-size:30px}.unit{font-size:13px;color:var(--muted)}
-  .delta{font-family:var(--mono);font-size:12px}.up{color:var(--go)}
   .mrows{display:flex;flex-direction:column;gap:11px}
   .mrow{display:grid;grid-template-columns:96px 1fr auto;align-items:center;gap:12px}
-  .mrow .nm{font-size:12px;color:var(--muted)}
-  .mrow .bar{height:7px;border-radius:5px;background:rgba(255,255,255,.06);overflow:hidden}
-  .mrow .bar i{display:block;height:100%;border-radius:5px}
-  .mrow .vv{font-family:var(--mono);font-size:13px;font-weight:500;text-align:right;min-width:78px}
+  .mrow .nm{font-size:12px;color:var(--muted)}.mrow .bar{height:7px;border-radius:5px;background:rgba(255,255,255,.06);overflow:hidden}
+  .mrow .bar i{display:block;height:100%;border-radius:5px}.mrow .vv{font-family:var(--mono);font-size:13px;font-weight:500;text-align:right;min-width:78px}
   .mrow .vv s{color:var(--muted);text-decoration:none;font-size:10px}
   .gaugewrap{display:flex;align-items:center;gap:18px}
   .ring{position:relative;width:124px;height:124px;flex:none}.ring svg{transform:rotate(-90deg)}
@@ -117,23 +86,10 @@
   .legend{display:flex;flex-direction:column;gap:8px;font-size:12px;flex:1}
   .legend .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
   .legend .lft{display:flex;align-items:center;gap:8px;color:var(--muted)}
-  .legend .sw{width:9px;height:9px;border-radius:2px;flex:none}
-  .legend b{font-family:var(--mono);font-weight:500;color:var(--text)}
+  .legend .sw{width:9px;height:9px;border-radius:2px;flex:none}.legend b{font-family:var(--mono);font-weight:500;color:var(--text)}
   .splitbar{height:30px;border-radius:8px;overflow:hidden;display:flex;font-family:var(--mono);font-weight:600;font-size:12px;margin-top:14px}
   .splitbar .easy{background:linear-gradient(90deg,var(--go-dim),var(--go));display:flex;align-items:center;padding-left:12px;color:#06210f}
   .splitbar .hard{background:linear-gradient(90deg,#c23a52,var(--coral));display:flex;align-items:center;justify-content:flex-end;padding-right:12px;color:#2a0509}
-  .cal{display:flex;flex-direction:column;gap:5px}
-  .cal .crow{display:grid;grid-template-columns:42px repeat(7,1fr);gap:5px;align-items:center}
-  .cal .wl{font-family:var(--mono);font-size:10px;color:var(--dim)}
-  .cal .dh{font-family:var(--mono);font-size:9px;color:var(--dim);text-align:center}
-  .d{height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px}
-  .d.rest{background:rgba(255,255,255,.045);color:var(--dim)}
-  .d.easy{background:rgba(52,224,125,.28);color:#bff5d6}
-  .d.qual{background:rgba(255,180,58,.38);color:#3a2a06}
-  .d.long{background:rgba(69,200,224,.42);color:#06222a}
-  .d.miss{background:transparent;border:1px dashed rgba(255,94,108,.5);color:var(--coral)}
-  .calleg{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:10.5px;color:var(--muted);font-family:var(--mono)}
-  .calleg span{display:flex;align-items:center;gap:5px}.calleg i{width:10px;height:10px;border-radius:3px;display:inline-block}
   .week{display:flex;flex-direction:column;gap:7px}
   .wk-day{display:grid;grid-template-columns:60px 70px 1fr auto;align-items:center;gap:10px;padding:9px 11px;border-radius:9px;background:var(--panel2);border:1px solid var(--line)}
   .wk-day.today{border-color:rgba(69,200,224,.4);background:rgba(69,200,224,.06)}
@@ -141,43 +97,64 @@
   .wk-day .ty{font-family:var(--mono);font-size:9px;letter-spacing:.08em;padding:2px 7px;border-radius:5px;text-transform:uppercase;text-align:center}
   .ty.easy{background:rgba(52,224,125,.16);color:var(--go)}.ty.qual{background:rgba(255,180,58,.16);color:var(--amber)}
   .ty.long{background:rgba(69,200,224,.16);color:var(--cyan)}.ty.rest{background:rgba(255,255,255,.05);color:var(--muted)}
+  .ty.run{background:rgba(52,224,125,.16);color:var(--go)}
   .wk-day .ds{font-size:12px;color:var(--text)}.wk-day .km{font-family:var(--mono);font-size:12px;color:var(--muted)}
-  .shoe{display:flex;flex-direction:column;gap:13px;margin-top:2px}
-  .shoe .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-  .shoe .nm b{font-family:var(--disp);font-size:15px;letter-spacing:.02em}
-  .shoe .role{font-family:var(--mono);font-size:9px;letter-spacing:.1em;padding:2px 6px;border-radius:4px;text-transform:uppercase}
-  .role.race{background:rgba(69,200,224,.16);color:var(--cyan)}.role.daily{background:rgba(52,224,125,.14);color:var(--go)}.role.work{background:rgba(255,180,58,.14);color:var(--amber)}
-  .shoe .track{height:8px;border-radius:5px;background:rgba(255,255,255,.06);overflow:hidden;margin:6px 0}
-  .shoe .track i{display:block;height:100%;border-radius:5px}
-  .shoe .meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
-  .heat{display:flex;flex-direction:column;gap:6px}
-  .heat .hr{display:grid;grid-template-columns:74px repeat(8,1fr);gap:5px;align-items:center}
-  .heat .lab{font-size:11px;color:var(--muted)}
-  .cell{height:19px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.5)}
-  .cell.hit{background:rgba(52,224,125,.85);color:#06210f}.cell.half{background:rgba(255,180,58,.8);color:#2a1c02}
-  .streak{display:flex;align-items:baseline;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
-  .streak b{font-family:var(--mono);font-size:20px;color:var(--go)}.streak span{font-size:11px;color:var(--muted)}
   .predbox{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
   .predbox .lead{flex:none}
   .predbox .lead .l{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase}
   .predbox .lead .k{font-family:var(--mono);font-weight:600;font-size:46px;line-height:1;margin:6px 0 4px}
-  .predbox .lead .r{font-family:var(--mono);font-size:12px;color:var(--muted)}.predbox .lead .r b{color:var(--text)}
-  .predbox .chart{flex:1;min-width:260px;height:140px;position:relative}
+  .predbox .lead .r{font-family:var(--mono);font-size:12px;color:var(--muted)}
   .inputs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px;padding-top:15px;border-top:1px solid var(--line)}
   .inputs .l{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
   .inputs .v{font-family:var(--mono);font-size:18px;margin-top:5px}.inputs .s{font-size:10.5px;color:var(--dim)}
-  .flag{margin-top:12px;padding:10px 12px;border-radius:9px;display:flex;gap:10px;align-items:flex-start;font-size:11.5px;line-height:1.45}
+  .flag{margin-top:10px;padding:10px 12px;border-radius:9px;display:flex;gap:10px;align-items:flex-start;font-size:11.5px;line-height:1.45}
   .flag.am{background:rgba(255,180,58,.08);border:1px solid rgba(255,180,58,.22)}
   .flag.cy{background:rgba(69,200,224,.07);border:1px solid rgba(69,200,224,.2)}
+  .flag.go{background:rgba(52,224,125,.07);border:1px solid rgba(52,224,125,.2)}
+  .flag.co{background:rgba(255,94,108,.07);border:1px solid rgba(255,94,108,.2)}
   .flag .ico{font-family:var(--mono);font-weight:600;flex:none}
-  .flag.am .ico{color:var(--amber)}.flag.cy .ico{color:var(--cyan)}.flag b{color:var(--text)}
+  .flag.am .ico{color:var(--amber)}.flag.cy .ico{color:var(--cyan)}.flag.go .ico{color:var(--go)}.flag.co .ico{color:var(--coral)}
+  .flag b{color:var(--text)}
+  /* BB bar */
+  .bb-bar{height:12px;border-radius:6px;background:rgba(255,255,255,.06);overflow:hidden;margin:6px 0 3px}
+  .bb-bar i{display:block;height:100%;border-radius:6px;transition:width .4s}
+  /* sleep stages */
+  .stage-row{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:8px 0 4px}
+  .stage-row .deep{background:#9a87ff}.stage-row .rem{background:#45c8e0}.stage-row .light{background:rgba(255,255,255,.2)}.stage-row .awake{background:rgba(255,94,108,.5)}
+  /* balance bar */
+  .bal-wrap{margin:10px 0}
+  .bal-bar{height:14px;border-radius:7px;overflow:hidden;display:flex}
+  .bal-bar .left{background:linear-gradient(90deg,#1c8a4f,var(--go));display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-family:var(--mono);font-size:9px;color:#06210f;font-weight:600}
+  .bal-bar .right{background:linear-gradient(90deg,#c23a52,var(--coral));display:flex;align-items:center;padding-left:6px;font-family:var(--mono);font-size:9px;color:#2a0509;font-weight:600}
+  .bal-ideal{position:relative;height:14px;margin-top:4px}
+  .bal-ideal::after{content:'';position:absolute;left:50%;top:0;bottom:0;width:1.5px;background:rgba(255,255,255,.2)}
+  /* run card */
+  .run-item{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:8px}
+  .run-item .rh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}
+  .run-item .rname{font-family:var(--disp);font-size:15px;letter-spacing:.02em}
+  .run-item .rdate{font-family:var(--mono);font-size:10px;color:var(--dim)}
+  .run-stats{display:flex;flex-wrap:wrap;gap:14px}
+  .rs{display:flex;flex-direction:column;gap:2px}
+  .rs .rl{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--dim);text-transform:uppercase}
+  .rs .rv{font-family:var(--mono);font-size:14px;font-weight:500}
+  /* hrv status badge */
+  .hrv-badge{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;padding:2px 8px;border-radius:5px;text-transform:uppercase;margin-left:8px}
+  .hrv-badge.BALANCED{background:rgba(52,224,125,.16);color:var(--go)}
+  .hrv-badge.LOW{background:rgba(255,94,108,.16);color:var(--coral)}
+  .hrv-badge.UNBALANCED{background:rgba(255,180,58,.16);color:var(--amber)}
+  .hrv-badge.POOR{background:rgba(255,94,108,.16);color:var(--coral)}
+  /* acwr badge */
+  .acwr-badge{font-family:var(--mono);font-size:9px;letter-spacing:.08em;padding:2px 7px;border-radius:5px;text-transform:uppercase}
+  .acwr-badge.OPTIMAL{background:rgba(52,224,125,.16);color:var(--go)}
+  .acwr-badge.HIGH{background:rgba(255,94,108,.16);color:var(--coral)}
+  .acwr-badge.LOW{background:rgba(255,180,58,.16);color:var(--amber)}
   footer{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;font-size:11px;color:var(--dim);font-family:var(--mono)}
   .src{position:fixed;top:14px;right:14px;z-index:20;font-family:var(--mono);font-size:10px;letter-spacing:.12em;padding:6px 11px;border-radius:20px;text-transform:uppercase;backdrop-filter:blur(6px)}
   .src.live{background:rgba(52,224,125,.14);border:1px solid rgba(52,224,125,.3);color:var(--go)}
   .src.demo{background:rgba(255,180,58,.14);border:1px solid rgba(255,180,58,.3);color:var(--amber)}
   @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-  @media(max-width:1080px){.c3,.c4,.c5,.c6,.c7,.c8{grid-column:span 12}.chips{grid-template-columns:repeat(3,1fr)}.brand h1{font-size:34px}.inputs{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:560px){body{padding:14px}.chips{grid-template-columns:repeat(2,1fr)}.cal .crow{grid-template-columns:34px repeat(7,1fr)}.heat .hr{grid-template-columns:54px repeat(8,1fr)}.predbox .lead .k{font-size:36px}}
+  @media(max-width:1080px){.c3,.c4,.c5,.c6,.c7,.c8,.c9{grid-column:span 12}.chips{grid-template-columns:repeat(3,1fr)}.brand h1{font-size:34px}.inputs{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){body{padding:14px}.chips{grid-template-columns:repeat(2,1fr)}.predbox .lead .k{font-size:36px}}
 </style>
 </head>
 <body>
@@ -187,242 +164,409 @@
     <div class="brand">
       <div class="eyebrow">Marathon Block · Telemetry</div>
       <h1>The <span>Build</span></h1>
-      <div class="phase"><span class="pill" id="m-phase">—</span> Week <b id="m-week">—</b> · <b id="m-days">—</b> days to race · no goal set — readout is fitness-driven</div>
+      <div class="phase"><span class="pill" id="m-phase">—</span> Week <b id="m-week">—</b> · <b id="m-days">—</b> days to race · fitness-driven readout</div>
     </div>
     <div class="pred">
-      <div class="l">Predicted finish · from fitness</div>
+      <div class="l">Garmin race prediction · marathon</div>
       <div class="k" id="m-pred">—</div>
       <div class="r" id="m-predr">—</div>
     </div>
   </header>
   <div class="progress"><i id="m-prog"></i><div class="taper" id="m-taper"><s>Taper</s></div></div>
   <div class="ptags"><span>W1 · Base</span><span>Build</span><span>Peak</span><span>Race</span></div>
-
   <div class="chips" id="chips"></div>
-
   <div class="tabs">
     <button class="tab active" data-tab="load"><span class="n">01</span>Fitness &amp; Load</button>
     <button class="tab" data-tab="vol"><span class="n">02</span>Volume</button>
-    <button class="tab" data-tab="pace"><span class="n">03</span>Intensity &amp; Pace</button>
+    <button class="tab" data-tab="pace"><span class="n">03</span>Intensiteit &amp; Loopdata</button>
     <button class="tab" data-tab="ready"><span class="n">04</span>Readiness &amp; Plan</button>
-    <button class="tab" data-tab="body"><span class="n">05</span>Body &amp; Recovery</button>
+    <button class="tab" data-tab="body"><span class="n">05</span>Herstel &amp; Lichaam</button>
   </div>
 
+  <!-- TAB 01: FITNESS & LOAD -->
   <div class="panel-set active" id="load"><div class="grid">
-    <div class="card c7"><h2><span class="dot"></span>Training Stress Balance · PMC<span class="info" tabindex="0">i<span class="tip"><b>Form (TSB) = CTL − ATL.</b> Fitness minus fatigue. Aim −10 to −20 while building; let it rise toward 0 to +10 in race week so you arrive fresh.</span></span></h2><div class="cap">Fitness (CTL) vs fatigue (ATL); violet line + shaded band is form (TSB). Negative = loaded, positive = fresh.</div><div class="chart-h tall"><canvas id="pmcChart"></canvas></div><div style="display:flex;align-items:baseline;gap:8px;margin-top:8px"><span class="big" id="m-form">—</span><span class="unit">current form (TSB)</span><span id="m-formlab" style="margin-left:auto;font-size:11px;color:var(--muted)"></span></div></div>
-    <div class="card c5"><h2><span class="dot am"></span>CTL Ramp · Injury Guard<span class="info" tabindex="0">i<span class="tip"><b>= this week's CTL minus last week's.</b> How fast fitness is climbing. Stay under ~6–7/wk (green); amber is watch, red means back off — your piriformis insurance.</span></span></h2><div class="cap">Weekly fitness gain. Under ~6–7/wk is your piriformis insurance — green safe, amber watch, red back off.</div><div class="chart-h tall"><canvas id="rampChart"></canvas></div></div>
-    <div class="card c7"><h2><span class="dot"></span>Weekly Training Load · TSS<span class="info" tabindex="0">i<span class="tip"><b>Training Stress Score per week = volume × intensity.</b> The raw load behind the CTL/ATL curves. Want a steady climb with clear dips on deload weeks.</span></span></h2><div class="cap">Total stress per week — the raw fuel behind the CTL/ATL curves.</div><div class="chart-h"><canvas id="tssChart"></canvas></div></div>
-    <div class="card c5"><h2><span class="dot cy"></span>VO₂max Trend<span class="info" tabindex="0">i<span class="tip"><b>Estimated aerobic ceiling (ml/kg/min), from intervals.icu.</b> A slow upward drift across the block is the goal; a sudden drop usually means fatigue or illness, not lost fitness.</span></span></h2><div class="cap">Aerobic ceiling over the block.</div><div class="chart-h"><canvas id="vo2Chart"></canvas></div><div style="display:flex;align-items:baseline;gap:8px;margin-top:8px"><span class="big" style="color:var(--cyan)" id="m-vo2">—</span><span class="unit">ml/kg/min</span></div></div>
-    <div class="card c12"><h2><span class="dot am"></span>Monotony &amp; Strain · Injury Guard<span class="info" tabindex="0">i<span class="tip"><b>Monotony = mean daily load ÷ its variation; strain = weekly load × monotony.</b> Keep monotony under 2 — training every day the same raises injury and illness risk even at modest volume.</span></span></h2><div class="cap">Foster load monitoring. Monotony &gt;2 (training too samey) or a strain spike raises injury/illness risk — an early-warning layer beyond the CTL ramp.</div><div class="chart-h"><canvas id="monoChart"></canvas></div></div>
+    <div class="card c7"><h2><span class="dot"></span>Training Load · ACWR<span class="info" tabindex="0">i<span class="tip"><b>Acute (ATL) vs Chronic (CTL) workload.</b> ATL = stress van de afgelopen ~7 dagen. CTL = fitness opgebouwd over ~42 dagen. ACWR = ATL÷CTL. Optimale zone 0.8–1.3 — daarboven verhoogd blessurerisico.</span></span></h2><div class="cap">Acute belasting (ATL) vs fitness (CTL) van Garmin. ACWR optimale zone 0.8–1.3.</div>
+      <div class="chart-h tall"><canvas id="pmcChart"></canvas></div>
+      <div style="display:flex;align-items:baseline;gap:12px;margin-top:8px;flex-wrap:wrap">
+        <span><span class="big" id="m-ctl">—</span><span class="unit"> CTL</span></span>
+        <span><span class="big" style="color:var(--coral)" id="m-atl">—</span><span class="unit"> ATL</span></span>
+        <span><span class="big" style="color:var(--violet)" id="m-form">—</span><span class="unit"> form</span></span>
+        <span id="m-acwr-badge" style="margin-left:auto;align-self:center"></span>
+      </div>
+    </div>
+    <div class="card c5"><h2><span class="dot cy"></span>VO₂max Trend<span class="info" tabindex="0">i<span class="tip"><b>Garmin's VO₂max schatting (ml/kg/min).</b> Langzame stijging over het blok is het doel. Plotselinge daling = vermoeidheid of ziekte, niet verloren fitness.</span></span></h2><div class="cap">Aerobe capaciteit over het blok — direct uit Garmin.</div>
+      <div class="chart-h tall"><canvas id="vo2Chart"></canvas></div>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px"><span class="big" style="color:var(--cyan)" id="m-vo2">—</span><span class="unit">ml/kg/min</span></div>
+    </div>
+    <div class="card c7"><h2><span class="dot am"></span>Training Status · Garmin<span class="info" tabindex="0">i<span class="tip"><b>Garmin's trainingstatus op basis van belasting vs fitness.</b> STRAINED = te hoog tempo van opbouw. MAINTAINING = stabiel. IMPROVING = progressie zichtbaar. RECOVERY = herstelweek.</span></span></h2><div class="cap">Garmin's analyse van je trainingsbalans — belasting vs. aerobe en anaerobe maandelijkse doelen.</div>
+      <div class="chart-h sm"><canvas id="loadBalChart"></canvas></div>
+      <div id="m-trainingstatus" style="margin-top:10px;font-size:12px;color:var(--muted)"></div>
+    </div>
+    <div class="card c5"><h2><span class="dot"></span>Race Predictions<span class="info" tabindex="0">i<span class="tip"><b>Garmin's racetijdvoorspellingen op basis van je huidige VO₂max en trainingsdata.</b> Gebaseerd op dezelfde data als je horloge gebruikt voor je dagelijkse statistieken.</span></span></h2><div class="cap">Garmin's voorspellingen op basis van huidige conditie.</div>
+      <div id="race-preds" style="margin-top:4px;display:flex;flex-direction:column;gap:10px"></div>
+    </div>
   </div></div>
 
+  <!-- TAB 02: VOLUME -->
   <div class="panel-set" id="vol"><div class="grid">
-    <div class="card c8"><h2><span class="dot"></span>Weekly Mileage vs Plan<span class="info" tabindex="0">i<span class="tip"><b>Completed km against the planned curve.</b> Green = done, grey = plan, cyan line = longest run. The odd small miss is fine; watch for weeks consistently under plan.</span></span></h2><div class="cap">Completed (green) against the planned curve (grey). Cyan line = long-run progression.</div><div class="chart-h tall"><canvas id="volChart"></canvas></div></div>
-    <div class="card c4"><h2><span class="dot am"></span>Long-Run Share<span class="info" tabindex="0">i<span class="tip"><b>Long run as a percentage of weekly distance.</b> Marathon sweet spot is 30–40% (shaded). Above ~40% means the week leans too hard on one run — spread the volume out.</span></span></h2><div class="cap">Long run as % of weekly distance. Marathon range 30–40% (shaded); flag above ~40%.</div><div class="chart-h tall"><canvas id="lrChart"></canvas></div></div>
-    <div class="card c12"><h2><span class="dot"></span>Consistency Heatmap<span class="info" tabindex="0">i<span class="tip"><b>Every day of the block.</b> E = easy, Q = quality, L = long, × = missed. Check that rest days actually show up and that two quality days aren't stacked back-to-back.</span></span></h2><div class="cap">Every day of the block. Watch that rest days appear and quality sessions aren't stacked back-to-back.</div><div class="cal" id="cal"></div>
-      <div class="calleg"><span><i style="background:rgba(255,255,255,.1)"></i>Rest</span><span><i style="background:rgba(52,224,125,.4)"></i>Easy</span><span><i style="background:rgba(255,180,58,.5)"></i>Quality</span><span><i style="background:rgba(69,200,224,.5)"></i>Long</span><span><i style="border:1px dashed rgba(255,94,108,.6)"></i>Missed</span><span id="m-runcount" style="margin-left:auto;color:var(--text)"></span></div></div>
+    <div class="card c8"><h2><span class="dot"></span>Wekelijks Volume<span class="info" tabindex="0">i<span class="tip"><b>Kilometers per trainingsweek.</b> Groen = gedaan. Het doel is een gestage opbouw met duidelijke deload-weken.</span></span></h2><div class="cap">Wekelijkse kilometerstand — opbouw richting race-peak van 55–70 km/week.</div>
+      <div class="chart-h tall"><canvas id="volChart"></canvas></div>
+    </div>
+    <div class="card c4"><h2><span class="dot am"></span>Intensiteitsmix<span class="info" tabindex="0">i<span class="tip"><b>Tijd per Pfitzinger HR-zone, laatste 28 dagen.</b> Doel ~80% easy (recovery + general aerobic). Te veel hard werk stopt de progressie en verhoogt blessurerisico.</span></span></h2><div class="cap">Pfitzinger HR-zone verdeling laatste 28 dagen. ~80% easy is het doel.</div>
+      <div class="gaugewrap" style="margin-top:4px">
+        <div class="ring"><svg width="124" height="124" viewBox="0 0 124 124" id="zoneRing"></svg><div class="ctr"><b id="m-easy">—</b><s>Easy</s></div></div>
+        <div class="legend" id="zoneLegend"></div>
+      </div>
+      <div class="splitbar" id="m-split"></div>
+    </div>
+    <div class="card c12"><h2><span class="dot cy"></span>Recente Runs · Overzicht<span class="info" tabindex="0">i<span class="tip"><b>Laatste 5 runs met splits, HR, cadans en beenbalans.</b> Directe data van Garmin — geen tussenlaag.</span></span></h2><div class="cap">Laatste 5 activiteiten met loopeconomie-data direct van de Forerunner.</div>
+      <div id="recent-runs"></div>
+    </div>
   </div></div>
 
+  <!-- TAB 03: INTENSITEIT & LOOPDATA -->
   <div class="panel-set" id="pace"><div class="grid">
-    <div class="card c4"><h2><span class="dot"></span>Intensity Mix<span class="info" tabindex="0">i<span class="tip"><b>Time-in-zone over the last 4 weeks.</b> Polarised target is about 80% easy / 20% hard. Too little easy running is the most common cause of stalled progress and niggles.</span></span></h2><div class="cap">Time-in-zone, last 4 weeks. ~80% easy is the target.</div>
-      <div class="gaugewrap" style="margin-top:4px"><div class="ring"><svg width="124" height="124" viewBox="0 0 124 124" id="zoneRing"></svg><div class="ctr"><b id="m-easy">—</b><s>Easy</s></div></div><div class="legend" id="zoneLegend"></div></div>
-      <div class="splitbar" id="m-split"></div></div>
-    <div class="card c8"><h2><span class="dot cy"></span>Aerobic Engine · Pace @ Fixed HR<span class="info" tabindex="0">i<span class="tip"><b>Pace held at a steady reference HR (faster = fitter), plus long-run HR/pace decoupling.</b> Decoupling under 5% means you're durable enough to hold pace late in the marathon.</span></span></h2><div class="cap">Pace held at a steady reference HR (faster = fitter) plus HR/pace decoupling on long runs (&lt;5% = race-durable).</div><div class="chart-h tall"><canvas id="aeroChart"></canvas></div></div>
-    <div class="card c12"><h2><span class="dot"></span>Marathon-Pace Analytics<span class="info" tabindex="0">i<span class="tip"><b>Average HR at the same MP effort across sessions.</b> HR drifting down over time = fitness rising at goal pace. Drifting up = recalibrate the pace or check for fatigue.</span></span></h2><div class="cap">Avg HR while holding the same MP effort across sessions. HR drifting <b>down</b> = fitness rising; up = recalibrate.</div><div class="chart-h"><canvas id="mpChart"></canvas></div></div>
-    <div class="card c6"><h2><span class="dot cy"></span>Best Efforts · Pace Curve<span class="info" tabindex="0">i<span class="tip"><b>Fastest average pace sustained over each distance this block.</b> Your seasonal pace curve and a reality-check on the predictor — tune-up races will set the fast points.</span></span></h2><div class="cap">Fastest average pace sustained over each distance this block — your seasonal pace curve and a reality-check on the predictor.</div><div class="inputs" id="beList"></div></div>
-    <div class="card c6"><h2><span class="dot"></span>Efficiency Factor<span class="info" tabindex="0">i<span class="tip"><b>EF = metres per minute ÷ heart rate</b> on aerobic runs. Speed per heartbeat. A rising line at the same effort is direct evidence your aerobic engine is improving.</span></span></h2><div class="cap">Speed per heartbeat (m/min ÷ HR) on runs with HR. Rising = your aerobic engine improving at the same effort.</div><div class="chart-h"><canvas id="efChart"></canvas></div><div style="display:flex;align-items:baseline;gap:8px;margin-top:8px"><span class="big" id="m-ef">—</span><span class="unit">m/min per bpm</span></div></div>
+    <div class="card c6"><h2><span class="dot co"></span>Beenbalans · L/R asymmetrie<span class="info" tabindex="0">i<span class="tip"><b>Links/rechts grondcontactbalans per run.</b> Doel &lt;2% asymmetrie van 50/50. Jij laadt nu meer op links (52%) — klassiek compensatiepatroon bij rechter gluteus/piriformis-voorgeschiedenis.</span></span></h2><div class="cap">Grondcontactbalans per run. Ideaal 50/50 — afwijking &gt;2% is een signaal voor gerichte krachtarbeid rechts.</div>
+      <div class="chart-h"><canvas id="balanceChart"></canvas></div>
+      <div id="m-balance-detail" style="margin-top:10px"></div>
+    </div>
+    <div class="card c6"><h2><span class="dot cy"></span>Loopeconomie · Cadans &amp; GCT<span class="info" tabindex="0">i<span class="tip"><b>Cadans (spm) en Ground Contact Time (ms) per run.</b> Doel: cadans richting 180 spm, GCT dalend. Lage cadans bij hard lopen = grotere staplengte = meer heupbelasting = piriformis-risico.</span></span></h2><div class="cap">Cadans (spm) en grondcontacttijd (ms) per run. Cadans doel: 180 spm. GCT: dalend is beter.</div>
+      <div class="chart-h"><canvas id="econChart"></canvas></div>
+    </div>
+    <div class="card c6"><h2><span class="dot"></span>Efficiency Factor<span class="info" tabindex="0">i<span class="tip"><b>EF = vermogen (W) ÷ gemiddelde HR.</b> Hogere waarde = meer watt per hartslag = efficiënter. Een stijgende lijn bij gelijke inspanning bewijst aerobe progressie.</span></span></h2><div class="cap">Watt per hartslag op easy runs. Stijgende trend = aantoonbare aerobe progressie.</div>
+      <div class="chart-h"><canvas id="efChart"></canvas></div>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px"><span class="big" id="m-ef">—</span><span class="unit">W/bpm</span></div>
+    </div>
+    <div class="card c6"><h2><span class="dot am"></span>Splits · Laatste Run<span class="info" tabindex="0">i<span class="tip"><b>Per-km splits van de meest recente run.</b> Let op HR-drift (stijgende lijn bij gelijke pace = vermoeidheid of hitte), cadansvariatie en pacepatroon.</span></span></h2><div class="cap">Per-kilometer splits van de meest recente run — HR, cadans en pace per lap.</div>
+      <div class="chart-h tall"><canvas id="splitsChart"></canvas></div>
+    </div>
   </div></div>
 
+  <!-- TAB 04: READINESS & PLAN -->
   <div class="panel-set" id="ready"><div class="grid">
-    <div class="card c12"><h2><span class="dot cy"></span>Race-Time Predictor · Current Fitness Only<span class="info" tabindex="0">i<span class="tip"><b>Riegel projection from your best recent run</b> (time ≈ effort × (42.195 ÷ dist) to the power 1.06). No goal entered — it shows where today's fitness lands. Conservative early, sharper once you race tune-ups.</span></span></h2><div class="cap">No goal entered. Where your fitness says you'd finish 26.2 today — Riegel projection from your best recent effort, with a confidence range.</div>
-      <div class="predbox"><div class="lead"><div class="l">Projected Finish</div><div class="k" id="m-pred2">—</div><div class="r" id="m-pred2r">—</div></div><div class="chart"><canvas id="predChart"></canvas></div></div>
-      <div class="inputs" id="m-inputs"></div></div>
-    <div class="card c7"><h2><span class="dot"></span>Next 7 Days<span class="info" tabindex="0">i<span class="tip"><b>Planned sessions pulled from your intervals.icu calendar.</b> The forward view, so the board is a compass and not just a mirror. Days with nothing planned show as rest.</span></span></h2><div class="cap">The forward view — what's planned, so the board is a compass, not just a mirror.</div><div class="week" id="week"></div></div>
-    <div class="card c5"><h2><span class="dot"></span>RHR &amp; HRV<span class="info" tabindex="0">i<span class="tip"><b>Resting heart rate and heart-rate variability baselines.</b> Several days of rising RHR or falling HRV is an early flag for illness or deep fatigue — ease off before it becomes a problem.</span></span></h2><div class="cap">Daily baselines — the early-warning system for illness or deep fatigue.</div><div class="chart-h"><canvas id="rhrChart"></canvas></div>
-      <div class="mrows" style="margin-top:10px"><div class="mrow"><span class="nm">Resting HR</span><div class="bar"><i id="m-rhrbar" style="background:var(--go)"></i></div><span class="vv" id="m-rhr">—</span></div><div class="mrow"><span class="nm">HRV</span><div class="bar"><i id="m-hrvbar" style="background:var(--go)"></i></div><span class="vv" id="m-hrv">—</span></div></div></div>
-    <div class="card c12" id="ai-card"><h2><span class="dot cy"></span>AI Coaching Feedback<span class="info" tabindex="0">i<span class="tip"><b>Dagelijks gegenereerd door Claude</b> op basis van je intervals.icu data — zones, cadans, efficiency factor, belasting en herstel. Automatisch bijgewerkt na elke sync.</span></span></h2><div class="cap">Datagedreven coaching op basis van je laatste runs en trainingsstatus — elke dag automatisch bijgewerkt.</div>
+    <div class="card c4"><h2><span class="dot cy"></span>Training Readiness<span class="info" tabindex="0">i<span class="tip"><b>Garmin's ochtend-gereedheidscore (0–100).</b> Samengesteld uit HRV, slaap, Body Battery, herstel en stressniveau. Onder 40 = hersteldag. 40–60 = matig. Boven 60 = groen licht.</span></span></h2><div class="cap">Garmin's dagelijkse gereedheidscore — samengesteld uit HRV, slaap, Body Battery en herstel.</div>
+      <div id="readiness-display" style="margin-top:8px"></div>
+    </div>
+    <div class="card c8"><h2><span class="dot"></span>Body Battery · 14 dagen<span class="info" tabindex="0">i<span class="tip"><b>Garmin Body Battery = opgeladen door slaap, verbruikt door activiteit en stress.</b> Ideaal start je de dag boven 75. Consistent laag (&lt;40) = te veel stress, te weinig herstel.</span></span></h2><div class="cap">Dagelijks herstel — opgeladen door slaap, verbruikt door training en stress.</div>
+      <div class="chart-h"><canvas id="bbChart"></canvas></div>
+    </div>
+    <div class="card c7"><h2><span class="dot"></span>Komende 7 Dagen<span class="info" tabindex="0">i<span class="tip"><b>Geplande workouts uit Garmin Connect (gesynchroniseerd via TrainingPeaks).</b> Je agenda als kompas, niet alleen als spiegel.</span></span></h2><div class="cap">Geplande workouts uit Garmin — direct gesynchroniseerd vanuit TrainingPeaks.</div>
+      <div class="week" id="week"></div>
+    </div>
+    <div class="card c5"><h2><span class="dot vl"></span>HRV &amp; Status<span class="info" tabindex="0">i<span class="tip"><b>HRV (hartslag-variabiliteit) is de vroegste herstelmarker.</b> Jouw baseline 59–82 ms. BALANCED = volledig hersteld. LOW = sub-baseline. UNBALANCED = acute stress (slaaptekort, ziekte).</span></span></h2><div class="cap">Nacht-HRV vs jouw persoonlijke baseline (59–82 ms). Vroegste herstelmarker.</div>
+      <div class="chart-h"><canvas id="hrvChart"></canvas></div>
+      <div id="m-hrv-status" style="margin-top:8px;font-size:12px"></div>
+    </div>
+    <div class="card c12" id="ai-card"><h2><span class="dot cy"></span>AI Coaching Feedback · Pfitzinger Coach<span class="info" tabindex="0">i<span class="tip"><b>Dagelijks gegenereerd door Claude</b> op basis van Garmin data — zones, cadans, beenbalans, HRV, Body Battery en trainingsbelasting. Direct na elke sync bijgewerkt.</span></span></h2><div class="cap">Datagedreven Pfitzinger-coaching op basis van je Garmin data — elke sync automatisch bijgewerkt.</div>
       <div id="ai-body" style="margin-top:14px;font-size:13.5px;line-height:1.7;color:var(--text)"><span style="color:var(--muted)">Laden…</span></div>
       <div id="ai-meta" style="margin-top:10px;font-size:11px;color:var(--dim)"></div>
     </div>
   </div></div>
 
+  <!-- TAB 05: HERSTEL & LICHAAM -->
   <div class="panel-set" id="body"><div class="grid">
-    <div class="card c4"><h2><span class="dot"></span>Weight Trend<span class="info" tabindex="0">i<span class="tip"><b>Body-weight toward your race-weight zone</b> (dashed line = 78 kg). Aim for a gentle decline; sharp mid-block drops usually cost training quality and lean mass.</span></span></h2><div class="cap">Tracking toward race-weight zone.</div><div class="chart-h sm"><canvas id="wtChart"></canvas></div><div style="display:flex;align-items:baseline;gap:8px;margin-top:10px"><span class="big" id="m-wt">—</span><span class="unit">kg</span></div></div>
-    <div class="card c4"><h2><span class="dot cy"></span>Sleep &amp; Wellness<span class="info" tabindex="0">i<span class="tip"><b>Weekly sleep hours and subjective soreness (1–4).</b> The recovery you can't see in pace. Persistent short sleep or rising soreness is your cue to add a rest day.</span></span></h2><div class="cap">Weekly sleep hours and subjective soreness from intervals.icu — recovery you can't see in pace.</div><div class="chart-h sm"><canvas id="sleepChart"></canvas></div><div id="m-sleepnote" style="margin-top:10px;color:var(--muted);font-size:11px"></div></div>
-    <div class="card c4"><h2><span class="dot"></span>Strength &amp; Mobility<span class="info" tabindex="0">i<span class="tip"><b>Sessions logged as Garmin activities.</b> Target strength 2×/wk, mobility most days. Green = target met, amber = partial. Consistency here is what protects your right glute and piriformis.</span></span></h2><div class="cap">Sessions logged as Garmin activities. Target: strength 2×/wk, mobility most days.</div><div class="heat" id="smHeat"></div><div class="streak" id="m-smnote"></div></div>
+    <div class="card c4"><h2><span class="dot"></span>Gewicht<span class="info" tabindex="0">i<span class="tip"><b>Gewicht richting racedoelgewicht (78 kg).</b> Streef naar geleidelijke daling; scherpe dalingen halverwege het blok kosten trainingskwaliteit en spiermassa.</span></span></h2><div class="cap">Gewichtstrend richting 78 kg race-gewicht.</div>
+      <div class="chart-h sm"><canvas id="wtChart"></canvas></div>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-top:10px"><span class="big" id="m-wt">—</span><span class="unit">kg</span><span id="m-wt-delta" style="font-family:var(--mono);font-size:12px;margin-left:8px;color:var(--muted)"></span></div>
+    </div>
+    <div class="card c8"><h2><span class="dot cy"></span>Slaap · Kwaliteit &amp; Duur<span class="info" tabindex="0">i<span class="tip"><b>Slaapduur en fases (deep, REM, light) direct van Garmin.</b> Doel: 7–9 uur, &gt;15% deep sleep, &gt;20% REM. Aanhoudend slechte slaap = vermoeidheidsaccumulatie die je pas 3–4 dagen later voelt in je training.</span></span></h2><div class="cap">Slaapduur en fases direct van Garmin. Doel: 7–9u, &gt;15% deep, &gt;20% REM.</div>
+      <div class="chart-h"><canvas id="sleepChart"></canvas></div>
+      <div id="m-sleep-detail" style="margin-top:10px;font-size:11px;color:var(--muted)"></div>
+    </div>
+    <div class="card c6"><h2><span class="dot am"></span>Rusthartslag &amp; Stress<span class="info" tabindex="0">i<span class="tip"><b>RHR en gemiddelde dagelijkse stressscore.</b> Stijgende RHR (&gt;5 bpm boven baseline) = overbelasting of ziekte-onset. Stress en RHR samen omhoog = hersteldag inlassen.</span></span></h2><div class="cap">RHR en dagelijkse stressscore — samen de vroegste indicatoren van overbelasting.</div>
+      <div class="chart-h"><canvas id="rhrChart"></canvas></div>
+      <div class="mrows" style="margin-top:10px">
+        <div class="mrow"><span class="nm">Rust-HR</span><div class="bar"><i id="m-rhrbar" style="background:var(--go)"></i></div><span class="vv" id="m-rhr">—</span></div>
+        <div class="mrow"><span class="nm">Stress</span><div class="bar"><i id="m-stressbar" style="background:var(--amber)"></i></div><span class="vv" id="m-stress">—</span></div>
+      </div>
+    </div>
+    <div class="card c6"><h2><span class="dot co"></span>Beenbalans Detail · Laatste Run<span class="info" tabindex="0">i<span class="tip"><b>Links/rechts grondcontactbalans, GCT en vertical oscillation.</b> 52% links = 4% asymmetrie — je laadt meer op links doordat rechts piriformis compensatiegedrag vertoont. Doelzone &lt;51.5% links.</span></span></h2><div class="cap">Beenbalans en loopeconomie-parameters van de meest recente run.</div>
+      <div id="balance-detail-body" style="margin-top:8px"></div>
+    </div>
   </div></div>
 
-  <footer><span>MARATHON BUILD · TELEMETRY</span><span id="m-updated">SOURCE: —</span></footer>
+  <footer><span>MARATHON BUILD · TELEMETRY · GARMIN DIRECT</span><span id="m-updated">—</span></footer>
 </div>
 
 <script>
 const C={go:'#34e07d',goDim:'#1c8a4f',amber:'#ffb43a',coral:'#ff5e6c',cyan:'#45c8e0',violet:'#9a87ff',text:'#e8edf3',muted:'#7d889a',dim:'#525c6b',grid:'rgba(255,255,255,.045)'};
-
-/* ---- SAMPLE fallback (used when data.json is absent, e.g. opened locally) ---- */
-const SAMPLE={
-  meta:{phase:'Build phase',week:8,totalWeeks:18,daysToRace:70,predicted:'2:58:24',predictedRange:'2:55:10–3:01:40',predictedPace:'4:13/km',vo2:59,updated:'sample data',live:false,unit:'km'},
-  kpi:{adherence:'94%',adherenceDetail:'47/49 sessions hit',ramp:'+5.0',rampNote:'upper safe (<6–7)',rampSt:'amber',easyHard:'82/18',totalVol:'517',volAvg:'8 wks · 65/wk avg',readiness:'Building'},
-  weeks:['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12','W13','W14','W15','W16','W17','W18'],
-  volume:{plan:[53,60,66,55,68,72,79,68,80,85,72,87,89,72,89,77,58,42],done:[51,61,64,56,66,74,77,68,null,null,null,null,null,null,null,null,null,null],longrun:[19,21,23,18,24,26,27,21,null,null,null,null,null,null,null,null,null,null]},
-  longRunPct:[37,34,36,32,36,35,35,31],
-  pmc:{ctl:[45,49,53,55,59,63,67,72],atl:[48,54,52,49,63,68,71,69],form:[-3,-5,1,6,-4,-5,-4,3]},
-  monotony:[1.4,1.6,1.3,1.1,1.7,1.8,1.5,1.2],strain:[2100,2600,2400,1900,3100,3400,3000,2300],
-  ef:[1.78,1.80,1.82,1.83,1.85,1.86,1.88,1.90],
-  bestEfforts:[{d:'5 km',pace:'3:52/km',on:'W6'},{d:'10 km',pace:'4:02/km',on:'W7'},{d:'Half',pace:'4:18/km',on:'W5'}],
-  sleep:[7.2,7.0,7.4,6.8,7.1,7.3,7.0,7.5],soreness:[2,2,1,3,2,2,1,1],
-  strength:[2,2,1,2,2,2,2,2],mobility:[6,7,5,6,7,6,7,7],
-  tss:[310,360,400,330,420,470,500,430],
-  vo2:[56,56,57,57,58,58,59,59],
-  rhr:[48,47,47,46,46,45,45,44],hrv:[58,60,61,64,63,67,69,71],weight:[90.0,89.1,88.2,87.6,86.5,85.7,84.8,84.1],
-  zones:[{n:'Z1 recovery',v:22,c:'#2f7d52'},{n:'Z2 aerobic',v:60,c:'#34e07d'},{n:'Z3 tempo',v:5,c:'#ffb43a'},{n:'Z4 threshold',v:9,c:'#ff8a4a'},{n:'Z5 VO2',v:4,c:'#ff5e6c'}],
-  aero:{paceAtHR:[305,301,298,296,292,290,288,287],decoupling:[6.4,null,5.6,null,5.1,4.8,null,4.1]},
-  mp:{labels:[],hr:[],drift:[]},
-  predictorSeconds:[11220,11100,11040,10980,10860,10800,10740,10704],
-  predictorInputs:[{l:'Threshold pace',v:'3:58/km',s:'↓ from 4:04 · W1',cy:true},{l:'VO₂max',v:'59',s:'↑ +3'},{l:'Best long-run effic.',v:'4.1% drift',s:'aerobic'},{l:'Last tune-up',v:'—',s:'none yet · feeds model'}],
-  consistency:[['rest','easy','qual','easy','rest','easy','long'],['easy','qual','easy','rest','easy','easy','long'],['rest','easy','qual','easy','easy','rest','long'],['easy','rest','easy','qual','rest','easy','long'],['easy','qual','easy','easy','rest','easy','long'],['easy','qual','easy','easy','easy','qual','long'],['rest','easy','qual','easy','rest','easy','long'],['easy','qual','easy','miss','rest','easy','long']],
-  runcount:'47 runs · 12 rest days · 1 missed',
-  week7:[{d:'Today',t:'easy',ds:'Easy aerobic',km:'8 km · Z2'},{d:'Tue',t:'qual',ds:'Intervals',km:'6×1km @ thr'},{d:'Wed',t:'easy',ds:'Recovery',km:'6 km'},{d:'Thu',t:'qual',ds:'Tempo',km:'10 km w/ 5 @ MP'},{d:'Fri',t:'rest',ds:'Rest + mobility',km:'—'},{d:'Sat',t:'easy',ds:'Easy aerobic',km:'8 km'},{d:'Sun',t:'long',ds:'Long run',km:'30 km'}]
-};
-
-let DATA=SAMPLE;
 Chart.defaults.color=C.muted;Chart.defaults.font.family="'IBM Plex Mono', monospace";Chart.defaults.font.size=10.5;
 Chart.defaults.plugins.legend.display=false;
 Object.assign(Chart.defaults.plugins.tooltip,{backgroundColor:'#0a0d11',borderColor:'rgba(255,255,255,.1)',borderWidth:1,padding:9,titleColor:C.text,bodyColor:C.muted});
 const G={grid:{color:C.grid,drawTicks:false},border:{display:false},ticks:{padding:6}};
-const fmt=s=>Math.floor(s/3600)+':'+String(Math.floor(s%3600/60)).padStart(2,'0')+':'+String(Math.round(s%60)).padStart(2,'0');
-const fmtm=s=>Math.floor(s/3600)+':'+String(Math.floor(s%3600/60)).padStart(2,'0');
-const wlabels=()=>DATA.weeks.slice(0,DATA.pmc.ctl.length);
+const fmtm=s=>{if(!s)return'—';const t=parseInt(s);return Math.floor(t/3600)+':'+String(Math.floor(t%3600/60)).padStart(2,'0');};
+
+const SAMPLE={
+  meta:{phase:'Build phase',week:1,totalWeeks:18,daysToRace:123,predicted:'—',vo2:48,updated:'sample',live:false,unit:'km',ctl:0,atl:0,form:0,acwr:null,trainingStatus:'—'},
+  kpi:{ramp:null,rampNote:'—',rampSt:'go',easyHard:'—',totalVol:'0',volAvg:'—',readiness:null},
+  pmc:{dates:[],ctl:[],atl:[],form:[],acwr:[]},
+  volume:{labels:[],done:[]},
+  zones:[],week7:[],ef:[],
+  recentActivities:[],bodyBattery:[],sleep:[],hrv:[],rhr:[],stress:[],weight:[],vo2:[],
+  racePredictions:{},trainingReadiness:{},weeks:{}
+};
+let DATA=SAMPLE;
 
 function populate(){
   const m=DATA.meta,k=DATA.kpi;
-  document.getElementById('m-phase').textContent=m.phase;
-  document.getElementById('m-week').textContent=String(m.week).padStart(2,'0')+' / '+m.totalWeeks;
-  document.getElementById('m-days').textContent=m.daysToRace;
-  document.getElementById('m-pred').textContent=m.predicted;
-  document.getElementById('m-predr').textContent='≈ '+m.predictedPace+' · range '+m.predictedRange;
-  document.getElementById('m-prog').style.width=(m.week/m.totalWeeks*100).toFixed(1)+'%';
-  const taperPct=((m.totalWeeks-3)/m.totalWeeks*100).toFixed(1);
-  document.getElementById('m-taper').style.left=taperPct+'%';
-  const stMap={amber:'var(--amber)',coral:'var(--coral)',go:'var(--go)'};
+  document.getElementById('m-phase').textContent=m.phase||'—';
+  document.getElementById('m-week').textContent=String(m.week||1).padStart(2,'0')+' / '+(m.totalWeeks||18);
+  document.getElementById('m-days').textContent=m.daysToRace||'—';
+  // Race prediction
+  const rp=DATA.racePredictions||{};
+  document.getElementById('m-pred').textContent=rp.fm||m.predicted||'—';
+  const subs=[rp['5k']?'5K '+rp['5k']:'',rp['10k']?'10K '+rp['10k']:'',rp.hm?'HM '+rp.hm:''].filter(Boolean).join(' · ');
+  document.getElementById('m-predr').textContent=subs||'sync data voor voorspelling';
+  // Progress bar
+  document.getElementById('m-prog').style.width=((m.week||1)/(m.totalWeeks||18)*100).toFixed(1)+'%';
+  document.getElementById('m-taper').style.left=(((m.totalWeeks||18)-3)/(m.totalWeeks||18)*100).toFixed(1)+'%';
+  // ACWR badge
+  const acwrStatus=(DATA.pmc?.acwr||[]).at(-1);
+  document.getElementById('m-acwr-badge').innerHTML=acwrStatus?`<span class="acwr-badge ${acwrStatus}">${acwrStatus}</span>`:'';
+  // CTL/ATL/form
+  const ctlArr=DATA.pmc?.ctl||[];
+  const atlArr=DATA.pmc?.atl||[];
+  const formArr=DATA.pmc?.form||[];
+  document.getElementById('m-ctl').textContent=ctlArr.at(-1)??'—';
+  document.getElementById('m-atl').textContent=atlArr.at(-1)??'—';
+  document.getElementById('m-form').textContent=formArr.at(-1)??'—';
+  document.getElementById('m-vo2').textContent=(DATA.vo2||[]).at(-1)?.vo2??m.vo2??'—';
+  // Chips
+  const rdScore=DATA.trainingReadiness?.score;
+  const rdLevel=DATA.trainingReadiness?.level||'—';
+  const rdColor=rdScore>60?'var(--go)':rdScore>40?'var(--amber)':'var(--coral)';
+  const stMap={'go':'var(--go)','amber':'var(--amber)','coral':'var(--coral)'};
+  const bb=DATA.bodyBattery?.at(-1);
   const chips=[
-    {l:'Adherence',v:k.adherence,s:k.adherenceDetail,st:'var(--go)',tip:"<b>Completed sessions ÷ planned sessions</b> from your intervals.icu calendar, block-to-date. How closely you're following the plan — the odd miss is fine, a falling trend isn't."},
-    {l:'CTL Ramp',v:k.ramp+'<span class="unit">/wk</span>',s:k.rampNote,st:stMap[k.rampSt]||'var(--go)',tip:"<b>Weekly rise in CTL (fitness).</b> Under ~6–7/wk is safe, amber is watch, red means back off — your main guardrail against piriformis flare-ups."},
-    {l:'Easy / Hard',v:k.easyHard,s:'80/20 target',st:'var(--go)',tip:"<b>Share of training that's easy vs hard.</b> Aim for about 80/20. More easy running builds the aerobic base; too much hard work stalls progress and invites injury."},
-    {l:'Total Volume',v:k.totalVol+'<span class="unit">'+m.unit+'</span>',s:k.volAvg,st:'var(--cyan)',tip:"<b>Total distance this block, with weekly average.</b> The headline number behind your fitness — your 18/55 plan blended toward 55–70/wk."},
-    {l:'Readiness',v:'<span style="font-size:18px">'+k.readiness+'</span>',s:'load · on track',st:'var(--go)',tip:"<b>Derived from current form (TSB = CTL − ATL).</b> Fresh, On track, or Loaded — a quick read on whether today is a day to push or to recover."}
+    {l:'ACWR',v:((DATA.pmc?.acwr||[]).at(-1)||'—').toString(),s:'opt. zone 0.8–1.3',st:'var(--cyan)',tip:'<b>Acute:Chronic Workload Ratio.</b> Hoe je acute belasting zich verhoudt tot je fitness. 0.8–1.3 = optimale zone. Boven 1.5 = verhoogd blessurerisico.'},
+    {l:'CTL Ramp',v:(k.ramp!=null?'+'+k.ramp:k.ramp||'—')+' <span class="unit">/wk</span>',s:k.rampNote||'—',st:stMap[k.rampSt]||'var(--go)',tip:'<b>Wekelijkse CTL-stijging.</b> Onder ~6–7/wk is veilig — je piriformisverzekering.'},
+    {l:'Easy / Hard',v:k.easyHard||'—',s:'80/20 doel (Pfitzinger)',st:'var(--go)',tip:'<b>Aandeel easy vs hard training laatste 28d.</b> Pfitzinger-model: ~80% easy bouwt het aerobe fundament.'},
+    {l:'Body Battery',v:bb?(bb.charged||'—').toString():'—',s:bb?`+${bb.charged} opgeladen / −${bb.drained} verbruikt`:'geen data',st:'var(--cyan)',tip:'<b>Garmin Body Battery.</b> Opgeladen door slaap, verbruikt door training en stress. Ideaal boven 75 starten aan een trainingsdag.'},
+    {l:'Readiness',v:`<span style="font-size:18px;color:${rdColor}">${rdScore??'—'}</span>`,s:rdLevel,st:rdColor,tip:'<b>Garmin Training Readiness (0–100).</b> Samengesteld uit HRV-status, slaap, Body Battery, recent herstel en stressniveau.'}
   ];
   document.getElementById('chips').innerHTML=chips.map(c=>`<div class="chip" style="--st:${c.st}"><div class="l">${c.l}<span class="info" tabindex="0">i<span class="tip">${c.tip}</span></span></div><div class="v">${c.v}</div><div class="s">${c.s}</div></div>`).join('');
+  // Badge
   const badge=document.getElementById('srcBadge');
-  if(m.live){badge.className='src live';badge.textContent='● live · '+m.updated;}
-  else{badge.className='src demo';badge.textContent='● sample data — demo';}
-  document.getElementById('m-updated').textContent='SOURCE: '+(m.live?('intervals.icu · updated '+m.updated):'sample · connect the pipeline to go live');
+  if(m.live){badge.className='src live';badge.textContent='● live · Garmin · '+m.updated;}
+  else{badge.className='src demo';badge.textContent='● sample — sync voor live data';}
+  document.getElementById('m-updated').textContent='SOURCE: Garmin Connect Direct · bijgewerkt '+m.updated;
 }
 
 const built=new Set();
 const builders={
   load(){
-    const L=wlabels(),ctl=DATA.pmc.ctl,atl=DATA.pmc.atl,tsb=ctl.map((c,i)=>+((c-(atl[i]||0)).toFixed(1)));
-    new Chart(pmcChart,{type:'line',data:{labels:L,datasets:[
-      {label:'TSB (form)',data:tsb,borderColor:C.violet,borderWidth:1.5,backgroundColor:ctx=>{const v=ctx.p1?.parsed?.y;return v<0?'rgba(255,94,108,.15)':'rgba(52,224,125,.15)';},fill:'origin',tension:.35,pointRadius:0,order:3,yAxisID:'y2'},
-      {label:'Fitness (CTL)',data:ctl,borderColor:C.go,borderWidth:2.5,tension:.35,pointRadius:0,order:1},
-      {label:'Fatigue (ATL)',data:atl,borderColor:C.coral,borderWidth:1.6,borderDash:[4,3],tension:.35,pointRadius:0,order:2}
-    ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(+c.raw.toFixed(1))}}},scales:{x:{...G,grid:{display:false}},y:{...G},y2:{position:'right',grid:{display:false},border:{display:false},ticks:{color:C.violet},suggestedMin:-20,suggestedMax:20}}}});
-    const ramp=ctl.map((c,i)=>i===0?null:+(c-ctl[i-1]).toFixed(1));
-    new Chart(rampChart,{type:'bar',data:{labels:L,datasets:[{data:ramp,backgroundColor:r=>r.raw>7?C.coral:r.raw>5?C.amber:C.go,borderRadius:3,barPercentage:.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>'Ramp: +'+c.raw+' CTL/wk'}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:0,suggestedMax:9,title:{display:true,text:'CTL pts / wk',color:C.dim,font:{size:9}}}}},plugins:[{id:'safe',beforeDraw(c){const{ctx,chartArea:a,scales:{y}}=c;const y5=y.getPixelForValue(5),y7=y.getPixelForValue(7);ctx.save();ctx.fillStyle='rgba(255,180,58,.06)';ctx.fillRect(a.left,y7,a.right-a.left,y5-y7);ctx.strokeStyle='rgba(255,94,108,.35)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(a.left,y7);ctx.lineTo(a.right,y7);ctx.stroke();ctx.restore();}}]});
-    new Chart(tssChart,{type:'bar',data:{labels:L,datasets:[{data:DATA.tss,backgroundColor:'rgba(69,200,224,.65)',borderRadius:3,barPercentage:.62}]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>c.raw+' TSS'}}},scales:{x:{...G,grid:{display:false}},y:{...G,title:{display:true,text:'weekly TSS',color:C.dim,font:{size:9}}}}}});
-    new Chart(vo2Chart,{type:'line',data:{labels:L,datasets:[{data:DATA.vo2,borderColor:C.cyan,borderWidth:2.5,tension:.35,pointRadius:0,fill:true,backgroundColor:'rgba(69,200,224,.08)'}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:Math.min(...DATA.vo2)-2,suggestedMax:Math.max(...DATA.vo2)+2}}}});
-    document.getElementById('m-vo2').textContent=DATA.meta.vo2;
-    const cf=tsb.at(-1);
-    document.getElementById('m-form').textContent=(cf>0?'+':'')+cf.toFixed(1);
-    document.getElementById('m-form').style.color=cf>5?'var(--go)':cf<-15?'var(--coral)':'var(--amber)';
-    document.getElementById('m-formlab').textContent=cf>5?'fresh':cf<-15?'loaded — back off':'productive load';
-    const mono=DATA.monotony||[],strain=DATA.strain||[];
-    if(mono.some(v=>v!=null)){
-      new Chart(monoChart,{data:{labels:L,datasets:[
-        {type:'bar',label:'Strain',data:strain,backgroundColor:'rgba(154,135,255,.55)',borderRadius:3,barPercentage:.6,yAxisID:'y'},
-        {type:'line',label:'Monotony',data:mono,borderColor:C.coral,borderWidth:2,tension:.35,spanGaps:true,pointRadius:3,pointBackgroundColor:C.coral,yAxisID:'y2'}
-      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw}}},scales:{x:{...G,grid:{display:false}},y:{...G,title:{display:true,text:'weekly strain',color:C.dim,font:{size:9}}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:0,suggestedMax:2.5,ticks:{color:C.coral},title:{display:true,text:'monotony',color:C.coral,font:{size:9}}}}},plugins:[{id:'mb',beforeDraw(c){const{ctx,chartArea:a,scales:{y2}}=c;const yv=y2.getPixelForValue(2);ctx.save();ctx.strokeStyle='rgba(255,94,108,.4)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(a.left,yv);ctx.lineTo(a.right,yv);ctx.stroke();ctx.restore();}}]});
-    }else{monoChart.closest('.chart-h').innerHTML='<div style="color:var(--muted);font-size:12px;padding:20px 0">Builds once a few days of daily training load are in.</div>';}
+    // PMC chart — ATL/CTL/form
+    const pmc=DATA.pmc||{};
+    const dates=pmc.dates||[];
+    const ctl=pmc.ctl||[];const atl=pmc.atl||[];const form=pmc.form||[];
+    const labels=dates.map(d=>d.slice(5));// MM-DD
+    if(ctl.length){
+      new Chart(pmcChart,{type:'line',data:{labels,datasets:[
+        {label:'Form (CTL−ATL)',data:form,borderColor:C.violet,borderWidth:1.5,backgroundColor:ctx=>{const v=ctx.p1?.parsed?.y;return v<0?'rgba(255,94,108,.12)':'rgba(52,224,125,.12)';},fill:'origin',tension:.35,pointRadius:0,order:3,yAxisID:'y2'},
+        {label:'Fitness (CTL)',data:ctl,borderColor:C.go,borderWidth:2.5,tension:.35,pointRadius:0,order:1},
+        {label:'Belasting (ATL)',data:atl,borderColor:C.coral,borderWidth:1.6,borderDash:[4,3],tension:.35,pointRadius:0,order:2}
+      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(+c.raw.toFixed(1))}}},scales:{x:{...G,grid:{display:false}},y:{...G},y2:{position:'right',grid:{display:false},border:{display:false},ticks:{color:C.violet}}}}});
+    }
+    // VO2max
+    const vo2arr=DATA.vo2||[];
+    if(vo2arr.length){
+      new Chart(vo2Chart,{type:'line',data:{labels:vo2arr.map(d=>d.date?.slice(5)||''),datasets:[{label:'VO₂max',data:vo2arr.map(d=>d.vo2),borderColor:C.cyan,borderWidth:2.5,tension:.35,pointRadius:0,fill:true,backgroundColor:'rgba(69,200,224,.08)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+' ml/kg/min'}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:40,suggestedMax:65}}}});
+    }
+    // Training status
+    const ts=DATA.meta?.trainingStatus||'—';
+    const tsMap={'STRAINED_4':'Overbelast — te hoog tempo van opbouw','STRAINED_3':'Overbelast','MAINTAINING':'Stabiel — fitness wordt gehandhaafd','IMPROVING':'Progressie — aerobe motor groeit','RECOVERY':'Herstelweek — let op',null:'—',undefined:'—'};
+    document.getElementById('m-trainingstatus').innerHTML=`<b style="color:var(--amber)">${ts}</b> — ${tsMap[ts]||ts}`;
+    // Load balance bar
+    const wks=Object.values(DATA.weeks||{});
+    if(wks.length){
+      new Chart(loadBalChart,{type:'bar',data:{labels:Object.keys(DATA.weeks||{}).map(w=>'W'+w),datasets:[{label:'km',data:wks.map(w=>w.km?.toFixed(1)||0),backgroundColor:'rgba(52,224,125,.55)',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+' km'}}},scales:{x:{...G,grid:{display:false}},y:{...G}}}});
+    }
+    // Race predictions
+    const rp=DATA.racePredictions||{};
+    const rpEl=document.getElementById('race-preds');
+    const dists=[['5K','5k'],['10K','10k'],['Half','hm'],['Marathon','fm']];
+    rpEl.innerHTML=dists.map(([label,key])=>rp[key]?`<div style="display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line)"><span style="font-size:12px;color:var(--muted)">${label}</span><span style="font-family:var(--mono);font-size:18px;font-weight:500">${rp[key]}</span></div>`:'').join('');
   },
   vol(){
-    new Chart(volChart,{type:'bar',data:{labels:DATA.weeks,datasets:[
-      {label:'Plan',data:DATA.volume.plan,backgroundColor:'rgba(125,136,154,.18)',borderRadius:3,barPercentage:.96,categoryPercentage:.82,order:2},
-      {label:'Done',data:DATA.volume.done,backgroundColor:C.go,borderRadius:3,barPercentage:.6,categoryPercentage:.82,order:1},
-      {type:'line',label:'Long run',data:DATA.volume.longrun,borderColor:C.cyan,borderWidth:2,pointRadius:3,pointBackgroundColor:C.cyan,tension:.35,order:0}
-    ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},scales:{x:{...G,grid:{display:false}},y:{...G,title:{display:true,text:DATA.meta.unit+' / wk',color:C.dim,font:{size:9}}}}}});
-    new Chart(lrChart,{type:'bar',data:{labels:wlabels(),datasets:[{data:DATA.longRunPct,backgroundColor:r=>r.raw>40?C.coral:C.amber,borderRadius:3,barPercentage:.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>'Long run: '+c.raw+'% of week'}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:20,suggestedMax:50,ticks:{callback:v=>v+'%'}}}},plugins:[{id:'band',beforeDraw(c){const{ctx,chartArea:a,scales:{y}}=c;const y30=y.getPixelForValue(30),y40=y.getPixelForValue(40);ctx.save();ctx.fillStyle='rgba(52,224,125,.07)';ctx.fillRect(a.left,y40,a.right-a.left,y30-y40);ctx.strokeStyle='rgba(52,224,125,.35)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(a.left,y30);ctx.lineTo(a.right,y30);ctx.stroke();ctx.restore();}}]});
-    const lbl={rest:'',easy:'E',qual:'Q',long:'L',miss:'×'};
-    let cal=`<div class="crow"><span class="wl"></span>`+['Mo','Tu','We','Th','Fr','Sa','Su'].map(d=>`<span class="dh">${d}</span>`).join('')+`</div>`;
-    DATA.consistency.forEach((wk,i)=>{cal+=`<div class="crow"><span class="wl">W${i+1}</span>`+wk.map(d=>`<div class="d ${d}">${lbl[d]||''}</div>`).join('')+`</div>`;});
-    document.getElementById('cal').innerHTML=cal;
-    document.getElementById('m-runcount').textContent=DATA.runcount;
+    // Volume chart
+    const vol=DATA.volume||{};
+    const vlabels=vol.labels||Object.keys(DATA.weeks||{}).map(w=>'W'+w);
+    const vdone=vol.done||Object.values(DATA.weeks||{}).map(w=>w.km?.toFixed(1)||null);
+    if(vdone.length){
+      new Chart(volChart,{type:'bar',data:{labels:vlabels,datasets:[{label:'km gedaan',data:vdone,backgroundColor:'rgba(52,224,125,.55)',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+' km'}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:0,suggestedMax:90}}}});
+    }
+    // Zone ring
+    const zones=DATA.zones||[];
+    if(zones.length){
+      const total=zones.reduce((a,z)=>a+(z.v||0),0);
+      const cx=62,cy=62,r=52,circ=2*Math.PI*r;
+      let offset=0;
+      const segs=zones.map(z=>{const pct=(z.v||0)/Math.max(total,1);const arc=circ*pct;const el=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${z.c}" stroke-width="18" stroke-dasharray="${arc} ${circ-arc}" stroke-dashoffset="${-offset}" opacity=".9"/>`;offset+=arc;return el;});
+      document.getElementById('zoneRing').innerHTML=segs.join('');
+      const easy=zones.slice(0,2).reduce((a,z)=>a+(z.v||0),0);
+      const hard=zones.slice(2).reduce((a,z)=>a+(z.v||0),0);
+      document.getElementById('m-easy').textContent=easy+'%';
+      document.getElementById('zoneLegend').innerHTML=zones.map(z=>`<div class="row"><div class="lft"><div class="sw" style="background:${z.c}"></div>${z.n}</div><b>${z.v}%</b></div>`).join('');
+      const sb=document.getElementById('m-split');
+      sb.innerHTML=`<div class="easy" style="width:${easy}%">${easy}%</div><div class="hard" style="width:${hard}%">${hard}%</div>`;
+    }
+    // Recent runs
+    const runs=DATA.recentActivities||[];
+    const rEl=document.getElementById('recent-runs');
+    if(!runs.length){rEl.innerHTML='<div style="color:var(--muted);font-size:12px;padding:8px 0">Geen recente activiteiten. Voer garmin_fetch.py uit.</div>';return;}
+    rEl.innerHTML=runs.map(r=>{
+      const bal=r.balance_left?`<div class="rs"><div class="rl">L/R balans</div><div class="rv" style="color:${Math.abs(r.balance_left-50)>2?C.amber:C.go}">${r.balance_left}% L</div></div>`:'';
+      const gct=r.gct_ms?`<div class="rs"><div class="rl">GCT</div><div class="rv">${r.gct_ms}ms</div></div>`:'';
+      const vosc=r.vert_osc_cm?`<div class="rs"><div class="rl">Vert. Osc</div><div class="rv">${r.vert_osc_cm}cm</div></div>`:'';
+      return `<div class="run-item">
+        <div class="rh"><span class="rname">${r.name}</span><span class="rdate">${r.date}</span></div>
+        <div class="run-stats">
+          ${r.dist_km?`<div class="rs"><div class="rl">Afstand</div><div class="rv">${r.dist_km} km</div></div>`:''}
+          ${r.pace?`<div class="rs"><div class="rl">Pace</div><div class="rv">${r.pace}</div></div>`:''}
+          ${r.avg_hr?`<div class="rs"><div class="rl">HR gem/max</div><div class="rv">${r.avg_hr}/${r.max_hr}</div></div>`:''}
+          ${r.cadence_spm?`<div class="rs"><div class="rl">Cadans</div><div class="rv" style="color:${r.cadence_spm>=178?C.go:r.cadence_spm>=170?C.amber:C.coral}">${r.cadence_spm} spm</div></div>`:''}
+          ${r.load?`<div class="rs"><div class="rl">Load</div><div class="rv">${r.load}</div></div>`:''}
+          ${bal}${gct}${vosc}
+        </div>
+      </div>`;
+    }).join('');
   },
   pace(){
-    const zones=DATA.zones,easy=zones.slice(0,2).reduce((a,z)=>a+z.v,0);
-    const ring=document.getElementById('zoneRing'),R=52,CX=62,CIRC=2*Math.PI*R;let off=0;
-    zones.forEach(z=>{const len=CIRC*z.v/100;const ci=document.createElementNS('http://www.w3.org/2000/svg','circle');ci.setAttribute('cx',CX);ci.setAttribute('cy',CX);ci.setAttribute('r',R);ci.setAttribute('fill','none');ci.setAttribute('stroke',z.c);ci.setAttribute('stroke-width',13);ci.setAttribute('stroke-dasharray',`${len} ${CIRC-len}`);ci.setAttribute('stroke-dashoffset',-off);ring.appendChild(ci);off+=len;});
-    document.getElementById('zoneLegend').innerHTML=zones.map(z=>`<div class="row"><div class="lft"><span class="sw" style="background:${z.c}"></span>${z.n}</div><b>${z.v}%</b></div>`).join('');
-    document.getElementById('m-easy').textContent=easy+'%';
-    document.getElementById('m-split').innerHTML=`<div class="easy" style="width:${easy}%">${easy}% EASY</div><div class="hard" style="width:${100-easy}%">${100-easy}%</div>`;
-    new Chart(aeroChart,{data:{labels:wlabels(),datasets:[
-      {type:'line',label:'Pace @ fixed HR',data:DATA.aero.paceAtHR,borderColor:C.cyan,borderWidth:2.5,tension:.35,spanGaps:true,pointRadius:3,pointBackgroundColor:C.cyan,yAxisID:'y'},
-      {type:'line',label:'LR decoupling %',data:DATA.aero.decoupling,borderColor:C.amber,borderWidth:2,borderDash:[5,3],spanGaps:true,tension:.35,pointRadius:4,pointBackgroundColor:C.amber,yAxisID:'y2'}
-    ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>c.dataset.yAxisID==='y'?'Pace: '+Math.floor(c.raw/60)+':'+String(c.raw%60).padStart(2,'0')+'/km':'Decoupling: '+c.raw+'%'}}},scales:{x:{...G,grid:{display:false}},y:{...G,reverse:true,ticks:{callback:v=>Math.floor(v/60)+':'+String(v%60).padStart(2,'0')},title:{display:true,text:'pace /km (faster↑)',color:C.cyan,font:{size:9}}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:0,suggestedMax:8,ticks:{color:C.amber,callback:v=>v+'%'}}}}});
-    new Chart(mpChart,{type:'line',data:{labels:DATA.mp.labels,datasets:[
-      {label:'Avg HR @ MP',data:DATA.mp.hr,borderColor:C.coral,borderWidth:2.5,tension:.3,pointRadius:4,pointBackgroundColor:C.coral,yAxisID:'y'},
-      {label:'Intra-session drift',data:DATA.mp.drift,borderColor:C.amber,borderWidth:2,borderDash:[5,3],tension:.3,pointRadius:3,pointBackgroundColor:C.amber,yAxisID:'y2'}
-    ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>c.dataset.yAxisID==='y'?'HR: '+c.raw+' bpm':'Drift: '+c.raw+'%'}}},scales:{x:{...G,grid:{display:false}},y:{...G,position:'left',ticks:{color:C.coral},title:{display:true,text:'bpm (lower↓ better)',color:C.dim,font:{size:9}}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:0,suggestedMax:8,ticks:{color:C.amber,callback:v=>v+'%'}}}}});
-    const be=DATA.bestEfforts||[];
-    document.getElementById('beList').innerHTML=be.length?be.map(b=>`<div><div class="l">${b.d}</div><div class="v">${b.pace}</div><div class="s">${b.on}</div></div>`).join(''):'<div style="color:var(--muted);font-size:12px;padding:8px 0">No qualifying runs yet — fastest pace per distance fills in as you log runs.</div>';
+    // Balance chart
+    const runs=(DATA.recentActivities||[]).filter(r=>r.balance_left).reverse();
+    if(runs.length){
+      new Chart(balanceChart,{type:'bar',data:{labels:runs.map(r=>r.date?.slice(5)||''),datasets:[
+        {label:'Links %',data:runs.map(r=>r.balance_left),backgroundColor:runs.map(r=>Math.abs((r.balance_left||50)-50)>2?'rgba(255,180,58,.7)':'rgba(52,224,125,.7)'),borderRadius:3},
+        {label:'50% ideaal',data:runs.map(()=>50),type:'line',borderColor:'rgba(255,255,255,.2)',borderWidth:1.5,borderDash:[4,3],pointRadius:0,backgroundColor:'transparent'}
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+'%'}}},scales:{x:{...G,grid:{display:false}},y:{...G,min:47,max:53,ticks:{callback:v=>v+'%'}}}}}); 
+      const last=runs.at(-1);
+      const diff=Math.abs((last?.balance_left||50)-50);
+      const color=diff>2?C.amber:C.go;
+      document.getElementById('m-balance-detail').innerHTML=last?.balance_left?`<div class="bal-wrap"><div class="bal-bar"><div class="left" style="width:${last.balance_left}%">${last.balance_left}%</div><div class="right" style="width:${100-last.balance_left}%">${(100-last.balance_left).toFixed(1)}%</div></div></div><div style="font-size:11px;color:${color};margin-top:4px">${diff>2?`⚠ ${diff.toFixed(1)}% asymmetrie — gluteus activatie rechts prioriteit`:'✓ Binnen doelzone &lt;2% asymmetrie'}</div>`:'';
+    }
+    // Econ chart (cadans + GCT)
+    const allRuns=(DATA.recentActivities||[]).filter(r=>r.cadence_spm).reverse();
+    if(allRuns.length){
+      new Chart(econChart,{type:'line',data:{labels:allRuns.map(r=>r.date?.slice(5)||''),datasets:[
+        {label:'Cadans (spm)',data:allRuns.map(r=>r.cadence_spm),borderColor:C.cyan,borderWidth:2.5,tension:.35,pointRadius:4,yAxisID:'y'},
+        {label:'GCT (ms)',data:allRuns.map(r=>r.gct_ms),borderColor:C.amber,borderWidth:2,borderDash:[4,3],tension:.35,pointRadius:4,yAxisID:'y2'}
+      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:160,suggestedMax:185,ticks:{color:C.cyan}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:240,suggestedMax:320,ticks:{color:C.amber}}}}});
+    }
+    // EF chart
     const ef=DATA.ef||[];
-    if(ef.some(v=>v!=null)){
-      new Chart(efChart,{type:'line',data:{labels:wlabels(),datasets:[{data:ef,borderColor:C.go,borderWidth:2.5,tension:.35,spanGaps:true,pointRadius:0,fill:true,backgroundColor:'rgba(52,224,125,.08)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>'EF: '+c.raw}}},scales:{x:{...G,grid:{display:false}},y:{...G}}}});
-      const last=[...ef].reverse().find(v=>v!=null);document.getElementById('m-ef').textContent=last!=null?last:'—';
-    }else{efChart.closest('.chart-h').innerHTML='<div style="color:var(--muted);font-size:12px;padding:20px 0">Builds from runs that have heart-rate data.</div>';}
+    if(ef.length){
+      new Chart(efChart,{type:'line',data:{labels:ef.map((_,i)=>'R'+(i+1)),datasets:[{label:'EF (W/bpm)',data:ef,borderColor:C.go,borderWidth:2.5,tension:.35,pointRadius:4,fill:true,backgroundColor:'rgba(52,224,125,.08)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>'EF: '+c.raw}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:1.5,suggestedMax:3.0}}}});
+      document.getElementById('m-ef').textContent=ef.at(-1)??'—';
+    }
+    // Splits last run
+    const lastRun=(DATA.recentActivities||[])[0];
+    const splits=lastRun?.splits||[];
+    if(splits.length){
+      new Chart(splitsChart,{type:'line',data:{labels:splits.map((_,i)=>'km '+(i+1)),datasets:[
+        {label:'HR (bpm)',data:splits.map(s=>s.hr),borderColor:C.coral,borderWidth:2,tension:.3,pointRadius:3,yAxisID:'y'},
+        {label:'Cadans (spm)',data:splits.map(s=>s.cad),borderColor:C.cyan,borderWidth:1.8,borderDash:[4,3],tension:.3,pointRadius:3,yAxisID:'y2'}
+      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{title:c=>(lastRun?.name||'Run')+' · km '+(c[0].dataIndex+1)}}},scales:{x:{...G,grid:{display:false}},y:{...G,ticks:{color:C.coral}},y2:{position:'right',grid:{display:false},border:{display:false},ticks:{color:C.cyan}}}}});
+    }else{
+      splitsChart.closest('.chart-h').innerHTML='<div style="color:var(--muted);font-size:12px;padding:20px 0">Splits laden bij volgende sync.</div>';
+    }
   },
   ready(){
-    const ps=DATA.predictorSeconds;
-    document.getElementById('m-pred2').textContent=DATA.meta.predicted;
-    document.getElementById('m-pred2r').textContent='≈ '+DATA.meta.predictedPace+' · range '+DATA.meta.predictedRange;
-    new Chart(predChart,{type:'line',data:{labels:wlabels(),datasets:[
-      {label:'Hi',data:ps.map(s=>s+190),borderColor:'rgba(69,200,224,0)',backgroundColor:'rgba(69,200,224,.12)',fill:'+1',pointRadius:0,tension:.35},
-      {label:'Lo',data:ps.map(s=>s-190),borderColor:'rgba(69,200,224,0)',pointRadius:0,tension:.35},
-      {label:'Predicted',data:ps,borderColor:C.cyan,borderWidth:2.5,tension:.35,pointRadius:0}
-    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{filter:i=>i.datasetIndex===2,callbacks:{label:c=>'Predicted: '+fmt(c.raw)}}},scales:{x:{...G,grid:{display:false}},y:{...G,reverse:true,ticks:{callback:fmtm}}}}});
-    document.getElementById('m-inputs').innerHTML=DATA.predictorInputs.map(i=>`<div><div class="l">${i.l}</div><div class="v"${i.cy?' style="color:var(--cyan)"':''}>${i.v}</div><div class="s">${i.s}</div></div>`).join('');
-    document.getElementById('week').innerHTML=DATA.week7.map((x,i)=>`<div class="wk-day ${i===0?'today':''}"><span class="dy">${i===0?'<b>'+x.d+'</b>':x.d}</span><span class="ty ${x.t}">${x.t}</span><span class="ds">${x.ds}</span><span class="km">${x.km}</span></div>`).join('');
-    const L=wlabels();
-    new Chart(rhrChart,{type:'line',data:{labels:L,datasets:[
-      {label:'RHR',data:DATA.rhr,borderColor:C.go,borderWidth:2,tension:.35,pointRadius:0,yAxisID:'y'},
-      {label:'HRV',data:DATA.hrv,borderColor:C.violet,borderWidth:2,tension:.35,pointRadius:0,yAxisID:'y2'}
-    ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+(c.dataset.label==='RHR'?' bpm':' ms')}}},scales:{x:{...G,grid:{display:false}},y:{...G,position:'left',ticks:{color:C.go}},y2:{position:'right',grid:{display:false},border:{display:false},ticks:{color:C.violet}}}}});
-    const rhr=DATA.rhr.at(-1),hrv=DATA.hrv.at(-1);
-    document.getElementById('m-rhr').innerHTML=rhr+' <s>bpm</s>';document.getElementById('m-rhrbar').style.width='45%';
-    document.getElementById('m-hrv').innerHTML=hrv+' <s>ms</s>';document.getElementById('m-hrvbar').style.width=Math.min(100,hrv)+'%';
+    // Readiness display
+    const rd=DATA.trainingReadiness||{};
+    const score=rd.score;
+    const level=rd.level||'—';
+    const color=score>60?C.go:score>40?C.amber:C.coral;
+    const rdEl=document.getElementById('readiness-display');
+    rdEl.innerHTML=`<div style="font-family:var(--mono);font-size:56px;font-weight:600;color:${color};line-height:1">${score??'—'}</div>
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:${color};text-transform:uppercase;margin:4px 0 12px">${level}</div>
+      ${score<40?`<div class="flag co"><span class="ico">!</span><span>Score onder 40 — hersteldag aanbevolen. Geen kwaliteitswork vandaag.</span></div>`:score<60?`<div class="flag am"><span class="ico">~</span><span>Matige readiness — easy training OK, geen hoog-intensief werk.</span></div>`:`<div class="flag go"><span class="ico">✓</span><span>Groen licht — je bent hersteld genoeg voor kwaliteitswork.</span></div>`}`;
+    // Body Battery chart
+    const bb=DATA.bodyBattery||[];
+    if(bb.length){
+      new Chart(bbChart,{type:'bar',data:{labels:bb.map(d=>d.date?.slice(5)||''),datasets:[
+        {label:'Opgeladen',data:bb.map(d=>d.charged),backgroundColor:'rgba(52,224,125,.6)',borderRadius:3,stack:'s'},
+        {label:'Verbruikt',data:bb.map(d=>-(d.drained||0)),backgroundColor:'rgba(255,94,108,.5)',borderRadius:3,stack:'s'}
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+Math.abs(c.raw)}}},scales:{x:{...G,grid:{display:false}},y:{...G,stacked:true}}}});
+    }
+    // Week7
+    const w7=DATA.week7||[];
+    const wEl=document.getElementById('week');
+    wEl.innerHTML=w7.length?w7.map((w,i)=>`<div class="wk-day${i===0?' today':''}"><div class="dy"><b>${w.d}</b></div><div class="ty ${w.t||'rest'}">${w.t||'rest'}</div><div class="ds">${w.ds||'—'}</div><div class="km">${w.km||'—'}</div></div>`).join(''):'<div style="color:var(--muted);font-size:12px">Geen geplande workouts gevonden.</div>';
+    // HRV chart
+    const hrv=DATA.hrv||[];
+    if(hrv.length){
+      new Chart(hrvChart,{type:'line',data:{labels:hrv.map(d=>d.date?.slice(5)||''),datasets:[
+        {label:'HRV (ms)',data:hrv.map(d=>d.hrv5||d.hrv_avg),borderColor:C.violet,borderWidth:2.5,tension:.35,pointRadius:3,fill:true,backgroundColor:'rgba(154,135,255,.08)'},
+        {label:'Baseline laag (59)',data:hrv.map(()=>59),borderColor:'rgba(255,255,255,.15)',borderWidth:1,borderDash:[4,3],pointRadius:0},
+        {label:'Baseline hoog (82)',data:hrv.map(()=>82),borderColor:'rgba(255,255,255,.15)',borderWidth:1,borderDash:[4,3],pointRadius:0}
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+' ms'}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:0,suggestedMax:110}}}});
+      const lastHrv=hrv.at(-1);
+      const statusColor={BALANCED:C.go,LOW:C.coral,UNBALANCED:C.amber}[lastHrv?.status]||C.muted;
+      document.getElementById('m-hrv-status').innerHTML=lastHrv?`<span style="color:${statusColor};font-family:var(--mono);font-size:12px">${lastHrv.hrv5||lastHrv.hrv_avg||'—'} ms</span> <span class="hrv-badge ${lastHrv.status||''}">${lastHrv.status||'—'}</span><br><span style="color:var(--dim);font-size:10px;margin-top:4px;display:block">Baseline 59–82 ms · Weekly avg ${lastHrv.weekly||'—'} ms</span>`:'';
+    }
+    loadAiFeedback();
   },
   body(){
-    new Chart(wtChart,{type:'line',data:{labels:wlabels(),datasets:[
-      {label:'Weight',data:DATA.weight,borderColor:C.cyan,borderWidth:2.5,tension:.35,pointRadius:0,fill:true,backgroundColor:'rgba(69,200,224,.08)'},
-      {label:'Race-weight zone',data:DATA.weight.map(()=>78),borderColor:'rgba(52,224,125,.45)',borderWidth:1,borderDash:[5,4],pointRadius:0}
-    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+' kg'}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:Math.min(...DATA.weight,78)-2,suggestedMax:Math.max(...DATA.weight)+2}}}});
-    document.getElementById('m-wt').textContent=DATA.weight.at(-1);
-    const sleep=DATA.sleep||[],sore=DATA.soreness||[];
-    if(sleep.some(v=>v!=null)||sore.some(v=>v!=null)){
-      new Chart(sleepChart,{data:{labels:wlabels(),datasets:[
-        {type:'bar',label:'Sleep h',data:sleep,backgroundColor:'rgba(69,200,224,.55)',borderRadius:3,barPercentage:.6,yAxisID:'y'},
-        {type:'line',label:'Soreness',data:sore,borderColor:C.amber,borderWidth:2,tension:.35,spanGaps:true,pointRadius:3,pointBackgroundColor:C.amber,yAxisID:'y2'}
-      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:0,suggestedMax:10,title:{display:true,text:'hours',color:C.dim,font:{size:9}}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:1,suggestedMax:4,ticks:{color:C.amber},title:{display:true,text:'soreness 1–4',color:C.amber,font:{size:9}}}}}});
-      const ls=[...sleep].reverse().find(v=>v!=null),lo=[...sore].reverse().find(v=>v!=null);
-      document.getElementById('m-sleepnote').textContent=(ls!=null?'Latest sleep '+ls+' h':'')+(lo!=null?' · soreness '+lo+'/4':'');
-    }else{sleepChart.closest('.chart-h').innerHTML='<div style="color:var(--muted);font-size:12px;padding:20px 0">Log sleep & soreness in intervals.icu (or sync from Garmin) to populate.</div>';}
-    const st=DATA.strength||[],mo=DATA.mobility||[],wks=Math.max(st.length,mo.length,1);
-    const cell=(c,t1,t2)=>c>=t1?['hit',c]:c>=t2?['half',c]:['miss',c||0];
-    const rows=[['Strength',st.map(c=>cell(c,2,1))],['Mobility',mo.map(c=>cell(c,3,1))]];
-    let sm='';rows.forEach(r=>{sm+=`<div class="hr" style="grid-template-columns:64px repeat(${wks},1fr)"><span class="lab">${r[0]}</span>`+r[1].map(c=>`<div class="cell ${c[0]}">${c[1]}</div>`).join('')+`</div>`;});
-    sm+=`<div class="hr" style="grid-template-columns:64px repeat(${wks},1fr)"><span class="lab" style="color:var(--dim)">Week</span>`+Array.from({length:wks},(_,i)=>`<div class="cell" style="background:none;color:var(--dim)">${i+1}</div>`).join('')+`</div>`;
-    document.getElementById('smHeat').innerHTML=sm;
-    const sHit=st.filter(c=>c>=2).length;
-    document.getElementById('m-smnote').innerHTML=`<b>${sHit}/${st.length||0}</b><span>weeks strength target hit</span>`;
+    // Weight
+    const wt=DATA.weight||[];
+    if(wt.length){
+      new Chart(wtChart,{type:'line',data:{labels:wt.map(d=>d.date?.slice(5)||''),datasets:[
+        {label:'Gewicht',data:wt.map(d=>d.kg),borderColor:C.cyan,borderWidth:2.5,tension:.35,pointRadius:3,fill:true,backgroundColor:'rgba(69,200,224,.08)'},
+        {label:'Race-gewicht 78 kg',data:wt.map(()=>78),borderColor:'rgba(52,224,125,.45)',borderWidth:1,borderDash:[5,4],pointRadius:0}
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+' kg'}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:75,suggestedMax:95}}}});
+      const lastWt=wt.at(-1)?.kg;
+      document.getElementById('m-wt').textContent=lastWt??'—';
+      const diff=lastWt?((lastWt-78).toFixed(1)):null;
+      document.getElementById('m-wt-delta').innerHTML=diff!=null?`<span style="color:${diff>0?C.amber:C.go}">${diff>0?'+':''} ${diff} kg van doel</span>`:'';
+    }
+    // Sleep
+    const sl=DATA.sleep||[];
+    if(sl.length){
+      new Chart(sleepChart,{type:'bar',data:{labels:sl.map(d=>d.date?.slice(5)||''),datasets:[
+        {label:'Deep %',data:sl.map(d=>d.deep_pct),backgroundColor:'rgba(154,135,255,.8)',borderRadius:2,stack:'s',barPercentage:.8},
+        {label:'REM %',data:sl.map(d=>d.rem_pct),backgroundColor:'rgba(69,200,224,.7)',borderRadius:2,stack:'s',barPercentage:.8},
+        {label:'Light %',data:sl.map(d=>Math.max(0,100-((d.deep_pct||0)+(d.rem_pct||0)))),backgroundColor:'rgba(255,255,255,.15)',borderRadius:2,stack:'s',barPercentage:.8},
+        {label:'Uren slaap',data:sl.map(d=>d.duration_h),type:'line',borderColor:C.go,borderWidth:2,tension:.35,pointRadius:3,yAxisID:'y2'}
+      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}}},scales:{x:{...G,grid:{display:false}},y:{...G,stacked:true,max:100,ticks:{callback:v=>v+'%'}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:0,suggestedMax:12,ticks:{color:C.go,callback:v=>v+'u'}}}}});
+      const ls=sl.at(-1);
+      document.getElementById('m-sleep-detail').textContent=ls?`Laatste nacht: ${ls.duration_h}u · deep ${ls.deep_pct}% · REM ${ls.rem_pct}% · score ${ls.score??'—'}${ls.qualifier?' ('+ls.qualifier+')':''}`:'';
+    }
+    // RHR + stress
+    const rhr=DATA.rhr||[];const str=DATA.stress||[];
+    const rhrDates=[...new Set([...rhr.map(d=>d.date),...str.map(d=>d.date)])].sort();
+    if(rhrDates.length){
+      const rhrMap=Object.fromEntries(rhr.map(d=>[d.date,d.rhr]));
+      const strMap=Object.fromEntries(str.map(d=>[d.date,d.avg_stress]));
+      new Chart(rhrChart,{type:'line',data:{labels:rhrDates.map(d=>d.slice(5)),datasets:[
+        {label:'RHR (bpm)',data:rhrDates.map(d=>rhrMap[d]),borderColor:C.go,borderWidth:2,tension:.35,pointRadius:3,yAxisID:'y'},
+        {label:'Stress',data:rhrDates.map(d=>strMap[d]),borderColor:C.amber,borderWidth:1.8,borderDash:[4,3],tension:.35,pointRadius:3,yAxisID:'y2'}
+      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}}},scales:{x:{...G,grid:{display:false}},y:{...G,ticks:{color:C.go}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:0,suggestedMax:100,ticks:{color:C.amber}}}}});
+      const lr=rhr.at(-1),ls=str.at(-1);
+      document.getElementById('m-rhr').innerHTML=(lr?.rhr??'—')+' <s>bpm</s>';
+      document.getElementById('m-rhrbar').style.width=Math.min(100,((lr?.rhr||48)/80*100))+'%';
+      document.getElementById('m-stress').textContent=ls?.avg_stress??'—';
+      document.getElementById('m-stressbar').style.width=Math.min(100,(ls?.avg_stress||0))+'%';
+    }
+    // Balance detail
+    const lastAct=(DATA.recentActivities||[])[0];
+    const bdEl=document.getElementById('balance-detail-body');
+    if(lastAct?.balance_left){
+      const bl=lastAct.balance_left,br=(100-bl).toFixed(1);
+      const diff=Math.abs(bl-50);
+      const color=diff>2?C.amber:C.go;
+      bdEl.innerHTML=`
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">${lastAct.date} · ${lastAct.name}</div>
+        <div class="bal-bar" style="height:22px;border-radius:8px"><div class="left" style="width:${bl}%;font-size:11px">${bl}% L</div><div class="right" style="flex:1;font-size:11px">${br}% R</div></div>
+        <div style="font-size:11px;color:${color};margin-top:6px">${diff>2?`⚠ ${diff.toFixed(1)}% asymmetrie (doel &lt;2%)`:'✓ Binnen doelzone'}</div>
+        <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          ${lastAct.gct_ms?`<div class="rs"><div class="rl">GCT</div><div class="rv">${lastAct.gct_ms} ms</div></div>`:''}
+          ${lastAct.vert_osc_cm?`<div class="rs"><div class="rl">Vert. Oscillatie</div><div class="rv">${lastAct.vert_osc_cm} cm</div></div>`:''}
+          ${lastAct.stride_cm?`<div class="rs"><div class="rl">Staplengte</div><div class="rv">${(lastAct.stride_cm/100).toFixed(2)} m</div></div>`:''}
+          ${lastAct.cadence_spm?`<div class="rs"><div class="rl">Cadans</div><div class="rv" style="color:${lastAct.cadence_spm>=178?C.go:C.amber}">${lastAct.cadence_spm} spm</div></div>`:''}
+        </div>`;
+    }else{
+      bdEl.innerHTML='<div style="color:var(--muted);font-size:12px">Beenbalansdata beschikbaar na sync.</div>';
+    }
   }
 };
 
@@ -438,15 +582,6 @@ document.addEventListener('click',e=>{
   if(i){e.stopPropagation();i.classList.toggle('open');}
 });
 
-async function init(){
-  try{
-    const res=await fetch('data.json',{cache:'no-store'});
-    if(res.ok){const j=await res.json();DATA=Object.assign({},SAMPLE,j);DATA.meta=Object.assign({},SAMPLE.meta,j.meta||{});}
-  }catch(e){/* keep SAMPLE — e.g. opened as a local file */}
-  populate();show('load');
-  loadAiFeedback();
-}
-
 async function loadAiFeedback(){
   const body=document.getElementById('ai-body');
   const meta=document.getElementById('ai-meta');
@@ -455,20 +590,19 @@ async function loadAiFeedback(){
     const res=await fetch('ai_feedback.json?_='+Date.now(),{cache:'no-store'});
     if(!res.ok)throw new Error('HTTP '+res.status);
     const d=await res.json();
-    if(!d.feedback||d.status==='skipped'){
-      body.innerHTML='<span style="color:var(--muted)">Nog geen feedback beschikbaar — wordt gegenereerd bij de volgende dagelijkse sync.</span>';
-      return;
-    }
-    body.innerHTML=d.feedback
-      .split(/\n{2,}/)
-      .map(p=>'<p style="margin:0 0 0.8em">'+p.replace(/\n/g,'<br>')+'</p>')
-      .join('');
+    if(!d.feedback||d.status==='skipped'){body.innerHTML='<span style="color:var(--muted)">Feedback wordt gegenereerd bij volgende sync.</span>';return;}
+    body.innerHTML=d.feedback.split(/\n{2,}/).map(p=>'<p style="margin:0 0 0.8em">'+p.replace(/\n/g,'<br>')+'</p>').join('');
     if(meta&&d.generated)meta.textContent='Gegenereerd op '+d.generated+(d.model?' · '+d.model:'');
-  }catch(e){
-    body.innerHTML='<span style="color:var(--muted)">Feedback nog niet beschikbaar (eerste sync nog niet uitgevoerd).</span>';
-  }
+  }catch(e){body.innerHTML='<span style="color:var(--muted)">Feedback niet beschikbaar — sync nog niet uitgevoerd.</span>';}
 }
 
+async function init(){
+  try{
+    const res=await fetch('data.json',{cache:'no-store'});
+    if(res.ok){const j=await res.json();DATA=Object.assign({},SAMPLE,j);DATA.meta=Object.assign({},SAMPLE.meta,j.meta||{});}
+  }catch(e){}
+  populate();show('load');
+}
 init();
 </script>
 </body>

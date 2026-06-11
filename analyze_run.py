@@ -1,178 +1,162 @@
 #!/usr/bin/env python3
 """
 analyze_run.py — AI post-run coaching feedback via Anthropic API.
-Reads data.json (written by fetch_data.py) and writes ai_feedback.json.
-Runs as second step in the GitHub Actions workflow (after fetch_data.py).
+Leest data.json (geschreven door garmin_fetch.py) en schrijft ai_feedback.json.
 
-Required secret:  ANTHROPIC_API_KEY
+Vereiste secret: ANTHROPIC_API_KEY (GitHub Actions) of lokale env var
 """
 
 import os, sys, json, datetime as dt
+from pathlib import Path
 
 try:
     import requests
 except ImportError:
-    sys.exit("Missing dependency: pip install requests")
+    sys.exit("pip install requests")
 
 ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()
-HERE      = os.path.dirname(os.path.abspath(__file__))
-DATA_PATH = os.path.join(HERE, "data.json")
-OUT_PATH  = os.path.join(HERE, "ai_feedback.json")
-
-ZONE_NAMES = ["Z1 herstel", "Z2 aerobic", "Z3 tempo", "Z4 drempel", "Z5 VO2max"]
+HERE      = Path(__file__).parent
+DATA_PATH = HERE / "data.json"
+OUT_PATH  = HERE / "ai_feedback.json"
 
 ATHLETE_CONTEXT = """
 Atletenprofiel:
-- Doel: zo snel mogelijk lopen op 11 oktober 2026 — geen vaste tijddrempel, maximale prestatie op basis van de data
-- Race-gewicht doel: 78 kg
+- Doel: zo snel mogelijk lopen op 11 oktober 2026 — maximale prestatie op basis van de data
 - Max HR: 190 BPM | LTHR: 173–174 BPM
-- Marathonpace doel: 4:15/km
 
 Pfitzinger HR-zones (persoonlijk, op basis van HRR):
-- Recovery run:        <146 bpm
-- General aerobic:     138–156 bpm
-- Long / medium-long:  144–161 bpm
-- Marathon pace (MP):  157–169 bpm
-- Lactate threshold:   157–175 bpm
-- VO2max intervals:    179–182 bpm
+- Recovery:        <146 bpm
+- General aerobic: 138–156 bpm
+- Long run:        144–161 bpm
+- Marathon pace:   157–169 bpm
+- Lactate threshold: 157–175 bpm
+- VO2max intervals: 179–182 bpm
 
-Gebruik ALTIJD bovenstaande zones bij het beoordelen van runs. Categoriseer elke run op type
-(recovery, general aerobic, long, MP, LT, VO2max) en toets de HR-data aan de bijbehorende zone.
-
+Gebruik ALTIJD bovenstaande zones bij het beoordelen van runs.
 Plan: Pfitzinger 18/55 hybrid, 55–70 km/week
-Voorgeschiedenis: marathon DNF door gluteus/piriformis kramp rechts — niet door conditie of voeding
-Huidige focus: gluteus-activatie, heupstabiliteit, core (2×/week krachtraining)
-Cadans doelstelling: ~180 spm (huidige halfcadans ~83–85 = 166–170 spm)
-Easy pace verwacht: 5:30–6:00/km afhankelijk van belasting
+Voorgeschiedenis: marathon DNF door gluteus/piriformis kramp rechts — niet door conditie
+Huidige focus: gluteus-activatie, heupstabiliteit, core (2×/week)
+Cadans doelstelling: ~180 spm
+Beenbalans doel: <2% asymmetrie (huidig: ~52% links = 4% afwijking)
 """.strip()
 
 
-def load_data():
-    with open(DATA_PATH) as f:
-        return json.load(f)
-
-
-def fmt_zone_pct(zone_pct):
-    if not zone_pct:
-        return "geen zone-data"
-    parts = []
-    for i, pct in enumerate(zone_pct):
-        if i < len(ZONE_NAMES):
-            parts.append(f"{ZONE_NAMES[i]} {pct}%")
-    return ", ".join(parts)
+def hms(s):
+    s = int(s)
+    return f"{s//3600}:{(s%3600)//60:02d}:{s%60:02d}"
 
 
 def build_prompt(data):
-    meta  = data.get("meta", {})
-    kpi   = data.get("kpi", {})
-    pmc   = data.get("pmc", {})
-    vol   = data.get("volume", {})
-    runs  = data.get("recentActivities", [])
+    meta       = data.get("meta", {})
+    kpi        = data.get("kpi", {})
+    pmc        = data.get("pmc", {})
+    recent     = data.get("recentActivities", [])
+    bb         = data.get("bodyBattery", [])
+    sleep_d    = data.get("sleep", [])
+    hrv_d      = data.get("hrv", [])
+    rhr_d      = data.get("rhr", [])
+    readiness  = data.get("trainingReadiness", {})
+    race_preds = data.get("racePredictions", {})
+    weight_d   = data.get("weight", [])
+    stress_d   = data.get("stress", [])
+    scheduled  = data.get("week7", [])
 
-    # --- trainingsstatus ---
-    week         = meta.get("week", "?")
-    total_weeks  = meta.get("totalWeeks", 18)
+    # ── Meta ──
+    week        = meta.get("week", "?")
+    total_weeks = meta.get("totalWeeks", 18)
     days_to_race = meta.get("daysToRace", "?")
-    predicted    = meta.get("predicted", "—")
-    readiness    = kpi.get("readiness", "—")
-    easy_hard    = kpi.get("easyHard", "—")
-    ramp         = kpi.get("ramp", "—")
-    ramp_note    = kpi.get("rampNote", "—")
-    adherence    = kpi.get("adherence", "—")
+    predicted   = race_preds.get("fm") or meta.get("predicted", "—")
+    ctl  = meta.get("ctl")
+    atl  = meta.get("atl")
+    form = meta.get("form")
+    vo2  = meta.get("vo2")
 
-    ctl_list  = pmc.get("ctl", [])
-    atl_list  = pmc.get("atl", [])
-    form_list = pmc.get("form", [])
-    ctl  = ctl_list[-1]  if ctl_list  else None
-    atl  = atl_list[-1]  if atl_list  else None
-    form = form_list[-1] if form_list else None
+    # ── KPI ──
+    ramp      = kpi.get("ramp")
+    ramp_note = kpi.get("rampNote")
+    easy_hard = kpi.get("easyHard", "—")
 
-    done     = vol.get("done", [])
-    vol_last = done[-1] if done else None
-    vol_prev = done[-2] if len(done) >= 2 else None
+    # ── Herstel ──
+    bb_today    = bb[-1] if bb else None
+    sleep_today = sleep_d[-1] if sleep_d else None
+    hrv_today   = hrv_d[-1] if hrv_d else None
+    rhr_today   = rhr_d[-1] if rhr_d else None
+    stress_avg  = stress_d[-1].get("avg_stress") if stress_d else None
+    weight      = weight_d[-1].get("kg") if weight_d else None
 
-    weight_list   = data.get("weight", [])
-    sleep_list    = data.get("sleep", [])
-    soreness_list = data.get("soreness", [])
-    ef_list       = data.get("ef", [])
-    weight   = weight_list[-1]   if weight_list   else None
-    sleep    = sleep_list[-1]    if sleep_list     else None
-    soreness = soreness_list[-1] if soreness_list  else None
-    ef       = ef_list[-1]       if ef_list        else None
-    ef_prev  = ef_list[-2]       if len(ef_list) >= 2 else None
+    # ── Race predictions ──
+    pred_str = " | ".join(f"{k.upper()}: {v}" for k, v in race_preds.items() if v)
 
-    # --- recente runs ---
-    runs_block = ""
-    if runs:
-        lines = []
-        for r in runs:
-            zstr = fmt_zone_pct(r.get("zone_pct"))
-            dec  = f", decoupling {r['decoupling']}%" if r.get("decoupling") is not None else ""
-            cad  = f", cadans {r['cadence_spm']} spm" if r.get("cadence_spm") else ""
-            hr   = f", HR gem {r['avg_hr']} / max {r['max_hr']} bpm" if r.get("avg_hr") else ""
-            load = f", load {r['load']}" if r.get("load") else ""
-            lines.append(
-                f"  {r['date']} — {r['name']}: {r.get('dist_km','?')} km "
-                f"@ {r.get('pace','—')}{hr}{cad}{load}{dec}\n"
-                f"    Zones: {zstr}"
-            )
-        runs_block = "Recente runs (nieuwste eerst):\n" + "\n".join(lines)
-    else:
-        runs_block = "Geen individuele run-data beschikbaar (nog geen activiteiten in het blok)."
+    # ── Recentste run ──
+    run_lines = []
+    for r in recent[:3]:
+        bal   = f", balans L {r['balance_left']}%" if r.get("balance_left") else ""
+        gct   = f", GCT {r['gct_ms']}ms" if r.get("gct_ms") else ""
+        vosc  = f", vert.osc {r['vert_osc_cm']}cm" if r.get("vert_osc_cm") else ""
+        cad   = f", cadans {r['cadence_spm']} spm" if r.get("cadence_spm") else ""
+        hr    = f", HR gem {r['avg_hr']}/max {r['max_hr']}" if r.get("avg_hr") else ""
+        load  = f", load {r['load']}" if r.get("load") else ""
+        run_lines.append(
+            f"  {r['date']} — {r['name']}: {r.get('dist_km')} km @ {r.get('pace','—')}"
+            f"{hr}{cad}{bal}{gct}{vosc}{load}"
+        )
+        # splits samenvatting
+        splits = r.get("splits", [])
+        if splits:
+            hr_vals = [s["hr"] for s in splits if s.get("hr")]
+            cad_vals = [s["cad"] for s in splits if s.get("cad")]
+            if hr_vals:
+                run_lines.append(
+                    f"    Splits HR: min {min(hr_vals)} → max {max(hr_vals)} bpm"
+                    + (f" | cadans: {min(cad_vals)}–{max(cad_vals)} spm" if cad_vals else "")
+                )
 
-    # --- upcoming ---
-    week7 = data.get("week7", [])
+    # ── Geplande workouts ──
     upcoming = "; ".join(
-        f"{w['d']}: {w['ds']} ({w.get('km','—')})"
-        for w in week7 if w.get("t") != "rest"
+        f"{w['d']}: {w['ds']}" for w in scheduled
     ) or "geen geplande workouts"
 
-    ef_trend = ""
-    if ef and ef_prev:
-        diff = round(ef - ef_prev, 3)
-        ef_trend = f" (vorige week {ef_prev}, trend {'↑' if diff > 0 else '↓'} {abs(diff):+.3f})"
+    prompt = f"""{ATHLETE_CONTEXT}
 
-    status = f"""Trainingsstatus:
+Trainingsstatus:
 - Week {week}/{total_weeks}, {days_to_race} dagen tot de race
-- Voorspelde marathon: {predicted}
-- Readiness: {readiness} | Form/TSB: {form} (CTL {ctl}, ATL {atl})
-- Ramp rate: {ramp} ({ramp_note})
-- Volume deze week: {vol_last} km | vorige week: {vol_prev} km
-- Easy/hard split (28d): {easy_hard} | Plan adherentie: {adherence}
-- Efficiency factor: {ef}{ef_trend}
-- Gewicht: {weight} kg | Slaap: {sleep} u | Soreness: {soreness}/5
-- Komende workouts: {upcoming}"""
+- Garmin race predictions: {pred_str or '—'}
+- VO2max: {vo2} | CTL: {ctl} | ATL: {atl} | Form/TSB: {form}
+- Ramp rate: {ramp} ({ramp_note}) | Easy/hard 28d: {easy_hard}
 
-    return f"""{ATHLETE_CONTEXT}
+Herstel vandaag:
+- Body Battery: {bb_today.get('charged')} opgeladen / {bb_today.get('drained')} verbruikt ({bb_today.get('level')}) {f"| Slaap: {sleep_today.get('duration_h')}u (deep {sleep_today.get('deep_pct')}%, REM {sleep_today.get('rem_pct')}%)" if sleep_today else ''} {f"| HRV: {hrv_today.get('hrv5')} (status: {hrv_today.get('status')})" if hrv_today else ''} {f"| RHR: {rhr_today.get('rhr')} bpm" if rhr_today else ''} {f"| Stress: {stress_avg}" if stress_avg else ''} {f"| Gewicht: {weight} kg" if weight else ''}
+- Training readiness: {readiness.get('score')} ({readiness.get('level')}) — {readiness.get('feedback') or '—'}
 
-{status}
+Recente runs (nieuwste eerst):
+{chr(10).join(run_lines) or '  Geen recente runs beschikbaar'}
 
-{runs_block}
+Komende week: {upcoming}
 
-Analyseer als Pfitzinger-coach. Vergelijk de uitgevoerde training met de geplande workout. Beoordeel:
-1. Zone-uitvoering: zat de run in de voorgeschreven Pfitzinger-zone? Was het tempo consistent met de bedoeling (easy, MP, LT, VO2max)?
-2. Cadans en loopeconomie: afwijking van 180 spm doel, signalen van compensatie of asymmetrie rechts
-3. Aerobe progressie: efficiency factor trend, decoupling op de lange duurlopen
-4. Belasting en herstel: CTL/ATL/TSB in context van Pfitzinger-opbouw richting de race — is de ramp rate verantwoord? Gebruik de voorspelde eindtijd als leidraad, niet een vaste doeltijd.
-Vermeld geen locaties. Sluit af met exact één concrete instructie voor de volgende geplande training."""
+Analyseer als Pfitzinger-coach:
+1. Zone-uitvoering: zat de laatste run in de juiste Pfitzinger-zone?
+2. Beenbalans & loopeconomie: L/R balans trend, GCT, vertical oscillation, cadans
+3. Herstelstatus: Body Battery + slaap + HRV + RHR in samenhang
+4. Belasting: CTL/ATL/form richting 11 oktober — op schema?
+Geen locaties vermelden. Sluit af met exact één concrete instructie voor de volgende geplande training."""
+
+    return prompt
 
 
 def call_anthropic(prompt):
     resp = requests.post(
         "https://api.anthropic.com/v1/messages",
         headers={
-            "x-api-key":          ANTHROPIC_KEY,
-            "anthropic-version":  "2023-06-01",
-            "content-type":       "application/json",
+            "x-api-key":         ANTHROPIC_KEY,
+            "anthropic-version": "2023-06-01",
+            "content-type":      "application/json",
         },
         json={
             "model":      "claude-sonnet-4-6",
             "max_tokens": 900,
             "system": (
                 "Je bent een professionele marathon-trainingscoach gespecialiseerd in Pfitzinger 18/55. "
-                "Je toon is direct, technisch en resultaatgericht — geen aanmoedigingen, geen complimenten tenzij de data het verdient. "
-                "Je analyseert uitsluitend op basis van de cijfers en Pfitzinger-principes. "
-                "Vermeld nooit locaties of plaatsnamen in je feedback. "
+                "Je toon is direct, technisch en resultaatgericht — geen aanmoedigingen, geen complimenten tenzij data het verdient. "
                 "Schrijf in het Nederlands. Maximaal 4 alinea's, geen bullet points, geen headers. "
                 "Sluit altijd af met exact één concrete instructie voor de volgende geplande training."
             ),
@@ -185,7 +169,6 @@ def call_anthropic(prompt):
 
 
 def main():
-    # Always produce a valid ai_feedback.json — dashboard must never 404
     placeholder = {
         "generated": dt.date.today().isoformat(),
         "feedback":  "AI feedback niet beschikbaar.",
@@ -193,25 +176,27 @@ def main():
     }
 
     if not ANTHROPIC_KEY:
-        print("ANTHROPIC_API_KEY not set — writing placeholder.")
+        print("ANTHROPIC_API_KEY niet ingesteld — placeholder schrijven.")
         with open(OUT_PATH, "w") as f:
             json.dump(placeholder, f, indent=2)
         return
 
-    if not os.path.exists(DATA_PATH):
-        print("data.json not found — run fetch_data.py first.")
+    if not DATA_PATH.exists():
+        print("data.json niet gevonden — voer garmin_fetch.py eerst uit.")
         with open(OUT_PATH, "w") as f:
             json.dump(placeholder, f, indent=2)
         return
 
-    data   = load_data()
+    with open(DATA_PATH) as f:
+        data = json.load(f)
+
     prompt = build_prompt(data)
+    print("Anthropic API aanroepen...")
 
-    print("Calling Anthropic API…")
     try:
         result = call_anthropic(prompt)
     except Exception as e:
-        print(f"API call failed: {e}")
+        print(f"API fout: {e}")
         placeholder["feedback"] = f"API fout: {e}"
         placeholder["status"]   = "error"
         with open(OUT_PATH, "w") as f:
@@ -232,9 +217,8 @@ def main():
     with open(OUT_PATH, "w") as f:
         json.dump(out, f, indent=2, ensure_ascii=False)
 
-    print(f"ai_feedback.json written — {len(text)} chars")
+    print(f"ai_feedback.json geschreven — {len(text)} chars")
 
 
 if __name__ == "__main__":
     main()
-    
