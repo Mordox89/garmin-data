@@ -78,11 +78,20 @@ def daterange(start, end):
         d += dt.timedelta(days=1)
 
 # ── Data ophalen ──────────────────────────────────────────────────────────────
+STRENGTH_TYPES = {"strength_training", "functional_strength_training", "cardio_training"}
+MOBILITY_TYPES = {"yoga", "pilates", "flexibility", "stretching", "mobility"}
+
 def fetch_activities(client, days=90):
     end = today()
     start = end - dt.timedelta(days=days)
     acts = client.get_activities_by_date(start.isoformat(), end.isoformat())
     return [a for a in acts if (a.get("activityType", {}).get("typeKey") or "").lower() in RUN_TYPES]
+
+def fetch_all_activities(client, days=130):
+    """Haal alle activiteiten op inclusief strength en mobility."""
+    end = today()
+    start = end - dt.timedelta(days=days)
+    return client.get_activities_by_date(start.isoformat(), end.isoformat())
 
 def fetch_splits(client, activity_id):
     try:
@@ -176,24 +185,28 @@ def fetch_rhr(client, days=14):
             continue
     return result
 
-def fetch_weight(client, days=60):
+def fetch_weight(client, days=120):
+    """Haalt gewichtsmetingen op via dailyWeightSummaries structuur."""
     end = today()
     start = end - dt.timedelta(days=days)
     try:
         data = client.get_weigh_ins(start.isoformat(), end.isoformat())
-        # Probeer meerdere veldnamen
-        entries = (data.get("dateWeightList") or 
-                   data.get("allWeightMetrics") or 
-                   (data if isinstance(data, list) else []))
-        result = []
-        for d in entries:
-            date = d.get("calendarDate") or d.get("date")
-            val  = d.get("weight") or d.get("value")
-            if date and val:
-                # Garmin slaat gewicht op in gram
-                kg = round(val / 1000, 1) if val > 500 else round(val, 1)
-                result.append({"date": str(date)[:10], "kg": kg})
-        return sorted(result, key=lambda x: x["date"])
+        summaries = data.get("dailyWeightSummaries") or []
+        result = {}
+        for day in summaries:
+            date = str(day.get("summaryDate") or "")[:10]
+            if not date:
+                continue
+            # Gebruik latestWeight voor de dag
+            lw = day.get("latestWeight") or {}
+            weight_g = lw.get("weight") or day.get("minWeight")
+            if not weight_g:
+                continue
+            kg = round(float(weight_g) / 1000, 1)
+            if kg < 30 or kg > 300:  # sanity check
+                continue
+            result[date] = kg
+        return [{"date": k, "kg": v} for k, v in sorted(result.items())]
     except Exception as e:
         print(f"Gewicht fout: {e}")
         return []
@@ -393,13 +406,12 @@ def process_activities(client, raw_acts):
             weeks[wk]["runs"] += 1
             weeks[wk]["load"] += load or 0
 
-        # HR zones (Pfitzinger, op basis van gem HR per activiteit)
-        if hr:
-            if hr < 138:   zone_secs[0] += t
-            elif hr < 157: zone_secs[1] += t
-            elif hr < 169: zone_secs[2] += t
-            elif hr < 179: zone_secs[3] += t
-            else:          zone_secs[4] += t
+        # HR zones — gebruik hrTimeInZone_1..5 (seconden per zone per activiteit)
+        # Garmin zones: Z1 120–145, Z2 146–155, Z3 156–164, Z4 165–173, Z5 >173
+        if date >= PLAN_START:
+            for zi in range(5):
+                secs = a.get(f"hrTimeInZone_{zi+1}") or 0
+                zone_secs[zi] += secs
 
     # Laatste 5 runs met splits
     for a in sorted(raw_acts, key=lambda x: x.get("startTimeLocal") or "", reverse=True)[:5]:
@@ -577,7 +589,7 @@ def build_zones(zone_secs):
     total = sum(zone_secs)
     if total == 0:
         return []
-    names = ["Recovery", "Aerobic", "Tempo", "Threshold", "VO2max"]
+    names = ["Z1 Warm-up", "Z2 Makkelijk", "Z3 Aeroob", "Z4 Drempel", "Z5 Maximum"]
     colors = ["#2f7d52", "#34e07d", "#ffb43a", "#ff8a4a", "#ff5e6c"]
     return [
         {"n": names[i], "v": round(zone_secs[i]/total*100), "c": colors[i]}
@@ -616,6 +628,122 @@ def build_ef(recent_acts):
             ef_list.append(round(power / hr, 3))
     return ef_list
 
+# ── Long runs (langste run per week) ─────────────────────────────────────────
+def build_long_runs(raw_acts):
+    """Langste run per week — voor long run progressie tracking."""
+    runs = [a for a in raw_acts if (a.get("activityType", {}).get("typeKey") or "").lower() in RUN_TYPES]
+    week_longest = {}
+    for a in runs:
+        date_str = (a.get("startTimeLocal") or "")[:10]
+        if not date_str:
+            continue
+        date = dt.date.fromisoformat(date_str)
+        if date < PLAN_START:
+            continue
+        wk = week_number(date)
+        dist = (a.get("distance") or 0) / 1000
+        hr = a.get("averageHR")
+        speed = a.get("averageSpeed") or 0
+        t = a.get("duration") or a.get("movingDuration") or 0
+        if wk not in week_longest or dist > week_longest[wk]["dist_km"]:
+            week_longest[wk] = {
+                "week": wk,
+                "date": date_str,
+                "dist_km": round(dist, 2),
+                "pace": pace_str(speed),
+                "avg_hr": round(hr) if hr else None,
+                "duration_s": round(t),
+                "name": a.get("activityName") or "Long Run",
+            }
+    return [v for _, v in sorted(week_longest.items())]
+
+# ── LT runs (drempel runs op basis van HR > 165) ──────────────────────────────
+def build_lt_runs(raw_acts):
+    """Runs met gem HR > 165 bpm = threshold/LT werk."""
+    runs = [a for a in raw_acts if (a.get("activityType", {}).get("typeKey") or "").lower() in RUN_TYPES]
+    lt_runs = []
+    for a in sorted(runs, key=lambda x: x.get("startTimeLocal") or ""):
+        date_str = (a.get("startTimeLocal") or "")[:10]
+        if not date_str:
+            continue
+        date = dt.date.fromisoformat(date_str)
+        if date < PLAN_START:
+            continue
+        hr = a.get("averageHR") or 0
+        if hr < 160:  # alleen runs met substantieel threshold werk
+            continue
+        speed = a.get("averageSpeed") or 0
+        lt_runs.append({
+            "date": date_str,
+            "name": a.get("activityName") or "Run",
+            "avg_hr": round(hr),
+            "max_hr": round(a.get("maxHR") or 0) if a.get("maxHR") else None,
+            "pace": pace_str(speed),
+            "dist_km": round((a.get("distance") or 0) / 1000, 2),
+        })
+    return lt_runs[-8:]  # laatste 8 LT runs
+
+# ── Strength & Mobility tracking ──────────────────────────────────────────────
+def build_strength_mobility(all_acts):
+    """Strength en mobility sessies per week voor weekoverzicht."""
+    result = {}  # week_number -> {strength: [], mobility: []}
+    for a in all_acts:
+        date_str = (a.get("startTimeLocal") or "")[:10]
+        if not date_str:
+            continue
+        date = dt.date.fromisoformat(date_str)
+        if date < PLAN_START:
+            continue
+        wk = week_number(date)
+        type_key = (a.get("activityType", {}).get("typeKey") or "").lower()
+        if type_key in STRENGTH_TYPES:
+            if wk not in result:
+                result[wk] = {"strength": [], "mobility": []}
+            result[wk]["strength"].append({
+                "date": date_str,
+                "name": a.get("activityName") or "Strength",
+                "duration_s": round(a.get("duration") or 0),
+            })
+        elif type_key in MOBILITY_TYPES:
+            if wk not in result:
+                result[wk] = {"strength": [], "mobility": []}
+            result[wk]["mobility"].append({
+                "date": date_str,
+                "name": a.get("activityName") or "Mobility",
+                "duration_s": round(a.get("duration") or 0),
+            })
+    # Zorg dat alle plan-weken aanwezig zijn
+    current_wk = week_number(today())
+    for wk in range(1, current_wk + 1):
+        if wk not in result:
+            result[wk] = {"strength": [], "mobility": []}
+    return {str(k): v for k, v in sorted(result.items())}
+
+# ── Slaap kwaliteit score ─────────────────────────────────────────────────────
+def build_sleep_quality(sleep_data):
+    """Berekent slaapkwaliteitsscore op basis van duur + fases."""
+    if not sleep_data:
+        return []
+    result = []
+    for d in sleep_data:
+        dur = d.get("duration_h") or 0
+        deep = d.get("deep_pct") or 0
+        rem  = d.get("rem_pct") or 0
+        score = d.get("score")
+        # Kwaliteitsscore: duur 0-40 + deep 0-30 + rem 0-30
+        dur_score  = min(40, max(0, (dur - 5) / 4 * 40))   # 5-9u -> 0-40
+        deep_score = min(30, deep / 20 * 30)               # doel >20% -> max 30
+        rem_score  = min(30, rem / 25 * 30)                # doel >25% -> max 30
+        quality = round(dur_score + deep_score + rem_score)
+        result.append({
+            **d,
+            "quality_score": score or quality,  # gebruik Garmin score als beschikbaar
+            "dur_ok":   dur >= 7,
+            "deep_ok":  deep >= 15,
+            "rem_ok":   rem >= 20,
+        })
+    return result
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 def main():
     print("Verbinding maken met Garmin Connect...")
@@ -644,6 +772,9 @@ def main():
     weight_data    = fetch_weight(client, days=30)
     scheduled      = fetch_scheduled_workouts(client)
 
+    print("Alle activiteiten ophalen voor strength/mobility...")
+    all_acts = fetch_all_activities(client, days=130)
+
     print("Data samenstellen...")
     meta  = build_meta(race_preds, training_load, vo2_data)
     kpi   = build_kpi(weeks, training_load, recent_acts)
@@ -659,7 +790,7 @@ def main():
         "ef":                build_ef(recent_acts),
         "recentActivities":  recent_acts,
         "bodyBattery":       body_battery,
-        "sleep":             sleep_data,
+        "sleep":             build_sleep_quality(sleep_data),
         "hrv":               hrv_data,
         "rhr":               rhr_data,
         "stress":            stress_data,
@@ -668,6 +799,9 @@ def main():
         "racePredictions":   race_preds,
         "trainingReadiness": readiness,
         "weeks":             {str(k): v for k, v in weeks.items()},
+        "longRuns":          build_long_runs(raw_acts),
+        "ltRuns":            build_lt_runs(raw_acts),
+        "strengthMobility":  build_strength_mobility(all_acts),
     }
 
     out_path = HERE / "data.json"

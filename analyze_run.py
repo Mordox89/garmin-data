@@ -24,13 +24,20 @@ Atletenprofiel:
 - Doel: zo snel mogelijk lopen op 11 oktober 2026 — maximale prestatie op basis van de data
 - Max HR: 190 BPM | LTHR: 173–174 BPM
 
-Pfitzinger HR-zones (persoonlijk, op basis van HRR):
-- Recovery:        <146 bpm
-- General aerobic: 138–156 bpm
-- Long run:        144–161 bpm
-- Marathon pace:   157–169 bpm
-- Lactate threshold: 157–175 bpm
-- VO2max intervals: 179–182 bpm
+Garmin HR-zones (horloge-instellingen):
+- Z1 Warm-up:   120–145 bpm
+- Z2 Makkelijk: 146–155 bpm
+- Z3 Aeroob:    156–164 bpm
+- Z4 Drempel:   165–173 bpm
+- Z5 Maximum:   >173 bpm
+
+Pfitzinger workout-types en hun doelzones:
+- Recovery run:      Z1–Z2 (<156 bpm)
+- General aerobic:   Z2 (146–155 bpm)
+- Long run:          Z1–Z2 (<156 bpm)
+- Marathon pace:     Z3 laag (156–161 bpm)
+- Lactate threshold: Z3–Z4 (156–173 bpm)
+- VO2max intervals:  Z4–Z5 (>165 bpm)
 
 Gebruik ALTIJD bovenstaande zones bij het beoordelen van runs.
 Plan: Pfitzinger 18/55 hybrid, 55–70 km/week

@@ -60,6 +60,7 @@
   .card h2 .dot.cy{background:var(--cyan);box-shadow:0 0 9px var(--cyan)}
   .card h2 .dot.am{background:var(--amber);box-shadow:0 0 9px var(--amber)}
   .card h2 .dot.vl{background:var(--violet);box-shadow:0 0 9px var(--violet)}
+  .card h2 .dot.go{background:var(--go);box-shadow:0 0 9px var(--go)}
   .card h2 .dot.co{background:var(--coral);box-shadow:0 0 9px var(--coral)}
   .card h2 .info{margin-left:auto;flex:none;width:16px;height:16px;border-radius:50%;border:1px solid var(--dim);color:var(--dim);font-family:var(--mono);font-size:10px;font-weight:500;font-style:normal;letter-spacing:0;text-transform:none;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;position:relative;opacity:0;transition:opacity .15s,color .15s,border-color .15s}
   .card:hover .info{opacity:.5}.info:hover,.info.open{opacity:1!important;color:var(--cyan);border-color:var(--cyan)}
@@ -178,9 +179,10 @@
   <div class="tabs">
     <button class="tab active" data-tab="load"><span class="n">01</span>Fitness &amp; Load</button>
     <button class="tab" data-tab="vol"><span class="n">02</span>Volume</button>
-    <button class="tab" data-tab="pace"><span class="n">03</span>Intensiteit &amp; Loopdata</button>
-    <button class="tab" data-tab="ready"><span class="n">04</span>Readiness &amp; Plan</button>
-    <button class="tab" data-tab="body"><span class="n">05</span>Herstel &amp; Lichaam</button>
+    <button class="tab" data-tab="training"><span class="n">03</span>Trainingsanalyse</button>
+    <button class="tab" data-tab="pace"><span class="n">04</span>Intensiteit &amp; Loopdata</button>
+    <button class="tab" data-tab="ready"><span class="n">05</span>Readiness &amp; Plan</button>
+    <button class="tab" data-tab="body"><span class="n">06</span>Herstel &amp; Lichaam</button>
   </div>
 
   <!-- TAB 01: FITNESS & LOAD -->
@@ -212,7 +214,7 @@
     <div class="card c8"><h2><span class="dot"></span>Wekelijks Volume<span class="info" tabindex="0">i<span class="tip"><b>Kilometers per trainingsweek.</b> Groen = gedaan. Het doel is een gestage opbouw met duidelijke deload-weken.</span></span></h2><div class="cap">Wekelijkse kilometerstand — opbouw richting race-peak van 55–70 km/week.</div>
       <div class="chart-h tall"><canvas id="volChart"></canvas></div>
     </div>
-    <div class="card c4"><h2><span class="dot am"></span>Intensiteitsmix<span class="info" tabindex="0">i<span class="tip"><b>Tijd per Pfitzinger HR-zone, laatste 28 dagen.</b> Doel ~80% easy (recovery + general aerobic). Te veel hard werk stopt de progressie en verhoogt blessurerisico.</span></span></h2><div class="cap">Pfitzinger HR-zone verdeling laatste 28 dagen. ~80% easy is het doel.</div>
+    <div class="card c4"><h2><span class="dot am"></span>Intensiteitsmix<span class="info" tabindex="0">i<span class="tip"><b>Tijd per Garmin HR-zone, vanaf start blok (8 juni).</b> Z1 Warm-up 120–145 · Z2 Makkelijk 146–155 · Z3 Aeroob 156–164 · Z4 Drempel 165–173 · Z5 Max &gt;173. Doel ~80% Z1+Z2.</span></span></h2><div class="cap">Pfitzinger HR-zone verdeling vanaf start blok (8 juni). ~80% easy is het doel.</div>
       <div class="gaugewrap" style="margin-top:4px">
         <div class="ring"><svg width="124" height="124" viewBox="0 0 124 124" id="zoneRing"></svg><div class="ctr"><b id="m-easy">—</b><s>Easy</s></div></div>
         <div class="legend" id="zoneLegend"></div>
@@ -285,6 +287,26 @@
     </div>
   </div></div>
 
+  <!-- TAB 06: TRAININGSANALYSE -->
+  <div class="panel-set" id="training"><div class="grid">
+    <div class="card c8"><h2><span class="dot cy"></span>Long Run Progressie<span class="info" tabindex="0">i<span class="tip"><b>Langste run per week.</b> De long run is de hoeksteen van Pfitzinger 18/55. Track afstand, pace en HR week over week. Stijgende afstand bij dalende of gelijke HR = aerobe groei.</span></span></h2><div class="cap">Langste run per week — afstand en gem HR. Kernindicator van marathon-specifieke fitness.</div>
+      <div class="chart-h tall"><canvas id="longRunChart"></canvas></div>
+      <div id="m-longrun-detail" style="margin-top:10px;font-size:11px;color:var(--muted)"></div>
+    </div>
+    <div class="card c4"><h2><span class="dot am"></span>LT Runs · Drempel Trend<span class="info" tabindex="0">i<span class="tip"><b>Runs met gem HR &gt;160 bpm = threshold work.</b> Dalende pace bij gelijke HR = je drempel verbetert. Dit is de directe maatstaf voor marathonspecifieke kracht.</span></span></h2><div class="cap">Threshold runs — pace en HR trend. Dalende pace = je drempel verschuift.</div>
+      <div class="chart-h tall"><canvas id="ltChart"></canvas></div>
+    </div>
+    <div class="card c6"><h2><span class="dot"></span>HR vs Pace · Running Economy<span class="info" tabindex="0">i<span class="tip"><b>Pace per hartslag — de meest directe maatstaf van loopeconomie.</b> Sneller bij dezelfde HR = je motor wordt efficiënter. Let op seizoenspatroon (hitte verhoogt HR bij gelijke pace).</span></span></h2><div class="cap">Snelheid per hartslag over de loopjes. Stijgende lijn = betere loopeconomie.</div>
+      <div class="chart-h"><canvas id="hrPaceChart"></canvas></div>
+    </div>
+    <div class="card c6"><h2><span class="dot vl"></span>Loopeconomie · GCT &amp; Vert. Osc<span class="info" tabindex="0">i<span class="tip"><b>Ground Contact Time en Vertical Oscillation per run (Advanced Dynamics via HRM-600).</b> GCT doel: dalend, &lt;260ms op marathon pace. Vert. osc doel: &lt;9cm. Beiden indicatoren van loopefficiëntie.</span></span></h2><div class="cap">GCT en vertical oscillation over het blok — direct van HRM-600 Advanced Dynamics.</div>
+      <div class="chart-h"><canvas id="dynamicsChart"></canvas></div>
+    </div>
+    <div class="card c12"><h2><span class="dot go"></span>Strength &amp; Mobility · Weekoverzicht<span class="info" tabindex="0">i<span class="tip"><b>Kracht- en mobiliteitssessies per week uit Garmin.</b> Doel: 2× kracht + dagelijks mobiliteit. Consistent krachtraining is de piriformis-verzekering voor de lange termijn.</span></span></h2><div class="cap">Kracht- en mobiliteitssessies per week — direct uit Garmin activiteiten. Doel: 2× kracht + 5× mobiliteit/week.</div>
+      <div id="sm-grid" style="margin-top:8px"></div>
+    </div>
+  </div></div>
+
   <footer><span>MARATHON BUILD · TELEMETRY · GARMIN DIRECT</span><span id="m-updated">—</span></footer>
 </div>
 
@@ -302,7 +324,7 @@ const SAMPLE={
   pmc:{dates:[],ctl:[],atl:[],form:[],acwr:[]},
   volume:{labels:[],done:[]},
   zones:[],week7:[],ef:[],
-  recentActivities:[],bodyBattery:[],sleep:[],hrv:[],rhr:[],stress:[],weight:[],vo2:[],
+  recentActivities:[],bodyBattery:[],sleep:[],hrv:[],rhr:[],stress:[],weight:[],vo2:[],longRuns:[],ltRuns:[],strengthMobility:{},
   racePredictions:{},trainingReadiness:{},weeks:{}
 };
 let DATA=SAMPLE;
@@ -549,7 +571,8 @@ const builders={
         {label:'Uren slaap',data:sl.map(d=>d.duration_h),type:'line',borderColor:C.go,borderWidth:2,tension:.35,pointRadius:3,yAxisID:'y2'}
       ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}}},scales:{x:{...G,grid:{display:false}},y:{...G,stacked:true,max:100,ticks:{callback:v=>v+'%'}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:0,suggestedMax:12,ticks:{color:C.go,callback:v=>v+'u'}}}}});
       const ls=sl.at(-1);
-      document.getElementById('m-sleep-detail').textContent=ls?`Laatste nacht: ${ls.duration_h}u · deep ${ls.deep_pct}% · REM ${ls.rem_pct}% · score ${ls.score??'—'}${ls.qualifier?' ('+ls.qualifier+')':''}`:'';
+      const sleepColor=ls?.quality_score>70?C.go:ls?.quality_score>50?C.amber:C.coral;
+      document.getElementById('m-sleep-detail').innerHTML=ls?`<span style="color:${sleepColor};font-family:var(--mono);font-weight:600">${ls.quality_score??'—'}/100</span> · ${ls.duration_h}u · deep <span style="color:${ls.deep_ok?C.go:C.amber}">${ls.deep_pct}%</span> · REM <span style="color:${ls.rem_ok?C.go:C.amber}">${ls.rem_pct}%</span> · ${ls.qualifier||'—'}`:''
     }
     // RHR + stress
     const rhr=DATA.rhr||[];const str=DATA.stress||[];
@@ -587,6 +610,62 @@ const builders={
     }else{
       bdEl.innerHTML='<div style="color:var(--muted);font-size:12px">Beenbalansdata beschikbaar na sync.</div>';
     }
+  },
+  training(){
+    // Long Run progressie
+    const lr=DATA.longRuns||[];
+    if(lr.length){
+      new Chart(longRunChart,{type:'line',data:{labels:lr.map(r=>'W'+r.week),datasets:[
+        {label:'Afstand (km)',data:lr.map(r=>r.dist_km),borderColor:C.cyan,borderWidth:2.5,tension:.35,pointRadius:5,fill:true,backgroundColor:'rgba(69,200,224,.08)',yAxisID:'y'},
+        {label:'Gem HR (bpm)',data:lr.map(r=>r.avg_hr),borderColor:C.coral,borderWidth:2,borderDash:[4,3],tension:.35,pointRadius:4,yAxisID:'y2'}
+      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+(c.datasetIndex===0?' km':' bpm')}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:10,suggestedMax:40,ticks:{color:C.cyan,callback:v=>v+'km'}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:130,suggestedMax:175,ticks:{color:C.coral}}}}});
+      const lastLr=lr.at(-1);
+      document.getElementById('m-longrun-detail').textContent=lastLr?`Laatste long run: ${lastLr.date} · ${lastLr.dist_km} km · ${lastLr.pace||'—'} · HR ${lastLr.avg_hr||'—'} bpm`:'';
+    }
+    // LT runs
+    const lt=DATA.ltRuns||[];
+    if(lt.length){
+      const paceToSec=p=>{if(!p)return null;const pts=p.split(':');return pts.length>=2?parseInt(pts[0])*60+parseInt(pts[1]):null;};
+      const secToPace=s=>{if(!s)return'—';return Math.floor(s/60)+':'+(s%60).toString().padStart(2,'0')+'/km';};
+      new Chart(ltChart,{type:'line',data:{labels:lt.map(r=>r.date?r.date.slice(5):''),datasets:[
+        {label:'Pace',data:lt.map(r=>paceToSec(r.pace)),borderColor:C.amber,borderWidth:2.5,tension:.35,pointRadius:4,yAxisID:'y'},
+        {label:'HR (bpm)',data:lt.map(r=>r.avg_hr),borderColor:C.coral,borderWidth:2,borderDash:[4,3],tension:.35,pointRadius:3,yAxisID:'y2'}
+      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>c.datasetIndex===0?'Pace: '+secToPace(c.raw):'HR: '+c.raw+' bpm'}}},scales:{x:{...G,grid:{display:false}},y:{...G,reverse:true,ticks:{color:C.amber,callback:v=>secToPace(v)}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:155,suggestedMax:185,ticks:{color:C.coral}}}}});
+    }
+    // HR vs Pace scatter
+    const ecoRuns=(DATA.recentActivities||[]).filter(r=>r.avg_hr&&r.pace).reverse();
+    if(ecoRuns.length){
+      const paceToSec2=p=>{if(!p)return null;const pts=p.split(':');return pts.length>=2?parseInt(pts[0])*60+parseInt(pts[1]):null;};
+      new Chart(hrPaceChart,{type:'scatter',data:{datasets:[{label:'HR vs Pace',data:ecoRuns.map(r=>({x:r.avg_hr,y:paceToSec2(r.pace),lbl:r.date?r.date.slice(5):''})),backgroundColor:C.cyan,pointRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const s=c.raw.y;return c.raw.lbl+' · HR '+c.raw.x+' · '+Math.floor(s/60)+':'+(s%60).toString().padStart(2,'0')+'/km';}}}},scales:{x:{...G,grid:{display:false}},y:{...G,reverse:true,ticks:{callback:v=>Math.floor(v/60)+':'+(v%60).toString().padStart(2,'0')}}}}});
+    }
+    // GCT & Vertical Oscillation
+    const dynRuns=(DATA.recentActivities||[]).filter(r=>r.gct_ms||r.vert_osc_cm).reverse();
+    if(dynRuns.length){
+      new Chart(dynamicsChart,{type:'line',data:{labels:dynRuns.map(r=>r.date?r.date.slice(5):''),datasets:[
+        {label:'GCT (ms)',data:dynRuns.map(r=>r.gct_ms),borderColor:C.amber,borderWidth:2.5,tension:.35,pointRadius:4,yAxisID:'y'},
+        {label:'Vert. Osc (cm)',data:dynRuns.map(r=>r.vert_osc_cm),borderColor:C.violet,borderWidth:2,borderDash:[4,3],tension:.35,pointRadius:4,yAxisID:'y2'}
+      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:240,suggestedMax:310,ticks:{color:C.amber,callback:v=>v+'ms'}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:7,suggestedMax:12,ticks:{color:C.violet,callback:v=>v+'cm'}}}}});
+    }
+    // Strength & Mobility weekoverzicht
+    const sm=DATA.strengthMobility||{};
+    const smEl=document.getElementById('sm-grid');
+    const smWeeks=Object.keys(sm).sort((a,b)=>+a-+b);
+    if(!smWeeks.length){smEl.innerHTML='<div style="color:var(--muted);font-size:12px">Geen kracht/mobiliteit activiteiten gevonden.</div>';return;}
+    const hdr='<div style="display:grid;grid-template-columns:80px repeat('+smWeeks.length+',1fr);gap:5px;margin-bottom:5px;font-family:var(--mono);font-size:9px;color:var(--dim)"><span></span>'+smWeeks.map(w=>'<span style="text-align:center">W'+w+'</span>').join('')+'</div>';
+    const smRows=['strength','mobility'];
+    const smTargets={strength:2,mobility:5};
+    const smLabels={strength:'Kracht',mobility:'Mobiliteit'};
+    const rowHtml=smRows.map(type=>{
+      const cells=smWeeks.map(wk=>{
+        const count=(sm[wk]&&sm[wk][type]?sm[wk][type]:[]).length;
+        const tgt=smTargets[type];
+        const bg=count>=tgt?'rgba(52,224,125,.7)':count>0?'rgba(255,180,58,.7)':'rgba(255,255,255,.05)';
+        const col=count>=tgt?'#06210f':count>0?'#2a1c02':'var(--dim)';
+        return '<div style="height:26px;border-radius:5px;background:'+bg+';display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:'+col+'">'+( count||'' )+'</div>';
+      }).join('');
+      return '<div style="display:grid;grid-template-columns:80px repeat('+smWeeks.length+',1fr);gap:5px;margin-bottom:5px;align-items:center"><span style="font-size:11px;color:var(--muted)">'+smLabels[type]+'</span>'+cells+'</div>';
+    }).join('');
+    smEl.innerHTML=hdr+rowHtml+'<div style="margin-top:8px;font-size:10px;color:var(--dim)">Groen = doel gehaald · Geel = gedeeltelijk · Grijs = geen sessie · Doel: kracht 2×, mobiliteit 5× per week</div>';
   }
 };
 
