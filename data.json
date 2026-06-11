@@ -54,27 +54,27 @@
   },
   "zones": [
     {
-      "n": "Recovery",
+      "n": "Z1 Warm-up",
       "v": 0,
       "c": "#2f7d52"
     },
     {
-      "n": "Aerobic",
+      "n": "Z2 Makkelijk",
       "v": 0,
       "c": "#34e07d"
     },
     {
-      "n": "Tempo",
+      "n": "Z3 Aeroob",
       "v": 100,
       "c": "#ffb43a"
     },
     {
-      "n": "Threshold",
+      "n": "Z4 Drempel",
       "v": 0,
       "c": "#ff8a4a"
     },
     {
-      "n": "VO2max",
+      "n": "Z5 Maximum",
       "v": 0,
       "c": "#ff5e6c"
     }
@@ -1237,7 +1237,7 @@
     },
     {
       "date": "2026-06-11",
-      "avg_stress": 21
+      "avg_stress": 20
     }
   ],
   "weight": [
