@@ -1,18 +1,5 @@
 {
   "generated": "2026-06-11",
-  "feedback": "De aerobe run van 10 juni zat gemiddeld op 157 bpm, wat net boven de bovengrens van Z2 ligt (155 bpm) en daarmee in Z3-laag terechtkwam. Voor een general aerobic run is dat grensgevallend acceptabel — Pfitzinger staat hier een gemiddelde van <156 bpm voor — maar de piekwaarde van 162 bpm en het tempo van 5:29/km suggereren dat de intensiteit licht boven doel uitkwam. Bij 87.9 kg en een lopende herstelbalans is dit geen ramp, maar structureel te hoog voor aerobe runs vergroot het risico op onvoldoende basisaanpassing. De LT-run van 8 juni is technisch te hard uitgevoerd: een piek van 177 bpm overschrijdt LTHR (173-174 bpm), wat betekent dat het drempelwerk deels in VO2max-gebied belandde. De bedoeling is 156–173 bpm vasthouden; de splitsvariantie van 141 tot 175 bpm duidt op een te agressieve startopbouw of onvoldoende tempodiscipline in de versnellingsfase.\n\nDe beenbalans stabiliseert niet: 52.2% links op 10 juni en zelfs 53.3% op 8 juni, gemiddeld 4% asymmetrie, ver boven het doelcriteria van <2%. GCT van 267 ms op de aerobe run is aanzienlijk hoger dan de 242 ms op de LT-run, wat logisch is bij lagere intensiteit, maar beide waarden liggen boven wat je bij cadans 180 spm wilt zien (theoretisch optimum ~167 ms bij perfect looppatroon). De cadans van 168 spm is nog te laag — structureel onder doel van 180 spm, en dit patroon is consistent over alle drie de runs. De combinatie van lage cadans, hoge GCT en persistente linksoverbelasting wijst op een technisch patroon waarbij het rechterbeen (het probleembeen bij de DNS) minder krachtig afdrukt, wat je ook terugziet in de asymmetriedata. De gluteus/piriformis-activatietraining dient aantoonbaar effect te krijgen op deze metric; als dat uitblijft na 2-3 weken, moet de kracht-selectie herzien worden.\n\nDe herstelstatus is belabberd. HRV van 91 met status LOW, Body Battery 52 na 9.1 uur slaap — dat is een slechte ratio. Bij 9 uur slaap verwacht je een hogere Body Battery tenzij de slaapkwaliteit tekortschiet, en dat bevestigen de cijfers: slechts 5.1% diepe slaap (normaal 13-23%) en 15.6% REM (normaal 20-25%). Je herstelt kwantitatief maar niet kwalitatief. TSB van -27 met ATL boven CTL bevestigt acute vermoeidheid in week 1/18 — dat is niet alarmerend als startpositie, maar het betekent dat het lichaam nu adaptatieachterstand inloopt. RHR van 51 is neutraal, stressscore 20 is laag, dus de belasting is fysiologisch, niet psychosociaal.\n\nMet 122 dagen en een Garmin-voorspelling van 3:42:25 zit je in een reëel kader voor progressie richting een streeftijd ergens in",
-  "status": "ok",
-  "model": "claude-sonnet-4-6",
-  "usage": {
-    "input_tokens": 1364,
-    "cache_creation_input_tokens": 0,
-    "cache_read_input_tokens": 0,
-    "cache_creation": {
-      "ephemeral_5m_input_tokens": 0,
-      "ephemeral_1h_input_tokens": 0
-    },
-    "output_tokens": 900,
-    "service_tier": "standard",
-    "inference_geo": "global"
-  }
+  "feedback": "AI feedback niet beschikbaar.",
+  "status": "skipped"
 }
