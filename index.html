@@ -257,7 +257,7 @@
       <div class="chart-h"><canvas id="hrvChart"></canvas></div>
       <div id="m-hrv-status" style="margin-top:8px;font-size:12px"></div>
     </div>
-    <div class="card c12" id="ai-card"><h2><span class="dot cy"></span>AI Coaching Feedback · Pfitzinger Coach<span class="info" tabindex="0">i<span class="tip"><b>Dagelijks gegenereerd door Claude</b> op basis van Garmin data — zones, cadans, beenbalans, HRV, Body Battery en trainingsbelasting. Direct na elke sync bijgewerkt.</span></span></h2><div class="cap">Datagedreven Pfitzinger-coaching op basis van je Garmin data — elke sync automatisch bijgewerkt.</div>
+    <div class="card c12" id="ai-card"><h2><span class="dot cy"></span>AI Coaching Feedback · Pfitzinger Coach<span class="info" tabindex="0">i<span class="tip"><b>Dagelijks gegenereerd door Claude</b> op basis van Garmin data — zones, cadans, beenbalans, HRV, Body Battery en trainingsbelasting. Direct na elke sync bijgewerkt.</span></span></h2>
       <div id="ai-body" style="margin-top:14px;font-size:13.5px;line-height:1.7;color:var(--text)"><span style="color:var(--muted)">Laden…</span></div>
       <div id="ai-meta" style="margin-top:10px;font-size:11px;color:var(--dim)"></div>
     </div>
@@ -339,7 +339,7 @@ function populate(){
   const bb=DATA.bodyBattery?.at(-1);
   const chips=[
     {l:'ACWR',v:((DATA.pmc?.acwr||[]).at(-1)||'—').toString(),s:'opt. zone 0.8–1.3',st:'var(--cyan)',tip:'<b>Acute:Chronic Workload Ratio.</b> Hoe je acute belasting zich verhoudt tot je fitness. 0.8–1.3 = optimale zone. Boven 1.5 = verhoogd blessurerisico.'},
-    {l:'CTL Ramp',v:(k.ramp!=null?'+'+k.ramp:k.ramp||'—')+' <span class="unit">/wk</span>',s:k.rampNote||'—',st:stMap[k.rampSt]||'var(--go)',tip:'<b>Wekelijkse CTL-stijging.</b> Onder ~6–7/wk is veilig — je piriformisverzekering.'},
+    {l:'ATL Ramp',v:(DATA.pmc?.atl?.at(-1)??'—').toString()+' <span class="unit">atl</span>',s:`CTL ${DATA.pmc?.ctl?.at(-1)??'—'} · Form ${DATA.pmc?.form?.at(-1)??'—'}`,st:'var(--amber)',tip:'<b>Acute trainingsbelasting (ATL).</b> Hoge ATL ten opzichte van CTL = vermoeid. Form (CTL−ATL) negatief = beladen maar opbouwend.'},
     {l:'Easy / Hard',v:k.easyHard||'—',s:'80/20 doel (Pfitzinger)',st:'var(--go)',tip:'<b>Aandeel easy vs hard training laatste 28d.</b> Pfitzinger-model: ~80% easy bouwt het aerobe fundament.'},
     {l:'Body Battery',v:bb?(bb.charged||'—').toString():'—',s:bb?`+${bb.charged} opgeladen / −${bb.drained} verbruikt`:'geen data',st:'var(--cyan)',tip:'<b>Garmin Body Battery.</b> Opgeladen door slaap, verbruikt door training en stress. Ideaal boven 75 starten aan een trainingsdag.'},
     {l:'Readiness',v:`<span style="font-size:18px;color:${rdColor}">${rdScore??'—'}</span>`,s:rdLevel,st:rdColor,tip:'<b>Garmin Training Readiness (0–100).</b> Samengesteld uit HRV-status, slaap, Body Battery, recent herstel en stressniveau.'}
@@ -370,7 +370,10 @@ const builders={
     // VO2max
     const vo2arr=DATA.vo2||[];
     if(vo2arr.length){
-      new Chart(vo2Chart,{type:'line',data:{labels:vo2arr.map(d=>d.date?.slice(5)||''),datasets:[{label:'VO₂max',data:vo2arr.map(d=>d.vo2),borderColor:C.cyan,borderWidth:2.5,tension:.35,pointRadius:0,fill:true,backgroundColor:'rgba(69,200,224,.08)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+' ml/kg/min'}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:40,suggestedMax:65}}}});
+      new Chart(vo2Chart,{type:'line',data:{labels:vo2arr.map(d=>d.date?.slice(5)||''),datasets:[
+        {label:'VO₂max (ml/kg/min)',data:vo2arr.map(d=>d.vo2),borderColor:C.cyan,borderWidth:2.5,tension:.35,pointRadius:4,fill:true,backgroundColor:'rgba(69,200,224,.08)'}
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+' ml/kg/min'}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:40,suggestedMax:65}}}});
+      document.getElementById('m-vo2').textContent=vo2arr.at(-1)?.vo2??'—';
     }
     // Training status
     const ts=DATA.meta?.trainingStatus||'—';
@@ -495,14 +498,16 @@ const builders={
     // HRV chart
     const hrv=DATA.hrv||[];
     if(hrv.length){
+      const hrvBaseLow=hrv[0]?.baseline_low||59, hrvBaseHigh=hrv[0]?.baseline_high||82;
       new Chart(hrvChart,{type:'line',data:{labels:hrv.map(d=>d.date?.slice(5)||''),datasets:[
-        {label:'HRV (ms)',data:hrv.map(d=>d.hrv5||d.hrv_avg),borderColor:C.violet,borderWidth:2.5,tension:.35,pointRadius:3,fill:true,backgroundColor:'rgba(154,135,255,.08)'},
-        {label:'Baseline laag (59)',data:hrv.map(()=>59),borderColor:'rgba(255,255,255,.15)',borderWidth:1,borderDash:[4,3],pointRadius:0},
-        {label:'Baseline hoog (82)',data:hrv.map(()=>82),borderColor:'rgba(255,255,255,.15)',borderWidth:1,borderDash:[4,3],pointRadius:0}
-      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+' ms'}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:0,suggestedMax:110}}}});
+        {label:'7d Gem HRV (ms)',data:hrv.map(d=>d.weekly||d.hrv_avg),borderColor:C.violet,borderWidth:2.5,tension:.35,pointRadius:3,fill:true,backgroundColor:'rgba(154,135,255,.08)'},
+        {label:'5min max HRV',data:hrv.map(d=>d.hrv5),borderColor:'rgba(154,135,255,.4)',borderWidth:1.5,borderDash:[3,3],tension:.35,pointRadius:2},
+        {label:'Baseline laag',data:hrv.map(d=>d.baseline_low||hrvBaseLow),borderColor:'rgba(255,255,255,.15)',borderWidth:1,borderDash:[4,3],pointRadius:0},
+        {label:'Baseline hoog',data:hrv.map(d=>d.baseline_high||hrvBaseHigh),borderColor:'rgba(255,255,255,.15)',borderWidth:1,borderDash:[4,3],pointRadius:0}
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.raw??'—')+' ms'}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:0,suggestedMax:120}}}});
       const lastHrv=hrv.at(-1);
       const statusColor={BALANCED:C.go,LOW:C.coral,UNBALANCED:C.amber}[lastHrv?.status]||C.muted;
-      document.getElementById('m-hrv-status').innerHTML=lastHrv?`<span style="color:${statusColor};font-family:var(--mono);font-size:12px">${lastHrv.hrv5||lastHrv.hrv_avg||'—'} ms</span> <span class="hrv-badge ${lastHrv.status||''}">${lastHrv.status||'—'}</span><br><span style="color:var(--dim);font-size:10px;margin-top:4px;display:block">Baseline 59–82 ms · Weekly avg ${lastHrv.weekly||'—'} ms</span>`:'';
+      document.getElementById('m-hrv-status').innerHTML=lastHrv?`<span style="color:${statusColor};font-family:var(--mono);font-size:12px">${lastHrv.weekly||lastHrv.hrv_avg||'—'} ms 7d gem</span> <span class="hrv-badge ${lastHrv.status||''}">${lastHrv.status||'—'}</span><br><span style="color:var(--dim);font-size:10px;margin-top:4px;display:block">Baseline ${lastHrv.baseline_low||59}–${lastHrv.baseline_high||82} ms · 5min max ${lastHrv.hrv5||'—'} ms</span>`:'';
     }
     loadAiFeedback();
   },
@@ -510,14 +515,29 @@ const builders={
     // Weight
     const wt=DATA.weight||[];
     if(wt.length){
-      new Chart(wtChart,{type:'line',data:{labels:wt.map(d=>d.date?.slice(5)||''),datasets:[
-        {label:'Gewicht',data:wt.map(d=>d.kg),borderColor:C.cyan,borderWidth:2.5,tension:.35,pointRadius:3,fill:true,backgroundColor:'rgba(69,200,224,.08)'},
-        {label:'Race-gewicht 78 kg',data:wt.map(()=>78),borderColor:'rgba(52,224,125,.45)',borderWidth:1,borderDash:[5,4],pointRadius:0}
-      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+' kg'}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:75,suggestedMax:95}}}});
+      // Bereken lineaire trend
+      const wtVals=wt.map(d=>d.kg);
+      const n=wtVals.length;
+      const xMean=(n-1)/2;
+      const yMean=wtVals.reduce((a,b)=>a+b,0)/n;
+      const slope=wtVals.reduce((a,v,i)=>a+(i-xMean)*(v-yMean),0)/wtVals.reduce((a,_,i)=>a+(i-xMean)**2,0);
+      const intercept=yMean-slope*xMean;
+      // Projecteer 18 weken vooruit
+      const wtLabels=[...wt.map(d=>d.date?.slice(5)||'')];
+      const wtData=[...wtVals];
+      const trendData=wtVals.map((_,i)=>+(intercept+slope*i).toFixed(1));
+      // Extrapoleer naar race datum
+      const weeksLeft=DATA.meta?.daysToRace?Math.ceil(DATA.meta.daysToRace/7):0;
+      const projEnd=+(intercept+slope*(n-1+weeksLeft*7/7)).toFixed(1);
+      new Chart(wtChart,{type:'line',data:{labels:wtLabels,datasets:[
+        {label:'Gewicht (kg)',data:wtData,borderColor:C.cyan,borderWidth:2.5,tension:.35,pointRadius:3,fill:true,backgroundColor:'rgba(69,200,224,.08)'},
+        {label:'Trend',data:trendData,borderColor:'rgba(69,200,224,.4)',borderWidth:1.5,borderDash:[4,3],tension:.35,pointRadius:0},
+        {label:'Race-gewicht 78 kg',data:wtData.map(()=>78),borderColor:'rgba(52,224,125,.45)',borderWidth:1,borderDash:[5,4],pointRadius:0}
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+' kg'}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:75,suggestedMax:95}}}});
       const lastWt=wt.at(-1)?.kg;
       document.getElementById('m-wt').textContent=lastWt??'—';
       const diff=lastWt?((lastWt-78).toFixed(1)):null;
-      document.getElementById('m-wt-delta').innerHTML=diff!=null?`<span style="color:${diff>0?C.amber:C.go}">${diff>0?'+':''} ${diff} kg van doel</span>`:'';
+      document.getElementById('m-wt-delta').innerHTML=diff!=null?`<span style="color:${diff>0?C.amber:C.go}">${diff>0?'+':''} ${diff} kg van doel · trend → ${projEnd} kg op racedag</span>`:'';
     }
     // Sleep
     const sl=DATA.sleep||[];

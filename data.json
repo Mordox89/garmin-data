@@ -22,8 +22,8 @@
     "rampNote": null,
     "rampSt": "warn",
     "easyHard": "60% easy",
-    "totalVol": 922.1,
-    "volAvg": 922.1,
+    "totalVol": 27.0,
+    "volAvg": 27.0,
     "readiness": 29
   },
   "pmc": {
@@ -48,7 +48,7 @@
       "W1"
     ],
     "done": [
-      922.1
+      27.0
     ],
     "plan": []
   },
@@ -79,7 +79,50 @@
       "c": "#ff5e6c"
     }
   ],
-  "week7": [],
+  "week7": [
+    {
+      "d": "Wo",
+      "ds": "Training",
+      "t": "run",
+      "km": null
+    },
+    {
+      "d": "Do",
+      "ds": "Training",
+      "t": "run",
+      "km": null
+    },
+    {
+      "d": "Vr",
+      "ds": "Recovery 6km",
+      "t": "run",
+      "km": null
+    },
+    {
+      "d": "Za",
+      "ds": "Long Run 19km",
+      "t": "run",
+      "km": null
+    },
+    {
+      "d": "Ma",
+      "ds": "Aerobic + Strides 13km",
+      "t": "run",
+      "km": null
+    },
+    {
+      "d": "Wo",
+      "ds": "Aerobic 16km",
+      "t": "run",
+      "km": null
+    },
+    {
+      "d": "Vr",
+      "ds": "Recovery 8km",
+      "t": "run",
+      "km": null
+    }
+  ],
   "ef": [
     2.48,
     2.31,
@@ -827,7 +870,7 @@
     {
       "date": "2026-06-11",
       "charged": 52,
-      "drained": 26,
+      "drained": 27,
       "level": null
     }
   ],
@@ -952,8 +995,8 @@
       "hrv_avg": null,
       "weekly": 61,
       "status": "BALANCED",
-      "baseline_low": null,
-      "baseline_high": null
+      "baseline_low": 59,
+      "baseline_high": 82
     },
     {
       "date": "2026-05-29",
@@ -961,8 +1004,8 @@
       "hrv_avg": null,
       "weekly": 64,
       "status": "BALANCED",
-      "baseline_low": null,
-      "baseline_high": null
+      "baseline_low": 59,
+      "baseline_high": 82
     },
     {
       "date": "2026-05-30",
@@ -970,8 +1013,8 @@
       "hrv_avg": null,
       "weekly": 65,
       "status": "BALANCED",
-      "baseline_low": null,
-      "baseline_high": null
+      "baseline_low": 59,
+      "baseline_high": 82
     },
     {
       "date": "2026-05-31",
@@ -979,8 +1022,8 @@
       "hrv_avg": null,
       "weekly": 64,
       "status": "BALANCED",
-      "baseline_low": null,
-      "baseline_high": null
+      "baseline_low": 59,
+      "baseline_high": 82
     },
     {
       "date": "2026-06-01",
@@ -988,8 +1031,8 @@
       "hrv_avg": null,
       "weekly": 63,
       "status": "BALANCED",
-      "baseline_low": null,
-      "baseline_high": null
+      "baseline_low": 59,
+      "baseline_high": 82
     },
     {
       "date": "2026-06-02",
@@ -997,8 +1040,8 @@
       "hrv_avg": null,
       "weekly": 66,
       "status": "BALANCED",
-      "baseline_low": null,
-      "baseline_high": null
+      "baseline_low": 59,
+      "baseline_high": 82
     },
     {
       "date": "2026-06-03",
@@ -1006,8 +1049,8 @@
       "hrv_avg": null,
       "weekly": 66,
       "status": "BALANCED",
-      "baseline_low": null,
-      "baseline_high": null
+      "baseline_low": 59,
+      "baseline_high": 82
     },
     {
       "date": "2026-06-04",
@@ -1015,8 +1058,8 @@
       "hrv_avg": null,
       "weekly": 66,
       "status": "BALANCED",
-      "baseline_low": null,
-      "baseline_high": null
+      "baseline_low": 59,
+      "baseline_high": 82
     },
     {
       "date": "2026-06-05",
@@ -1024,8 +1067,8 @@
       "hrv_avg": null,
       "weekly": 65,
       "status": "BALANCED",
-      "baseline_low": null,
-      "baseline_high": null
+      "baseline_low": 59,
+      "baseline_high": 82
     },
     {
       "date": "2026-06-06",
@@ -1033,8 +1076,8 @@
       "hrv_avg": null,
       "weekly": 54,
       "status": "UNBALANCED",
-      "baseline_low": null,
-      "baseline_high": null
+      "baseline_low": 59,
+      "baseline_high": 82
     },
     {
       "date": "2026-06-07",
@@ -1042,8 +1085,8 @@
       "hrv_avg": null,
       "weekly": 51,
       "status": "LOW",
-      "baseline_low": null,
-      "baseline_high": null
+      "baseline_low": 59,
+      "baseline_high": 82
     },
     {
       "date": "2026-06-09",
@@ -1051,8 +1094,8 @@
       "hrv_avg": null,
       "weekly": 49,
       "status": "LOW",
-      "baseline_low": null,
-      "baseline_high": null
+      "baseline_low": 59,
+      "baseline_high": 82
     },
     {
       "date": "2026-06-10",
@@ -1060,8 +1103,8 @@
       "hrv_avg": null,
       "weekly": 48,
       "status": "LOW",
-      "baseline_low": null,
-      "baseline_high": null
+      "baseline_low": 59,
+      "baseline_high": 82
     },
     {
       "date": "2026-06-11",
@@ -1069,8 +1112,8 @@
       "hrv_avg": null,
       "weekly": 47,
       "status": "LOW",
-      "baseline_low": null,
-      "baseline_high": null
+      "baseline_low": 59,
+      "baseline_high": 82
     }
   ],
   "rhr": [
@@ -1198,7 +1241,20 @@
     }
   ],
   "weight": [],
-  "vo2": [],
+  "vo2": [
+    {
+      "date": "2026-06-01",
+      "vo2": 47.7
+    },
+    {
+      "date": "2026-06-08",
+      "vo2": 48.5
+    },
+    {
+      "date": "2026-06-11",
+      "vo2": 48.4
+    }
+  ],
   "racePredictions": {
     "5k": "0:21:46",
     "10k": "0:45:37",
@@ -1212,9 +1268,9 @@
   },
   "weeks": {
     "1": {
-      "km": 922.11401171875,
-      "runs": 79,
-      "load": 12702.249557495117
+      "km": 27.009429687500003,
+      "runs": 2,
+      "load": 443.77093505859375
     }
   }
 }

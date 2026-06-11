@@ -149,13 +149,13 @@ def fetch_hrv(client, days=14):
             if not avg:
                 continue
             result.append({
-                "date":     d_date.isoformat(),
-                "hrv5":     summary.get("lastNight5MinHigh"),
-                "hrv_avg":  summary.get("lastNight"),
-                "weekly":   summary.get("weeklyAvg"),
-                "status":   summary.get("status"),
-                "baseline_low":  summary.get("balancedLow"),
-                "baseline_high": summary.get("balancedUpper"),
+                "date":      d_date.isoformat(),
+                "hrv5":      summary.get("lastNight5MinHigh"),
+                "hrv_avg":   summary.get("lastNight"),
+                "weekly":    summary.get("weeklyAvg"),
+                "status":    summary.get("status"),
+                "baseline_low":  summary.get("balancedLow") or 59,
+                "baseline_high": summary.get("balancedUpper") or 82,
             })
         except Exception:
             continue
@@ -176,18 +176,23 @@ def fetch_rhr(client, days=14):
             continue
     return result
 
-def fetch_weight(client, days=30):
+def fetch_weight(client, days=60):
     end = today()
     start = end - dt.timedelta(days=days)
     try:
         data = client.get_weigh_ins(start.isoformat(), end.isoformat())
-        entries = data.get("dateWeightList") or []
+        # Probeer meerdere veldnamen
+        entries = (data.get("dateWeightList") or 
+                   data.get("allWeightMetrics") or 
+                   (data if isinstance(data, list) else []))
         result = []
         for d in entries:
-            date = d.get("calendarDate")
-            val  = d.get("weight")
+            date = d.get("calendarDate") or d.get("date")
+            val  = d.get("weight") or d.get("value")
             if date and val:
-                result.append({"date": date, "kg": round(val / 1000, 1)})
+                # Garmin slaat gewicht op in gram
+                kg = round(val / 1000, 1) if val > 500 else round(val, 1)
+                result.append({"date": str(date)[:10], "kg": kg})
         return sorted(result, key=lambda x: x["date"])
     except Exception as e:
         print(f"Gewicht fout: {e}")
@@ -237,17 +242,37 @@ def fetch_training_load(client, days=90):
         return []
 
 def fetch_vo2max(client, days=90):
-    # VO2max zit in training_status, hier halen we alleen vandaag op
+    # Probeer historische VO2max data via get_stats
+    result = []
     try:
-        d = client.get_training_status(today().isoformat())
-        if isinstance(d, list):
-            d = d[-1] if d else {}
-        val = d.get("vo2_max_precise") or d.get("vo2_max") or d.get("vo2MaxPreciseValue")
-        if val:
-            return [{"date": today().isoformat(), "vo2": round(float(val), 1)}]
+        # Haal wekelijks VO2max op over het plan
+        end = today()
+        start = PLAN_START - dt.timedelta(days=7)
+        current = start
+        while current <= end:
+            try:
+                raw = client.get_training_status(current.isoformat())
+                vo2 = None
+                try:
+                    vo2 = raw["mostRecentVO2Max"]["generic"]["vo2MaxPreciseValue"]
+                except Exception:
+                    pass
+                if vo2:
+                    result.append({"date": current.isoformat(), "vo2": round(float(vo2), 1)})
+            except Exception:
+                pass
+            current += dt.timedelta(days=7)
+        # Altijd vandaag toevoegen
+        try:
+            raw = client.get_training_status(today().isoformat())
+            vo2 = raw["mostRecentVO2Max"]["generic"]["vo2MaxPreciseValue"]
+            if vo2 and (not result or result[-1]["date"] != today().isoformat()):
+                result.append({"date": today().isoformat(), "vo2": round(float(vo2), 1)})
+        except Exception:
+            pass
     except Exception as e:
         print(f"VO2max fout: {e}")
-    return []
+    return sorted(result, key=lambda x: x["date"])
 
 def fetch_race_predictions(client):
     try:
@@ -296,7 +321,6 @@ def fetch_stress(client, days=14):
 def fetch_scheduled_workouts(client):
     t = today()
     result = []
-    # Haal huidige en volgende maand op
     months = [(t.year, t.month)]
     if t.month == 12:
         months.append((t.year + 1, 1))
@@ -306,23 +330,31 @@ def fetch_scheduled_workouts(client):
     for year, month in months:
         try:
             data = client.get_scheduled_workouts(year, month)
-            for w in (data if isinstance(data, list) else []):
-                date = w.get("scheduledDate") or w.get("date") or ""
-                if not date or date in seen:
+            items = data if isinstance(data, list) else (data.get("calendarItems") or data.get("workouts") or [])
+            for w in items:
+                # Probeer meerdere datumvelden
+                date = (w.get("scheduledDate") or w.get("date") or 
+                        w.get("startDate") or w.get("calendarDate") or "")
+                if not date:
                     continue
-                # Alleen komende 7 dagen
+                date = str(date)[:10]
+                if date in seen:
+                    continue
                 try:
-                    d = dt.date.fromisoformat(date[:10])
-                    if d < t or d > t + dt.timedelta(days=7):
+                    d = dt.date.fromisoformat(date)
+                    if d < t - dt.timedelta(days=1) or d > t + dt.timedelta(days=8):
                         continue
-                except:
+                except Exception:
                     continue
                 seen.add(date)
+                # Workout type
+                sport = w.get("sportType") or w.get("activityType") or {}
+                wtype = sport.get("sportTypeKey") or sport.get("typeKey") or "run" if isinstance(sport, dict) else str(sport).lower()
                 result.append({
-                    "date": date[:10],
-                    "name": w.get("title") or w.get("workoutName"),
-                    "type": w.get("sportType", {}).get("sportTypeKey") if isinstance(w.get("sportType"), dict) else None,
-                    "desc": w.get("description"),
+                    "date": date,
+                    "name": w.get("title") or w.get("workoutName") or w.get("name") or "Training",
+                    "type": wtype,
+                    "desc": w.get("description") or "",
                 })
         except Exception as e:
             print(f"Geplande workouts fout ({year}/{month}): {e}")
@@ -352,13 +384,14 @@ def process_activities(client, raw_acts):
         speed = a.get("averageSpeed") or 0
         pace  = pace_str(speed)
 
-        # week
-        wk = week_number(date)
-        if wk not in weeks:
-            weeks[wk] = {"km": 0, "runs": 0, "load": 0}
-        weeks[wk]["km"]   += dist / 1000
-        weeks[wk]["runs"] += 1
-        weeks[wk]["load"] += load or 0
+        # week — alleen runs binnen het plan meenemen
+        if date >= PLAN_START:
+            wk = week_number(date)
+            if wk not in weeks:
+                weeks[wk] = {"km": 0, "runs": 0, "load": 0}
+            weeks[wk]["km"]   += dist / 1000
+            weeks[wk]["runs"] += 1
+            weeks[wk]["load"] += load or 0
 
         # HR zones (Pfitzinger, op basis van gem HR per activiteit)
         if hr:
