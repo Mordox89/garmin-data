@@ -52,33 +52,7 @@
     ],
     "plan": []
   },
-  "zones": [
-    {
-      "n": "Z1 Warm-up",
-      "v": 0,
-      "c": "#2f7d52"
-    },
-    {
-      "n": "Z2 Makkelijk",
-      "v": 0,
-      "c": "#34e07d"
-    },
-    {
-      "n": "Z3 Aeroob",
-      "v": 100,
-      "c": "#ffb43a"
-    },
-    {
-      "n": "Z4 Drempel",
-      "v": 0,
-      "c": "#ff8a4a"
-    },
-    {
-      "n": "Z5 Maximum",
-      "v": 0,
-      "c": "#ff5e6c"
-    }
-  ],
+  "zones": [],
   "week7": [
     {
       "d": "Wo",
