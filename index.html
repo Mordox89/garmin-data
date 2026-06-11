@@ -154,6 +154,11 @@
   .src.live{background:rgba(52,224,125,.14);border:1px solid rgba(52,224,125,.3);color:var(--go)}
   .src.demo{background:rgba(255,180,58,.14);border:1px solid rgba(255,180,58,.3);color:var(--amber)}
   @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .sparkwrap{display:flex;align-items:center;gap:8px;margin-top:6px}
+  .spark{flex:1;height:28px}
+  .trend-up{color:var(--go);font-size:11px;font-family:var(--mono)}
+  .trend-dn{color:var(--coral);font-size:11px;font-family:var(--mono)}
+  .trend-eq{color:var(--muted);font-size:11px;font-family:var(--mono)}
   @media(max-width:1080px){.c3,.c4,.c5,.c6,.c7,.c8,.c9{grid-column:span 12}.chips{grid-template-columns:repeat(3,1fr)}.brand h1{font-size:34px}.inputs{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:560px){body{padding:14px}.chips{grid-template-columns:repeat(2,1fr)}.predbox .lead .k{font-size:36px}}
 </style>
@@ -170,7 +175,7 @@
     <div class="pred">
       <div class="l">Garmin race prediction · marathon</div>
       <div class="k" id="m-pred">—</div>
-      <div class="r" id="m-predr">—</div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="r" id="m-predr">—</div><span id="m-pred-trend" class="trend-eq"></span></div>
     </div>
   </header>
   <div class="progress"><i id="m-prog"></i><div class="taper" id="m-taper"><s>Taper</s></div></div>
@@ -198,7 +203,7 @@
     </div>
     <div class="card c5"><h2><span class="dot cy"></span>VO₂max Trend<span class="info" tabindex="0">i<span class="tip"><b>Garmin's VO₂max schatting (ml/kg/min).</b> Langzame stijging over het blok is het doel. Plotselinge daling = vermoeidheid of ziekte, niet verloren fitness.</span></span></h2><div class="cap">Aerobe capaciteit over het blok — direct uit Garmin.</div>
       <div class="chart-h tall"><canvas id="vo2Chart"></canvas></div>
-      <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px"><span class="big" style="color:var(--cyan)" id="m-vo2">—</span><span class="unit">ml/kg/min</span></div>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px"><span class="big" style="color:var(--cyan)" id="m-vo2">—</span><span class="unit">ml/kg/min</span><span id="m-vo2-trend" class="trend-eq" style="margin-left:6px"></span></div>
     </div>
     <div class="card c7"><h2><span class="dot am"></span>Training Status · Garmin<span class="info" tabindex="0">i<span class="tip"><b>Garmin's trainingstatus op basis van belasting vs fitness.</b> STRAINED = te hoog tempo van opbouw. MAINTAINING = stabiel. IMPROVING = progressie zichtbaar. RECOVERY = herstelweek.</span></span></h2><div class="cap">Garmin's analyse van je trainingsbalans — belasting vs. aerobe en anaerobe maandelijkse doelen.</div>
       <div class="chart-h sm"><canvas id="loadBalChart"></canvas></div>
@@ -237,7 +242,7 @@
     </div>
     <div class="card c6"><h2><span class="dot"></span>Efficiency Factor<span class="info" tabindex="0">i<span class="tip"><b>EF = vermogen (W) ÷ gemiddelde HR.</b> Hogere waarde = meer watt per hartslag = efficiënter. Een stijgende lijn bij gelijke inspanning bewijst aerobe progressie.</span></span></h2><div class="cap">Watt per hartslag op easy runs. Stijgende trend = aantoonbare aerobe progressie.</div>
       <div class="chart-h"><canvas id="efChart"></canvas></div>
-      <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px"><span class="big" id="m-ef">—</span><span class="unit">W/bpm</span></div>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px"><span class="big" id="m-ef">—</span><span class="unit">W/bpm</span><span id="m-ef-trend" class="trend-eq" style="margin-left:6px"></span></div>
     </div>
     <div class="card c6"><h2><span class="dot am"></span>Splits · Laatste Run<span class="info" tabindex="0">i<span class="tip"><b>Per-km splits van de meest recente run.</b> Let op HR-drift (stijgende lijn bij gelijke pace = vermoeidheid of hitte), cadansvariatie en pacepatroon.</span></span></h2><div class="cap">Per-kilometer splits van de meest recente run — HR, cadans en pace per lap.</div>
       <div class="chart-h tall"><canvas id="splitsChart"></canvas></div>
@@ -336,7 +341,16 @@ function populate(){
   document.getElementById('m-days').textContent=m.daysToRace||'—';
   // Race prediction
   const rp=DATA.racePredictions||{};
-  document.getElementById('m-pred').textContent=rp.fm||m.predicted||'—';
+  const predFm=rp.fm||m.predicted||'—';
+  document.getElementById('m-pred').textContent=predFm;
+  // Arrow voor race prediction
+  (function(){
+    const paceToSec=p=>{if(!p||p==='—')return null;const pts=p.split(':');if(pts.length<2)return null;const h=parseInt(pts[0]),rest=pts[1]?.split(':');if(pts.length===3)return parseInt(pts[0])*3600+parseInt(pts[1])*60+parseInt(pts[2]);return parseInt(pts[0])*60+parseInt(pts[1]);};
+    const prev=sessionStorage.getItem('prev_pred');
+    const cur=paceToSec(predFm);
+    if(prev&&cur){const d=paceToSec(prev)-cur;const el=document.getElementById('m-pred-trend');if(d>30){el.textContent='↑ sneller';el.className='trend-up';}else if(d<-30){el.textContent='↓ trager';el.className='trend-dn';}else{el.textContent='→';el.className='trend-eq';}}
+    if(cur)sessionStorage.setItem('prev_pred',predFm);
+  })();
   const subs=[rp['5k']?'5K '+rp['5k']:'',rp['10k']?'10K '+rp['10k']:'',rp.hm?'HM '+rp.hm:''].filter(Boolean).join(' · ');
   document.getElementById('m-predr').textContent=subs||'sync data voor voorspelling';
   // Progress bar
@@ -352,7 +366,13 @@ function populate(){
   document.getElementById('m-ctl').textContent=ctlArr.at(-1)??'—';
   document.getElementById('m-atl').textContent=atlArr.at(-1)??'—';
   document.getElementById('m-form').textContent=formArr.at(-1)??'—';
-  document.getElementById('m-vo2').textContent=(DATA.vo2||[]).at(-1)?.vo2??m.vo2??'—';
+  const vo2arr2=DATA.vo2||[];
+  document.getElementById('m-vo2').textContent=vo2arr2.at(-1)?.vo2??m.vo2??'—';
+  if(vo2arr2.length>=2){
+    const d=vo2arr2.at(-1).vo2-vo2arr2.at(-2).vo2;
+    document.getElementById('m-vo2-trend').textContent=d>0?'↑ +'+d.toFixed(1):d<0?'↓ '+d.toFixed(1):'→';
+    document.getElementById('m-vo2-trend').className=d>0?'trend-up':d<0?'trend-dn':'trend-eq';
+  }
   // Chips
   const rdScore=DATA.trainingReadiness?.score;
   const rdLevel=DATA.trainingReadiness?.level||'—';
@@ -360,7 +380,13 @@ function populate(){
   const stMap={'go':'var(--go)','amber':'var(--amber)','coral':'var(--coral)'};
   const bb=DATA.bodyBattery?.at(-1);
   const chips=[
-    {l:'ACWR',v:((DATA.pmc?.acwr||[]).at(-1)||'—').toString(),s:'opt. zone 0.8–1.3',st:'var(--cyan)',tip:'<b>Acute:Chronic Workload Ratio.</b> Hoe je acute belasting zich verhoudt tot je fitness. 0.8–1.3 = optimale zone. Boven 1.5 = verhoogd blessurerisico.'},
+    (function(){
+    const acwrArr=DATA.pmc?.acwr||[];
+    const acwrNow=acwrArr.at(-1);
+    const acwrPrev=acwrArr.length>=2?acwrArr.at(-2):null;
+    const acwrArrow=acwrNow&&acwrPrev?(acwrNow>acwrPrev?'↑':'↓'):'';
+    return {l:'ACWR',v:(acwrNow||'—').toString()+' <span style="font-size:10px;color:var(--muted)">'+acwrArrow+'</span>',s:'opt. zone 0.8–1.3',st:'var(--cyan)',tip:'<b>Acute:Chronic Workload Ratio.</b> 0.8–1.3 = optimaal. Boven 1.5 = verhoogd blessurerisico.'};
+  })(),
     {l:'ATL Ramp',v:(DATA.pmc?.atl?.at(-1)??'—').toString()+' <span class="unit">atl</span>',s:`CTL ${DATA.pmc?.ctl?.at(-1)??'—'} · Form ${DATA.pmc?.form?.at(-1)??'—'}`,st:'var(--amber)',tip:'<b>Acute trainingsbelasting (ATL).</b> Hoge ATL ten opzichte van CTL = vermoeid. Form (CTL−ATL) negatief = beladen maar opbouwend.'},
     {l:'Easy / Hard',v:k.easyHard||'—',s:'80/20 doel (Pfitzinger)',st:'var(--go)',tip:'<b>Aandeel easy vs hard training laatste 28d.</b> Pfitzinger-model: ~80% easy bouwt het aerobe fundament.'},
     {l:'Body Battery',v:bb?(bb.charged||'—').toString():'—',s:bb?`+${bb.charged} opgeladen / −${bb.drained} verbruikt`:'geen data',st:'var(--cyan)',tip:'<b>Garmin Body Battery.</b> Opgeladen door slaap, verbruikt door training en stress. Ideaal boven 75 starten aan een trainingsdag.'},
@@ -481,7 +507,14 @@ const builders={
     const ef=DATA.ef||[];
     if(ef.length){
       new Chart(efChart,{type:'line',data:{labels:ef.map((_,i)=>'R'+(i+1)),datasets:[{label:'EF (W/bpm)',data:ef,borderColor:C.go,borderWidth:2.5,tension:.35,pointRadius:4,fill:true,backgroundColor:'rgba(52,224,125,.08)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:c=>'EF: '+c.raw}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:1.5,suggestedMax:3.0}}}});
-      document.getElementById('m-ef').textContent=ef.at(-1)??'—';
+      const efLast=ef.at(-1),efPrev=ef.length>=2?ef.at(-2):null;
+      document.getElementById('m-ef').textContent=efLast??'—';
+      if(efLast&&efPrev){
+        const diff=+(efLast-efPrev).toFixed(3);
+        const el=document.getElementById('m-ef-trend');
+        el.textContent=diff>0?'↑ +'+diff:diff<0?'↓ '+diff:'→';
+        el.className=diff>0?'trend-up':diff<0?'trend-dn':'trend-eq';
+      }
     }
     // Splits last run
     const lastRun=(DATA.recentActivities||[])[0];
@@ -634,7 +667,7 @@ const builders={
     }
     // HR vs Pace lijndiagram op datum (running economy trend)
     const planStart='2026-06-08';
-    const ecoRuns=(DATA.recentActivities||[]).filter(r=>r.avg_hr&&r.pace&&r.date>=planStart).sort((a,b)=>a.date>b.date?1:-1);
+    const ecoRuns=(DATA.recentActivities||[]).filter(r=>r.avg_hr&&r.pace&&r.date>=planStart).sort((a,b)=>a.date.localeCompare(b.date));
     if(ecoRuns.length){
       const p2s=p=>{if(!p)return null;const pts=p.split(':');return pts.length>=2?parseInt(pts[0])*60+parseInt(pts[1]):null;};
       const s2p=s=>{if(!s)return'--';return Math.floor(s/60)+':'+(s%60).toString().padStart(2,'0')+'/km';};
@@ -650,6 +683,18 @@ const builders={
         {label:'GCT (ms)',data:dynRuns.map(r=>r.gct_ms),borderColor:C.amber,borderWidth:2.5,tension:.35,pointRadius:4,yAxisID:'y'},
         {label:'Vert. Osc (cm)',data:dynRuns.map(r=>r.vert_osc_cm),borderColor:C.violet,borderWidth:2,borderDash:[4,3],tension:.35,pointRadius:4,yAxisID:'y2'}
       ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:240,suggestedMax:310,ticks:{color:C.amber,callback:v=>v+'ms'}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:7,suggestedMax:12,ticks:{color:C.violet,callback:v=>v+'cm'}}}}});
+    }
+    // Dynamics extra: Vertical Ratio, Stride Length, Step Speed Loss
+    const dynEl=document.getElementById('m-dynamics-extra');
+    if(dynEl){
+      const lastDyn=(DATA.recentActivities||[])[0];
+      const extras=[
+        {l:'Vertical Ratio',v:lastDyn?.vert_ratio?lastDyn.vert_ratio+'%':null,tip:'Vert. oscillatie / staplengte × 100. Doel &lt;8%. Lager = efficiënter.'},
+        {l:'Stride Length',v:lastDyn?.stride_cm?+(lastDyn.stride_cm/100).toFixed(2)+' m':null,tip:'Gemiddelde staplengte. Doel voor MP: ~1.25m.'},
+        {l:'Step Speed Loss',v:lastDyn?.step_speed_loss?lastDyn.step_speed_loss+'%':null,tip:'Snelheidsverlies per stap. Lager = betere loopeconomie. &lt;5% is uitstekend.'},
+        {l:'Balance L/R',v:lastDyn?.balance_left?lastDyn.balance_left+'% L':null,tip:'Grondcontactbalans links/rechts. Doel: &lt;51.5% links.'},
+      ];
+      dynEl.innerHTML=extras.map(e=>e.v?`<div class="rs"><div class="rl">${e.l}</div><div class="rv" title="${e.tip}">${e.v}</div></div>`:'').join('');
     }
     // Strength & Mobility weekoverzicht
     const sm=DATA.strengthMobility||{};

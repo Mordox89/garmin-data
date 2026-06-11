@@ -437,10 +437,12 @@ def process_activities(client, raw_acts):
             summaries  = split_data.get("splitSummaries") or []
             for s in summaries:
                 if s.get("splitType") == "INTERVAL_ACTIVE":
-                    balance_left = s.get("groundContactBalanceLeft")
-                    gct          = s.get("groundContactTime")
-                    vert_osc     = s.get("verticalOscillation")
-                    stride_len   = s.get("strideLength")
+                    balance_left  = s.get("groundContactBalanceLeft")
+                    gct           = s.get("groundContactTime")
+                    vert_osc      = s.get("verticalOscillation")
+                    stride_len    = s.get("strideLength")
+                    vert_ratio    = s.get("verticalRatio")
+                    step_spd_loss = s.get("stepSpeedLossPercent")
                     break
 
             # Per-km splits
@@ -461,22 +463,34 @@ def process_activities(client, raw_acts):
                     "elev_gain": lap.get("elevationGain"),
                 })
 
+        # Bereken Vertical Ratio als niet direct beschikbaar
+        vr = None
+        try:
+            if vert_ratio:
+                vr = round(float(vert_ratio), 2)
+            elif vert_osc and stride_len and stride_len > 0:
+                vr = round((vert_osc * 10) / stride_len * 100, 2)
+        except Exception:
+            pass
+
         recent.append({
-            "date":          date_str,
-            "name":          a.get("activityName") or "Run",
-            "activity_id":   act_id,
-            "dist_km":       round(dist / 1000, 2),
-            "moving_time_s": round(t),
-            "pace":          pace_str(speed),
-            "avg_hr":        round(hr)    if hr    else None,
-            "max_hr":        round(maxhr) if maxhr else None,
-            "cadence_spm":   round(cad)   if cad   else None,
-            "load":          round(load)  if load  else None,
-            "balance_left":  round(balance_left, 1) if balance_left else None,
-            "gct_ms":        round(gct, 1)          if gct          else None,
-            "vert_osc_cm":   round(vert_osc, 1)     if vert_osc     else None,
-            "stride_cm":     round(stride_len, 1)   if stride_len   else None,
-            "splits":        splits_out,
+            "date":           date_str,
+            "name":           a.get("activityName") or "Run",
+            "activity_id":    act_id,
+            "dist_km":        round(dist / 1000, 2),
+            "moving_time_s":  round(t),
+            "pace":           pace_str(speed),
+            "avg_hr":         round(hr)    if hr    else None,
+            "max_hr":         round(maxhr) if maxhr else None,
+            "cadence_spm":    round(cad)   if cad   else None,
+            "load":           round(load)  if load  else None,
+            "balance_left":   round(balance_left, 1)  if balance_left   else None,
+            "gct_ms":         round(gct, 1)            if gct            else None,
+            "vert_osc_cm":    round(vert_osc, 1)       if vert_osc       else None,
+            "stride_cm":      round(stride_len, 1)     if stride_len     else None,
+            "vert_ratio":     vr,
+            "step_speed_loss": round(float(step_spd_loss), 1) if step_spd_loss else None,
+            "splits":         splits_out,
         })
 
     return recent, weeks, zone_secs
