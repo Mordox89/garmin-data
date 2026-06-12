@@ -128,7 +128,7 @@ def build_prompt(data):
                     act_cads = [s["cad"] for s in active if s.get("cad")]
                     # Check HR drift in actieve blokken (teken van vermoeidheid)
                     hr_drift = act_hrs[-1] - act_hrs[0] if len(act_hrs) > 1 else 0
-                    drift_str = f" | HR drift actief: {hr_drift:+d} bpm ({'vermoeidheid' if hr_drift > 8 else 'stabiel'})" if len(act_hrs) > 1 else ""
+                    drift_str = f" | HR drift actief: {int(hr_drift):+d} bpm ({'vermoeidheid' if hr_drift > 8 else 'stabiel'})" if len(act_hrs) > 1 else ""
                     run_lines.append(
                         f"    Actieve blokken ({len(active)} laps): HR {min(act_hrs)}–{max(act_hrs)} bpm"
                         + (f" | cadans {min(act_cads)}–{max(act_cads)} spm" if act_cads else "")
