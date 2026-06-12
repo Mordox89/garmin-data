@@ -612,9 +612,11 @@ def build_zones(zone_secs):
     ]
 
 # ── Week7 (komende 7 dagen gepland) ──────────────────────────────────────────
-def build_week7(scheduled):
+def build_week7(scheduled, completed_dates=None):
+    """Bouw weekoverzicht. completed_dates = set van datums waarop een run is uitgevoerd."""
     result = []
     today_d = today()
+    done = completed_dates or set()
     for w in scheduled:
         date_str = w.get("date") or ""
         try:
@@ -625,12 +627,18 @@ def build_week7(scheduled):
                 day_name = ["Ma","Di","Wo","Do","Vr","Za","Zo"][d.weekday()]
         except:
             day_name = date_str
+        est_km = None
+        if w.get("estimated_distance_meters"):
+            est_km = round(w["estimated_distance_meters"] / 1000, 1)
+        elif w.get("estimated_duration_seconds"):
+            est_km = None  # geen afstand beschikbaar
         result.append({
-            "d":    day_name,
-            "date": date_str,
-            "ds":   w.get("name") or w.get("type") or "Training",
-            "t":    w.get("type") or "run",
-            "km":   None,
+            "d":         day_name,
+            "date":      date_str,
+            "ds":        w.get("name") or w.get("type") or "Training",
+            "t":         w.get("type") or "run",
+            "km":        f"{est_km} km" if est_km else None,
+            "completed": date_str in done,
         })
     return result
 
@@ -806,7 +814,7 @@ def main():
         "pmc":               build_pmc(training_load),
         "volume":            build_volume(weeks),
         "zones":             build_zones(zone_secs),
-        "week7":             build_week7(scheduled),
+        "week7":             build_week7(scheduled, completed_dates={a.get("startTimeLocal","")[:10] for a in raw_acts}),
         "ef":                build_ef(recent_acts),
         "recentActivities":  recent_acts,
         "bodyBattery":       body_battery,

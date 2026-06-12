@@ -549,7 +549,16 @@ const builders={
     // Week7
     const w7=DATA.week7||[];
     const wEl=document.getElementById('week');
-    wEl.innerHTML=w7.length?w7.map((w,i)=>`<div class="wk-day${i===0?' today':''}"><div class="dy"><b>${w.d}</b></div><div class="ty ${w.t||'rest'}">${w.t||'rest'}</div><div class="ds">${w.ds||'—'}</div><div class="km">${w.km||'—'}</div></div>`).join(''):'<div style="color:var(--muted);font-size:12px">Geen geplande workouts gevonden.</div>';
+    wEl.innerHTML=w7.length?w7.map((w,i)=>{
+      const done=w.completed;
+      const isToday=w.d==='Vandaag';
+      return `<div class="wk-day${isToday?' today':''}${done?' done':''}">
+        <div class="dy"><b>${w.d}</b></div>
+        <div class="ty ${w.t||'rest'}">${w.t||'rest'}</div>
+        <div class="ds" style="${done?'text-decoration:line-through;color:var(--muted)':''}">${w.ds||'—'}</div>
+        <div class="km" style="display:flex;align-items:center;gap:6px">${w.km||'—'}${done?'<span style="color:var(--go);font-size:12px">✓</span>':''}</div>
+      </div>`;
+    }).join(''):'<div style="color:var(--muted);font-size:12px">Geen geplande workouts gevonden.</div>';
     // HRV chart
     const hrv=DATA.hrv||[];
     if(hrv.length){
