@@ -1,17 +1,17 @@
 {
   "generated": "2026-06-12",
-  "feedback": "**STATUS:** Onderhersteld — HRV LOW, slaap 5.8u met slechts 10.8% deep en 2.8% REM, Body Battery 27, readiness 27. Geen trainingsruimte vandaag.\n\n**AFWIJKINGEN:** De aerobic 14km op 06-10 toont +16 bpm HR-drift over actieve laps (144→162 bpm) — dat is vermoeidheid, geen aerobe aanpassing. Bovendien overschrijdt het gemiddelde van 157 bpm met pieken tot 162 bpm de Easy-bovengrens van 158 bpm, wat dit technisch geen aerobe run maakt maar grensgebied LT-aanloop. Beenbalans zit op 52.2–53.3% links (4–6% asymmetrie) over alle drie de runs — ruim boven de 2%-norm en een direct piriformis-risicosignaal dat structureel aanwezig is, niet incidenteel. Cadans op de LT-run piekt op 179 spm maar zit in vroege laps op 165 spm — te laag voor LT-intensiteit waar >180 spm vereist is.\n\n**DIRECTIEF:** Donderdag: geen training. Vrijdag alleen uitvoeren als Body Battery >55 en HRV minimaal matig — dan een echte recovery run van 8 km strikt onder 150 bpm, cadans 165–168 spm. Zaterdag long run 19 km uitvoeren op 5:45–6:00/km, HR cap 158 bpm. Als één van de herstelmarkers vrijdag rood blijft: schuif de long run naar zondag en verwijder de MP-long run van volgende zaterdag.",
+  "feedback": "**STATUS:** Onderhersteld — HRV LOW, BB 27, slaap 5.8u met gestoorde diepe slaap (10.8%) en nagenoeg geen REM (2.8%), training readiness 27. Geen ruimte voor opschaling vandaag.\n\n**AFWIJKINGEN:** De aerobic run van 10 juni toont +16 bpm HR-drift over 14 laps — dit is geen stabiele aerobic stimulus maar een vermoeidheidssignaal dat de LT-sessie van 8 juni nog niet volledig verwerkt is. De LT-run zelf piekte op 175 bpm (boven LTHR 174) met cadans die slechts 179 spm bereikte op piekintensiteit — net onder de >180 spm norm voor LT-werk. Beenbalans links ligt op 52.2–53.3% over alle drie runs, systematisch boven de 2%-asymmetriedrempel, met name de 53.3% op de LT-run is een actief piriformis-risicosignaal. Vertical ratio van 8.27% op de recovery run is te hoog voor dat tempo — energie lekt verticaal.\n\n**DIRECTIEF:** Vandaag recovery run maximaal 6 km, strict 121–145 bpm, cadans 162–168 spm, tempo niet onder 6:00/km forceren. Beenbalans bewust sturen: focus op rechter gluteus-activatie per stap. Zaterdag long run 19 km start pas als BB >50 — zo niet: 16 km op 146–160 bpm, pace 5:45–6:10/km, geen MP-segmenten.",
   "status": "ok",
   "model": "claude-sonnet-4-6",
   "usage": {
-    "input_tokens": 2279,
+    "input_tokens": 2299,
     "cache_creation_input_tokens": 0,
     "cache_read_input_tokens": 0,
     "cache_creation": {
       "ephemeral_5m_input_tokens": 0,
       "ephemeral_1h_input_tokens": 0
     },
-    "output_tokens": 444,
+    "output_tokens": 428,
     "service_tier": "standard",
     "inference_geo": "global"
   }
