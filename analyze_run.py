@@ -212,7 +212,7 @@ def main():
             json.dump(placeholder, f, indent=2)
         return
 
-    with open(DATA_PATH) as f:
+    with open(DATA_PATH, encoding='utf-8', errors='replace') as f:
         data = json.load(f)
 
     prompt = build_prompt(data)
