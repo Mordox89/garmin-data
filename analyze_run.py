@@ -24,26 +24,28 @@ Atletenprofiel:
 - Doel: zo snel mogelijk lopen op 11 oktober 2026 — maximale prestatie op basis van de data
 - Max HR: 190 BPM | LTHR: 173–174 BPM
 
-Garmin HR-zones (horloge-instellingen):
-- Z1 Warm-up:   120–145 bpm
-- Z2 Makkelijk: 146–155 bpm
-- Z3 Aeroob:    156–164 bpm
-- Z4 Drempel:   165–173 bpm
-- Z5 Maximum:   >173 bpm
+Pfitzinger workout-types en doelzones (persoonlijk gekalibreerd):
+- Recovery / Herstel:      121–145 bpm (64–76% max HR) — hersteldagen, shake-out runs
+- Easy / General Aerobic:  140–158 bpm (74–83% max HR) — meeste easy runs
+- Endurance / Long Run:    146–164 bpm (77–86% max HR) — lange duurlopen zonder MP
+- Marathon Pace (MP):      154–168 bpm (81–88% max HR) — MP-segmenten in long runs
+- Lactate Threshold (LT):  166–173 bpm (87–91% max HR) — tempo runs rond LTHR 174
+- VO2max / Intervals:      176–184 bpm (93–97% max HR) — korte snelle intervallen
 
-Pfitzinger workout-types en hun doelzones:
-- Recovery run:      Z1–Z2 (<156 bpm)
-- General aerobic:   Z2 (146–155 bpm)
-- Long run:          Z1–Z2 (<156 bpm)
-- Marathon pace:     Z3 laag (156–161 bpm)
-- Lactate threshold: Z3–Z4 (156–173 bpm)
-- VO2max intervals:  Z4–Z5 (>165 bpm)
+Cadans per trainingstype (beoordeel NOOIT op run-gemiddelde — altijd in context van intensiteit):
+- Recovery:        155–165 spm (bereik 150–168)
+- Easy/Aerobic:    162–172 spm (bereik 158–175)
+- Long Run:        164–174 spm (bereik 160–176)
+- Marathon Pace:   168–178 spm (bereik 165–180)
+- LT/Tempo:        172–182 spm (bereik 170–185)
+- VO2max/Interval: 178–188 spm (bereik 175–190+)
+Warm-up en cool-down laps tellen NIET mee voor cadansbeoordeling.
 
-Gebruik ALTIJD bovenstaande zones bij het beoordelen van runs.
+Gebruik ALTIJD bovenstaande zones bij het beoordelen van runs. Categoriseer elke run eerst op type, dan pas op zone-uitvoering.
 Plan: Pfitzinger 18/55 hybrid, 55–70 km/week
 Voorgeschiedenis: marathon DNF door gluteus/piriformis kramp rechts — niet door conditie
 Huidige focus: gluteus-activatie, heupstabiliteit, core (2×/week)
-Cadans doelstelling: ~180 spm
+Cadans: bij easy/recovery (>5:30/km) is 170-175 spm normaal en acceptabel. Bij MP-tempo (<5:00/km) doel 178-180 spm. Bij LT/VO2max >180 spm. Gemiddelde cadans over een run is misleidend door warm-up — beoordeel cadans altijd in context van de intensiteit van dat moment.
 Beenbalans doel: <2% asymmetrie (huidig: ~52% links = 4% afwijking)
 """.strip()
 
@@ -94,7 +96,7 @@ def build_prompt(data):
     # ── Race predictions ──
     pred_str = " | ".join(f"{k.upper()}: {v}" for k, v in race_preds.items() if v)
 
-    # ── Recentste run ──
+    # ── Recentste run met lap-analyse ──
     run_lines = []
     for r in recent[:3]:
         bal   = f", balans L {r['balance_left']}%" if r.get("balance_left") else ""
@@ -110,16 +112,31 @@ def build_prompt(data):
             f"  {r['date']} — {r['name']}: {r.get('dist_km')} km @ {r.get('pace','—')}"
             f"{hr}{cad}{bal}{gct}{vosc}{vr}{ssl}{strd}{load}"
         )
-        # splits samenvatting
+        # Lap-analyse: filter warm-up/cooldown, analyseer actieve blokken
         splits = r.get("splits", [])
         if splits:
-            hr_vals = [s["hr"] for s in splits if s.get("hr")]
-            cad_vals = [s["cad"] for s in splits if s.get("cad")]
-            if hr_vals:
-                run_lines.append(
-                    f"    Splits HR: min {min(hr_vals)} → max {max(hr_vals)} bpm"
-                    + (f" | cadans: {min(cad_vals)}–{max(cad_vals)} spm" if cad_vals else "")
-                )
+            # Detecteer warm-up (eerste lap(s) met lagere HR) en cooldown (laatste lap)
+            all_hrs = [s["hr"] for s in splits if s.get("hr")]
+            if all_hrs:
+                avg_hr = sum(all_hrs) / len(all_hrs)
+                warmup_threshold = avg_hr * 0.88  # laps <88% van gem HR = warm-up/cooldown
+                active = [s for s in splits if s.get("hr") and s["hr"] >= warmup_threshold]
+                warmup_cool = [s for s in splits if s.get("hr") and s["hr"] < warmup_threshold]
+
+                if active:
+                    act_hrs = [s["hr"] for s in active]
+                    act_cads = [s["cad"] for s in active if s.get("cad")]
+                    # Check HR drift in actieve blokken (teken van vermoeidheid)
+                    hr_drift = act_hrs[-1] - act_hrs[0] if len(act_hrs) > 1 else 0
+                    drift_str = f" | HR drift actief: {hr_drift:+d} bpm ({'vermoeidheid' if hr_drift > 8 else 'stabiel'})" if len(act_hrs) > 1 else ""
+                    run_lines.append(
+                        f"    Actieve blokken ({len(active)} laps): HR {min(act_hrs)}–{max(act_hrs)} bpm"
+                        + (f" | cadans {min(act_cads)}–{max(act_cads)} spm" if act_cads else "")
+                        + drift_str
+                    )
+                if warmup_cool:
+                    wc_hrs = [s["hr"] for s in warmup_cool]
+                    run_lines.append(f"    Warm-up/cool-down ({len(warmup_cool)} laps): HR {min(wc_hrs)}–{max(wc_hrs)} bpm (niet meegewogen in analyse)")
 
     # ── Geplande workouts ──
     upcoming = "; ".join(
@@ -153,7 +170,7 @@ Race predictor: Beweegt de {predicted} richting het doel? Zo niet: wat ontbreekt
 
 CRUCIAAL: Als de data ruimte toont (HRV BALANCED + Body Battery >70 + ACWR <1.0 + form positief + slaakscore >75) — adviseer dan actief om die ruimte te benutten met een concreet voorstel. Een coach die alleen beschermt bouwt geen marathonlopers.
 
-Geen locaties. Maximaal 5 bondige alinea's. Sluit af met exact één concrete instructie voor de volgende training met specifieke pace, HR-zone of afstand."""
+Analyseer workouts op lap-niveau: negeer warm-up/cool-down voor de kernanalyse. Bij intervaltraining: beoordeel elk actief blok individueel op HR-drift (vermoeidheid) en herstelsnelheid tussen blokken. Geef feedback in drie vaste blokken: 1) STATUS, 2) DIAGNOSE, 3) DIRECTIEF. Geen locaties. Maximaal 5 bondige alinea's. Sluit af met exact één concrete instructie voor de volgende training met specifieke pace, HR-zone of afstand."""
 
     return prompt
 

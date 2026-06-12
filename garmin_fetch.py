@@ -407,7 +407,8 @@ def process_activities(client, raw_acts):
             weeks[wk]["load"] += load or 0
 
         # HR zones — gebruik hrTimeInZone_1..5 (seconden per zone per activiteit)
-        # Garmin zones: Z1 120–145, Z2 146–155, Z3 156–164, Z4 165–173, Z5 >173
+        # Persoonlijke Pfitzinger zones: Recovery 121-145, Easy 140-158, Long/MP 146-168, LT 166-173, VO2 176-184
+        # Garmin Z1-Z5 mapping sluit hier het beste op aan
         if date >= PLAN_START:
             for zi in range(5):
                 secs = a.get(f"hrTimeInZone_{zi+1}") or 0
@@ -603,8 +604,8 @@ def build_zones(zone_secs):
     total = sum(zone_secs)
     if total == 0:
         return []
-    names = ["Z1 Warm-up", "Z2 Makkelijk", "Z3 Aeroob", "Z4 Drempel", "Z5 Maximum"]
-    colors = ["#2f7d52", "#34e07d", "#ffb43a", "#ff8a4a", "#ff5e6c"]
+    names = ["Recovery", "Easy/Aerobic", "Long Run/MP", "LT/Tempo", "VO2max"]
+    colors = ["#2f7d52", "#34e07d", "#45c8e0", "#ffb43a", "#ff5e6c"]
     return [
         {"n": names[i], "v": round(zone_secs[i]/total*100), "c": colors[i]}
         for i in range(5)
