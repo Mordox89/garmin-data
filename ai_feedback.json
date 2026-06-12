@@ -1,6 +1,6 @@
 {
   "generated": "2026-06-12",
-  "feedback": "**STATUS:** Onderhersteld — HRV LOW, BB 27, slaap 5.8u met gestoorde diepe slaap (10.8%) en nagenoeg geen REM (2.8%), training readiness 27. Geen ruimte voor opschaling vandaag.\n\n**AFWIJKINGEN:** De aerobic run van 10 juni toont +16 bpm HR-drift over 14 laps — dit is geen stabiele aerobic stimulus maar een vermoeidheidssignaal dat de LT-sessie van 8 juni nog niet volledig verwerkt is. De LT-run zelf piekte op 175 bpm (boven LTHR 174) met cadans die slechts 179 spm bereikte op piekintensiteit — net onder de >180 spm norm voor LT-werk. Beenbalans links ligt op 52.2–53.3% over alle drie runs, systematisch boven de 2%-asymmetriedrempel, met name de 53.3% op de LT-run is een actief piriformis-risicosignaal. Vertical ratio van 8.27% op de recovery run is te hoog voor dat tempo — energie lekt verticaal.\n\n**DIRECTIEF:** Vandaag recovery run maximaal 6 km, strict 121–145 bpm, cadans 162–168 spm, tempo niet onder 6:00/km forceren. Beenbalans bewust sturen: focus op rechter gluteus-activatie per stap. Zaterdag long run 19 km start pas als BB >50 — zo niet: 16 km op 146–160 bpm, pace 5:45–6:10/km, geen MP-segmenten.",
+  "feedback": "**STATUS**\nOnderhersteld. HRV LOW (64), Body Battery 27, slaap 5.8u met ondermaatse diepe slaap (10.8%) en REM (2.8%), readiness 27. Geen trainingsruimte vandaag.\n\n**AFWIJKINGEN**\nDe aerobic run van 10 juni toont +16 bpm HR-drift over 14 laps — dat is geen easy aerobic run, dat is vermoeidheidsaccumulatie tijdens een zone 2/3 sessie. HR liep op tot 162 bpm, wat de bovengrens van endurance raakt en de easy/aerobic zone (140–158) overschrijdt. De LT-run van 8 juni bereikte 175 bpm in de actieve blokken, wat buiten de LT-zone (166–173) valt — één bpm boven LTHR, geen ramp maar wel een signaal van te hard eindigen. Beenbalans op beide recente runs: 52.2–53.3% links, structureel 4–6% asymmetrie rechts. Dit is het piriformis-risicosignaal, en het verslechterde op de recovery run van vandaag naar 53.1%. GCT 281 ms op recovery is acceptabel, maar step speed loss van 5.1% op een hersteldag wijst op mechanische vermoeidheid. Cadans op de aerobic run consistent 165–169 spm bij 5:29/km — dit is te laag voor aerobic tempo, doelbereik is 162–172 maar richting bovengrens bij dit tempo.\n\n**DIRECTIEF**\nVandaag: niet lopen. Zaterdag long run 19 km: start bij 5:50–6:05/km, HR strikt onder 161 bpm, de eerste 10 km niet boven 156 bpm. Als HR richting 162 kruipt vóór km 14, tempo verlagen, geen uitzonderingen. Cadans doel 168–172 spm. Beenbalans: als L>52.5% na km 5 — activeer gluteus-cue actief rechts, geen km verder zonder correctie.",
   "status": "ok",
   "model": "claude-sonnet-4-6",
   "usage": {
@@ -11,7 +11,7 @@
       "ephemeral_5m_input_tokens": 0,
       "ephemeral_1h_input_tokens": 0
     },
-    "output_tokens": 428,
+    "output_tokens": 546,
     "service_tier": "standard",
     "inference_geo": "global"
   }
