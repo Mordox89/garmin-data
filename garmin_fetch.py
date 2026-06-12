@@ -355,7 +355,7 @@ def fetch_scheduled_workouts(client):
                     continue
                 try:
                     d = dt.date.fromisoformat(date)
-                    if d < t - dt.timedelta(days=1) or d > t + dt.timedelta(days=8):
+                    if d < t or d > t + dt.timedelta(days=7):
                         continue
                 except Exception:
                     continue
@@ -614,18 +614,23 @@ def build_zones(zone_secs):
 # ── Week7 (komende 7 dagen gepland) ──────────────────────────────────────────
 def build_week7(scheduled):
     result = []
+    today_d = today()
     for w in scheduled:
         date_str = w.get("date") or ""
         try:
             d = dt.date.fromisoformat(date_str)
-            day_name = ["Ma","Di","Wo","Do","Vr","Za","Zo"][d.weekday()]
+            if d == today_d:
+                day_name = "Vandaag"
+            else:
+                day_name = ["Ma","Di","Wo","Do","Vr","Za","Zo"][d.weekday()]
         except:
             day_name = date_str
         result.append({
-            "d":  day_name,
-            "ds": w.get("name") or w.get("type") or "Training",
-            "t":  w.get("type") or "run",
-            "km": None,
+            "d":    day_name,
+            "date": date_str,
+            "ds":   w.get("name") or w.get("type") or "Training",
+            "t":    w.get("type") or "run",
+            "km":   None,
         })
     return result
 

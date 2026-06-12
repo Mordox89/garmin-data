@@ -740,7 +740,8 @@ async function loadAiFeedback(){
     if(!res.ok)throw new Error('HTTP '+res.status);
     const d=await res.json();
     if(!d.feedback||d.status==='skipped'){body.innerHTML='<span style="color:var(--muted)">Feedback wordt gegenereerd bij volgende sync.</span>';return;}
-    body.innerHTML=d.feedback.split(/\n{2,}/).map(p=>'<p style="margin:0 0 0.8em">'+p.replace(/\n/g,'<br>')+'</p>').join('');
+    const md2html=t=>t.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\*(.+?)\*/g,'<i>$1</i>');
+    body.innerHTML=d.feedback.split(/\n{2,}/).map(p=>'<p style="margin:0 0 0.8em">'+md2html(p).replace(/\n/g,'<br>')+'</p>').join('');
     if(meta&&d.generated)meta.textContent='Gegenereerd op '+d.generated+(d.model?' · '+d.model:'');
   }catch(e){body.innerHTML='<span style="color:var(--muted)">Feedback niet beschikbaar — sync nog niet uitgevoerd.</span>';}
 }

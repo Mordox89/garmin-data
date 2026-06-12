@@ -146,6 +146,7 @@ def build_prompt(data):
     prompt = f"""{ATHLETE_CONTEXT}
 
 Trainingsstatus:
+- Vandaag: {dt.date.today().strftime('%A %d %B %Y')} (gebruik dit als referentiedatum voor dag-aanduidingen)
 - Week {week}/{total_weeks}, {days_to_race} dagen tot de race
 - Garmin race predictions: {pred_str or '—'}
 - VO2max: {vo2} | CTL: {ctl} | ATL: {atl} | Form/TSB: {form}

@@ -81,44 +81,37 @@
   ],
   "week7": [
     {
-      "d": "Do",
-      "ds": "Training",
-      "t": "run",
-      "km": null
-    },
-    {
-      "d": "Vr",
+      "d": "Vandaag",
+      "date": "2026-06-12",
       "ds": "Training",
       "t": "run",
       "km": null
     },
     {
       "d": "Za",
+      "date": "2026-06-13",
       "ds": "Long Run 19km",
       "t": "run",
       "km": null
     },
     {
       "d": "Ma",
+      "date": "2026-06-15",
       "ds": "Aerobic + Strides 13km",
       "t": "run",
       "km": null
     },
     {
       "d": "Wo",
+      "date": "2026-06-17",
       "ds": "Aerobic 16km",
       "t": "run",
       "km": null
     },
     {
       "d": "Vr",
+      "date": "2026-06-19",
       "ds": "Recovery 8km",
-      "t": "run",
-      "km": null
-    },
-    {
-      "d": "Za",
-      "ds": "MP Long Run 21km",
       "t": "run",
       "km": null
     }
