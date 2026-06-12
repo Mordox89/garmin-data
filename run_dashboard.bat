@@ -14,21 +14,16 @@ if errorlevel 1 (
 )
 
 echo.
-echo [2/3] AI coaching feedback genereren...
-python analyze_run.py
-if errorlevel 1 (
-    echo WAARSCHUWING: AI feedback mislukt, doorgaan...
-)
-
-echo.
-echo [3/3] Pushen naar GitHub...
+echo [2/3] Pushen naar GitHub...
+git pull --rebase -X theirs
 git add -A
-git diff --staged --quiet || git commit -m "Manual sync: %date% %time%"
-git pull --rebase
+git diff --staged --quiet || git commit -m "Manual sync"
 git push
 
 echo.
 echo ================================
 echo  Klaar! Dashboard bijgewerkt.
+echo  AI feedback wordt automatisch
+echo  gegenereerd via GitHub Actions.
 echo ================================
 pause

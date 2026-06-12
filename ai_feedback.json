@@ -1,5 +1,23 @@
 {
   "generated": "2026-06-12",
+<<<<<<< HEAD
   "feedback": "AI feedback niet beschikbaar.",
   "status": "skipped"
+=======
+  "feedback": "De recovery run van 12 juni was zone-technisch correct — gemiddelde HR van 142 bpm, max 156 bpm, netjes binnen Z1–Z2, en de splitsdata bevestigen dat: 136–145 bpm, consistent en gecontroleerd. Dat klopt. De aerobic run van 10 juni is het probleem. Pfitzinger schrijft general aerobic voor in Z2 (146–155 bpm), maar de gemiddelde HR was 157 bpm met een piek op 166 bpm. Dit was geen general aerobic run — dit was een matige drempelrun zonder de gestructureerde prikkel die dat rechtvaardigt. Noem het wat het is: te hard voor het doel, te zacht voor adaptatie. De lactate threshold van 8 juni laat een genuanceerder beeld zien: gemiddeld 160 bpm is aan de lage kant voor een echte drempelsessie (doel Z3–Z4, 156–173 bpm), maar de piek op 177 bpm suggereert dat er aan het einde wel degelijk drempelintensiteit bereikt werd. De vraag is of het gestructureerd was of ongecontroleerd opgelopen — bij een cadans die pas in de laatste splits richting 179 spm gaat, vermoedelijk het laatste.\n\nDe cadans is stelselmatig te laag. Recovery: 166 spm. Aerobic: 168 spm. Drempel: gemiddeld 171 spm met een piek van 179. Het doel is 180 spm, en dat is geen richtlijn — het is een biomechanische ondergrens voor efficiëntie bij jouw profiel. Een lagere cadans bij gelijkblijvende snelheid betekent langere grondcontacttijd, meer verticale oscillatie, en meer belasting per stap op precies die structuren die je al eens hebben laten vallen. De beenbalans is consistent links-dominant: 53.1%, 52.2%, 53.3% — dat is 4–6% asymmetrie, structureel boven de drempel van 1,5% die als piriformis-risicosignaal geldt. Dit is geen ruis. Dit is een patroon dat de gluteus rechts systematisch onderbelast en de linker overcompenseert. De GCT van 281 ms tijdens de recovery run is hoog — bij efficiënte lopers op dat tempo verwacht je onder de 270 ms. Verticale oscillatie van 8,3–8,9 cm is acceptabel maar niet scherp. De vertical ratio van 6,94–8,27% toont dat de drempelsessie de beste benutting gaf; het zijn precies de langzamere runs waar energie verspild wordt aan verticale beweging in plaats van voorwaartse propulsie.\n\nDe herstelstatus is onderhersteld — zonder voorbehoud. Body Battery staat op 27, slaap was 5,8 uur met 10,8% diepe slaap en 2,8% REM. Om conceet te zijn: bij 5,8 uur slaap had je bij normale verhoudingen 13–20% diepe slaap en 20–25% REM verwacht. Je haalde een fractie van beide. HRV is 64 met status LOW, RHR van 54 bpm is niet alarmerend op zichzelf, maar in combinatie met een training readiness van 27 en een stressscore van 32 is het beeld eenduidig: het systeem is niet in staat om op dit moment kwaliteitstraining te absorberen. Er is geen ruimte om",
+  "status": "ok",
+  "model": "claude-sonnet-4-6",
+  "usage": {
+    "input_tokens": 2151,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 0
+    },
+    "output_tokens": 900,
+    "service_tier": "standard",
+    "inference_geo": "global"
+  }
+>>>>>>> af2e04114172d9fecfe3a3e06291208580eec392
 }
