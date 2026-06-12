@@ -88,7 +88,7 @@
     },
     {
       "d": "Vr",
-      "ds": "Apeldoorn - Recovery 6km",
+      "ds": "Training",
       "t": "run",
       "km": null
     },
@@ -1290,6 +1290,10 @@
     {
       "date": "2026-06-11",
       "kg": 87.9
+    },
+    {
+      "date": "2026-06-12",
+      "kg": 88.2
     }
   ],
   "vo2": [
