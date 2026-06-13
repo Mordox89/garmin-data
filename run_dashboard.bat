@@ -15,7 +15,8 @@ if errorlevel 1 (
 
 echo.
 echo [2/2] Pushen naar GitHub...
-git pull --rebase -X theirs
+git fetch origin
+git rebase -X theirs origin/main
 git add -A
 git diff --staged --quiet || git commit -m "Manual sync"
 git push
