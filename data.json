@@ -3,18 +3,18 @@
     "phase": "Week 1/18",
     "week": 1,
     "totalWeeks": 18,
-    "daysToRace": 120,
-    "predicted": "3:43:01",
+    "daysToRace": 119,
+    "predicted": "3:43:26",
     "predictedRange": null,
     "vo2": 48.5,
-    "updated": "2026-06-13",
+    "updated": "2026-06-14",
     "live": true,
     "unit": "km",
-    "ctl": 638.0,
-    "atl": 779.0,
-    "form": -141.0,
-    "acwr": 1.2,
-    "trainingStatus": "PRODUCTIVE_5"
+    "ctl": 623.0,
+    "atl": 655.0,
+    "form": -32.0,
+    "acwr": 1.0,
+    "trainingStatus": "PRODUCTIVE_3"
   },
   "kpi": {
     "adherence": "—",
@@ -24,23 +24,23 @@
     "easyHard": "60% easy",
     "totalVol": 52.0,
     "volAvg": 52.0,
-    "readiness": 69
+    "readiness": 40
   },
   "pmc": {
     "dates": [
-      "2026-06-13"
+      "2026-06-14"
     ],
     "ctl": [
-      638.0
+      623.0
     ],
     "atl": [
-      779.0
+      655.0
     ],
     "form": [
-      -141.0
+      -32.0
     ],
     "acwr": [
-      1.2
+      1.0
     ]
   },
   "volume": {
@@ -82,11 +82,11 @@
   "week7": [
     {
       "d": "Vandaag",
-      "date": "2026-06-13",
+      "date": "2026-06-14",
       "ds": "Training",
       "t": "run",
       "km": null,
-      "completed": true
+      "completed": false
     },
     {
       "d": "Ma",
@@ -768,12 +768,6 @@
   ],
   "bodyBattery": [
     {
-      "date": "2026-05-30",
-      "charged": 63,
-      "drained": 74,
-      "level": null
-    },
-    {
       "date": "2026-05-31",
       "charged": 53,
       "drained": 69,
@@ -853,24 +847,18 @@
     },
     {
       "date": "2026-06-13",
-      "charged": 68,
-      "drained": 31,
+      "charged": 72,
+      "drained": 84,
+      "level": null
+    },
+    {
+      "date": "2026-06-14",
+      "charged": 54,
+      "drained": 7,
       "level": null
     }
   ],
   "sleep": [
-    {
-      "date": "2026-05-30",
-      "duration_h": 7.6,
-      "deep_pct": 11.1,
-      "rem_pct": 20.3,
-      "score": 82,
-      "hrv_avg": 12.0,
-      "quality_score": 82,
-      "dur_ok": true,
-      "deep_ok": false,
-      "rem_ok": true
-    },
     {
       "date": "2026-05-31",
       "duration_h": 7.8,
@@ -1026,18 +1014,21 @@
       "dur_ok": true,
       "deep_ok": true,
       "rem_ok": true
+    },
+    {
+      "date": "2026-06-14",
+      "duration_h": 7.1,
+      "deep_pct": 16.2,
+      "rem_pct": 21.4,
+      "score": 78,
+      "hrv_avg": 12.0,
+      "quality_score": 78,
+      "dur_ok": true,
+      "deep_ok": true,
+      "rem_ok": true
     }
   ],
   "hrv": [
-    {
-      "date": "2026-05-30",
-      "hrv5": 86,
-      "hrv_avg": null,
-      "weekly": 65,
-      "status": "BALANCED",
-      "baseline_low": 59,
-      "baseline_high": 82
-    },
     {
       "date": "2026-05-31",
       "hrv5": 83,
@@ -1154,13 +1145,18 @@
       "status": "UNBALANCED",
       "baseline_low": 59,
       "baseline_high": 82
+    },
+    {
+      "date": "2026-06-14",
+      "hrv5": 83,
+      "hrv_avg": null,
+      "weekly": 58,
+      "status": "BALANCED",
+      "baseline_low": 59,
+      "baseline_high": 82
     }
   ],
   "rhr": [
-    {
-      "date": "2026-05-30",
-      "rhr": 49
-    },
     {
       "date": "2026-05-31",
       "rhr": 49
@@ -1216,13 +1212,13 @@
     {
       "date": "2026-06-13",
       "rhr": 47
+    },
+    {
+      "date": "2026-06-14",
+      "rhr": 52
     }
   ],
   "stress": [
-    {
-      "date": "2026-05-30",
-      "avg_stress": 31
-    },
     {
       "date": "2026-05-31",
       "avg_stress": 36
@@ -1277,14 +1273,14 @@
     },
     {
       "date": "2026-06-13",
-      "avg_stress": 9
+      "avg_stress": 31
+    },
+    {
+      "date": "2026-06-14",
+      "avg_stress": 20
     }
   ],
   "weight": [
-    {
-      "date": "2026-05-14",
-      "kg": 88.0
-    },
     {
       "date": "2026-05-15",
       "kg": 89.4
@@ -1380,6 +1376,10 @@
     {
       "date": "2026-06-13",
       "kg": 86.8
+    },
+    {
+      "date": "2026-06-14",
+      "kg": 88.1
     }
   ],
   "vo2": [
@@ -1392,19 +1392,19 @@
       "vo2": 48.5
     },
     {
-      "date": "2026-06-13",
+      "date": "2026-06-14",
       "vo2": 48.5
     }
   ],
   "racePredictions": {
-    "5k": "0:21:47",
+    "5k": "0:21:48",
     "10k": "0:45:41",
-    "hm": "1:39:37",
-    "fm": "3:43:01"
+    "hm": "1:39:39",
+    "fm": "3:43:26"
   },
   "trainingReadiness": {
-    "score": 69,
-    "level": "MODERATE",
+    "score": 40,
+    "level": "LOW",
     "feedback": null
   },
   "weeks": {
@@ -1436,6 +1436,11 @@
         }
       ],
       "mobility": [
+        {
+          "date": "2026-06-13",
+          "name": "Mobiliteit",
+          "duration_s": 913
+        },
         {
           "date": "2026-06-12",
           "name": "Mobiliteit",
