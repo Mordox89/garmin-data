@@ -1,17 +1,17 @@
 {
   "generated": "2026-06-15",
-  "feedback": "**STATUS:** Atletiek belast, onderhersteld, beenbalans kritiek — week 2 loopt achter op herstelcurve.\n\n**AFWIJKINGEN:** De 13km aerobic+strides van vandaag toont +16 bpm HR-drift over de actieve blokken — dat is geen normale vermoeidheid bij een 13km aerobic run, dat is een systeem dat onvoldoende hersteld was. Body Battery 49 bij aanvang bevestigt dit: onder de 70-grens, geen groene ruimte. Form/TSB staat op -181 met ATL 846 tegen CTL 665 — dit is geen normale trainingsdruk voor week 2/18, dit is gecumuleerde belasting zonder adequate uitdal. De beenbalans van 51.8% links vandaag en 52.7% op de long run zaterdag liggen beide ruim boven de 2%-asymmetriegrens — dit is het piriformis/gluteus-signaal dat de DNF voorafging. Step speed loss van 4.0–5.3% in combinatie met GCT boven 257ms wijst op afnemende loopstijfheid bij vermoeidheid, precies het mechanisme dat rechts gluteus overbelast.\n\n**DIRECTIEF:** Woensdag 16km aerobic wordt 12km easy, strikt HR 140–155 bpm, pace niet onder 5:40/km, geen strides. Vrijdag recovery 8km blijft staan. Zaterdag MP Long Run 21km: alleen uitvoeren als Body Battery >65 bij opstaan — zo niet, verschuif naar zondag of reduceer naar 16km endurance zonder MP-segment. Elke training deze week start met 5 minuten single-leg glute bridges en lateral band walks vooraf. Geen uitzonderingen.",
+  "feedback": "**STATUS:** Onderhersteld met oplopende vermoeidheidsindicatoren — TSB -181, ramp rate 102, ATL dominant, slaap 6.7u met Body Battery 49.\n\n**AFWIJKINGEN:** HR-drift van +16 bpm tijdens de aerobic/strides van vandaag en +17 bpm in de long run van zaterdag zijn geen normale vermoeidheidssignalen — dit is accumulatieschade. De long run piekte op 159 bpm, wat nog binnen endurance-zone valt, maar de drift suggereert dat het laatste derde deel op een hoger effectief inspanningsniveau liep dan de data toont. Beenbalans links 51.8–53.1% over drie runs: consistent boven 50%, structureel rechts-compenserend — exact het piriformis-risicopatroon. GCT 257–281 ms en step speed loss 4–5.3% wijzen op vermoeide loopmechaniek, geen technisch probleem. Ramp rate 102 bij week 2/18 is onhoudbaar — dit tempo opgebouwd in week 1 is te agressief voor een 18-wekenplan.\n\n**DIRECTIEF:** Woensdag 16km aerobic wordt teruggeschroefd naar 12km, strikt onder 155 bpm, cadans 162–170 spm — geen meter boven zone. Vrijdag recovery 8km blijft, HR cap 145 bpm. Zaterdag MP long run 21km: alleen doorgaan als Body Battery woensdag ochtend boven 60 laadt en HRV BALANCED blijft — zo niet, schrap de MP-segmenten volledig en loop 18km endurance onder 162 bpm.",
   "status": "ok",
   "model": "claude-sonnet-4-6",
   "usage": {
-    "input_tokens": 2265,
+    "input_tokens": 2271,
     "cache_creation_input_tokens": 0,
     "cache_read_input_tokens": 0,
     "cache_creation": {
       "ephemeral_5m_input_tokens": 0,
       "ephemeral_1h_input_tokens": 0
     },
-    "output_tokens": 451,
+    "output_tokens": 435,
     "service_tier": "standard",
     "inference_geo": "global"
   }
