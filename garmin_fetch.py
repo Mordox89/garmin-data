@@ -211,48 +211,52 @@ def fetch_weight(client, days=120):
         print(f"Gewicht fout: {e}")
         return []
 
-def fetch_training_load(client, days=90):
-    """Haalt training status op voor huidige dag (CTL/ATL via acute/chronic load)."""
+def _parse_training_status(raw):
+    """Parse één training_status response naar ctl/atl/acwr/vo2."""
+    vo2 = None
     try:
-        raw = client.get_training_status(today().isoformat())
+        vo2 = raw["mostRecentVO2Max"]["generic"]["vo2MaxPreciseValue"] or raw["mostRecentVO2Max"]["generic"]["vo2MaxValue"]
+    except Exception:
+        pass
+    atl = ctl = acwr = acwr_status = training_status_str = None
+    try:
+        devices = raw["mostRecentTrainingStatus"]["latestTrainingStatusData"]
+        device_data = list(devices.values())[0]
+        atl_dto = device_data.get("acuteTrainingLoadDTO") or {}
+        atl  = atl_dto.get("dailyTrainingLoadAcute")
+        ctl  = atl_dto.get("dailyTrainingLoadChronic")
+        acwr = atl_dto.get("dailyAcuteChronicWorkloadRatio")
+        acwr_status = atl_dto.get("acwrStatus")
+        training_status_str = device_data.get("trainingStatusFeedbackPhrase")
+    except Exception:
+        pass
+    return atl, ctl, acwr, acwr_status, training_status_str, vo2
 
-        # VO2max
-        vo2 = None
+def fetch_training_load(client, days=90):
+    """Haalt CTL/ATL/ACWR historie op — per dag terug vanaf blokstart."""
+    result = []
+    start = PLAN_START - dt.timedelta(days=7)
+    end = today()
+    current = start
+    while current <= end:
         try:
-            vo2 = raw["mostRecentVO2Max"]["generic"]["vo2MaxPreciseValue"] or raw["mostRecentVO2Max"]["generic"]["vo2MaxValue"]
+            raw = client.get_training_status(current.isoformat())
+            atl, ctl, acwr, acwr_status, ts_str, vo2 = _parse_training_status(raw)
+            if ctl and atl:
+                result.append({
+                    "date":            current.isoformat(),
+                    "ctl":             round(float(ctl), 1),
+                    "atl":             round(float(atl), 1),
+                    "form":            round(float(ctl) - float(atl), 1),
+                    "acwr":            round(float(acwr), 2) if acwr else None,
+                    "acwr_status":     acwr_status,
+                    "training_status": ts_str,
+                    "vo2":             round(float(vo2), 1) if vo2 else None,
+                })
         except Exception:
             pass
-
-        # CTL/ATL/form
-        atl = ctl = acwr = acwr_status = training_status_str = None
-        try:
-            devices = raw["mostRecentTrainingStatus"]["latestTrainingStatusData"]
-            device_data = list(devices.values())[0]
-            atl_dto = device_data.get("acuteTrainingLoadDTO") or {}
-            atl  = atl_dto.get("dailyTrainingLoadAcute")
-            ctl  = atl_dto.get("dailyTrainingLoadChronic")
-            acwr = atl_dto.get("dailyAcuteChronicWorkloadRatio")
-            acwr_status = atl_dto.get("acwrStatus")
-            training_status_str = device_data.get("trainingStatusFeedbackPhrase")
-        except Exception as e:
-            print(f"  Training load parsing fout: {e}")
-            import traceback; traceback.print_exc()
-
-        form = round(float(ctl or 0) - float(atl or 0), 1)
-
-        return [{
-            "date":            today().isoformat(),
-            "ctl":             round(float(ctl), 1) if ctl else 0,
-            "atl":             round(float(atl), 1) if atl else 0,
-            "form":            round(float(form), 1),
-            "acwr":            round(float(acwr), 2) if acwr else None,
-            "acwr_status":     acwr_status,
-            "training_status": training_status_str,
-            "vo2":             round(float(vo2), 1) if vo2 else None,
-        }]
-    except Exception as e:
-        print(f"Training load fout: {e}")
-        return []
+        current += dt.timedelta(days=1)
+    return result
 
 def fetch_vo2max(client, days=90):
     # Probeer historische VO2max data via get_stats
