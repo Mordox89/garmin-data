@@ -1,17 +1,17 @@
 {
-  "generated": "2026-06-14",
-  "feedback": "**STATUS**\nWeek 1/18 afgerond met structureel te hoge HR op easy-runs, aanhoudende links-dominantie boven piriformis-drempelwaarde, en herstelstatus te laag voor opschalen — maar de week is wél gelopen.\n\n**AFWIJKINGEN**\n\nDe aerobic run van 10 juni toont HR max 162 bpm en drift +16 bpm — dat is boven de Easy-zone (max 158 bpm) en de drift duidt op functionele vermoeidheid halfway. De long run van 13 juni pakt HR max 159 bpm, wat binnen Endurance-zone valt, maar de drift van +17 bpm over 19 laps is een hard vermoeidheidssignaal: het tempo van 5:27/km kostte aan het einde structureel meer slagvolume dan aan het begin. Beide runs leveren onvoldoende aeroob onderscheid op — er is geen echte easy-dag tussen de belasting.\n\nBeenbalans: 52.7% links op de long run en 53.1% op de recovery run — beide ruim boven de 2%-asymmetriedrempel. Dit is geen meetruis, dit is een consistent patroon over drie opeenvolgende runs richting de piriformis-zijde. GCT van 265–281 ms op respectievelijk long run en recovery is acceptabel op tempo, maar de verticale ratio van 7.7–8.3% in combinatie met step speed loss van 5.1–5.5% signaleert een loper die verticaal energie lekt in plaats van horizontaal omzet — dit vergroot gluteus-belasting per stap.\n\nHerstelstatus: Body Battery 54, Training Readiness 40 (LOW), Form/TSB -32 — dit is geen opschalerssignaal. HRV is BALANCED op 83, maar Battery en Readiness overschrijven dat. Slaap is 7.1u met 16.2% deep: te laag voor de geleverde belasting van CTL 623 en ATL 655.\n\n**DIRECTIEF**\n\nMaandagochtend Aerobic + Strides 13km: loop de eerste 11 km strikt onder 155 bpm — als HR daar boven kruipt, pas dan het tempo aan, niet de zone-definitie. Strides: 6× 20 sec op MP-cadans 178–180 spm met volledig herstel ertussen; HR mag oplopen maar telt niet mee voor zone-beoordeling. Beenbalans-focus: activeer rechter gluteus bewust de eerste 3 km — loop de eerste lap met actieve heupextensie rechts als cueing. Geen km harder dan 5:10/km tijdens het aerobe blok.",
+  "generated": "2026-06-15",
+  "feedback": "**STATUS:** Atletiek belast, onderhersteld, beenbalans kritiek — week 2 loopt achter op herstelcurve.\n\n**AFWIJKINGEN:** De 13km aerobic+strides van vandaag toont +16 bpm HR-drift over de actieve blokken — dat is geen normale vermoeidheid bij een 13km aerobic run, dat is een systeem dat onvoldoende hersteld was. Body Battery 49 bij aanvang bevestigt dit: onder de 70-grens, geen groene ruimte. Form/TSB staat op -181 met ATL 846 tegen CTL 665 — dit is geen normale trainingsdruk voor week 2/18, dit is gecumuleerde belasting zonder adequate uitdal. De beenbalans van 51.8% links vandaag en 52.7% op de long run zaterdag liggen beide ruim boven de 2%-asymmetriegrens — dit is het piriformis/gluteus-signaal dat de DNF voorafging. Step speed loss van 4.0–5.3% in combinatie met GCT boven 257ms wijst op afnemende loopstijfheid bij vermoeidheid, precies het mechanisme dat rechts gluteus overbelast.\n\n**DIRECTIEF:** Woensdag 16km aerobic wordt 12km easy, strikt HR 140–155 bpm, pace niet onder 5:40/km, geen strides. Vrijdag recovery 8km blijft staan. Zaterdag MP Long Run 21km: alleen uitvoeren als Body Battery >65 bij opstaan — zo niet, verschuif naar zondag of reduceer naar 16km endurance zonder MP-segment. Elke training deze week start met 5 minuten single-leg glute bridges en lateral band walks vooraf. Geen uitzonderingen.",
   "status": "ok",
   "model": "claude-sonnet-4-6",
   "usage": {
-    "input_tokens": 2264,
+    "input_tokens": 2265,
     "cache_creation_input_tokens": 0,
     "cache_read_input_tokens": 0,
     "cache_creation": {
       "ephemeral_5m_input_tokens": 0,
       "ephemeral_1h_input_tokens": 0
     },
-    "output_tokens": 691,
+    "output_tokens": 451,
     "service_tier": "standard",
     "inference_geo": "global"
   }
