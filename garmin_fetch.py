@@ -106,10 +106,13 @@ def fetch_body_battery(client, days=14):
         data = client.get_body_battery(start.isoformat(), end.isoformat())
         result = []
         for day in data:
+            charged = day.get("charged") or 0
+            drained = day.get("drained") or 0
             result.append({
                 "date":    day.get("date"),
-                "charged": day.get("charged"),
-                "drained": day.get("drained"),
+                "charged": charged,
+                "drained": drained,
+                "net":     charged - drained,
                 "level":   day.get("body_battery_level"),
             })
         return sorted(result, key=lambda x: x["date"])
@@ -646,6 +649,116 @@ def build_week7(scheduled, completed_dates=None):
         })
     return result
 
+# ── Piriformis risico-score ────────────────────────────────────────────────────
+def build_piriformis_risk(recent_acts, sleep_data, training_load):
+    """Samengestelde piriformis risico-indicator (0-100)."""
+    risk = 0
+    factors = []
+    # 1. Beenbalans asymmetrie (max 35 punten)
+    balances = [a.get("balance_left") for a in recent_acts if a.get("balance_left")]
+    if balances:
+        avg_bal = statistics.mean(balances)
+        asym = abs(avg_bal - 50)
+        bal_risk = min(35, asym * 10)
+        risk += bal_risk
+        if asym > 2:
+            factors.append(f"beenbalans {avg_bal:.1f}% L ({asym:.1f}% asymmetrie)")
+    # 2. ACWR (max 25 punten)
+    if training_load:
+        acwr = training_load[-1].get("acwr")
+        if acwr and acwr > 1.3:
+            acwr_risk = min(25, (acwr - 1.0) * 50)
+            risk += acwr_risk
+            factors.append(f"ACWR {acwr:.2f} (verhoogd)")
+    # 3. Slaaptekort (max 20 punten)
+    if sleep_data:
+        recent_sleep = sleep_data[-3:]
+        avg_sleep = statistics.mean([s.get("duration_h", 7) for s in recent_sleep])
+        if avg_sleep < 7:
+            sleep_risk = min(20, (7 - avg_sleep) * 15)
+            risk += sleep_risk
+            factors.append(f"slaap {avg_sleep:.1f}u/nacht (tekort)")
+    # 4. Cadans te laag bij hoge intensiteit (max 20 punten)
+    for a in recent_acts[:3]:
+        hr = a.get("avg_hr") or 0
+        cad = a.get("cadence_spm") or 180
+        if hr > 160 and cad < 172:
+            cad_risk = min(20, (172 - cad) * 2)
+            risk += cad_risk
+            factors.append(f"cadans {cad} spm bij HR {hr} (te laag)")
+            break
+    level = "laag" if risk < 30 else "matig" if risk < 55 else "hoog" if risk < 75 else "kritiek"
+    color = "go" if risk < 30 else "amber" if risk < 55 else "coral" if risk < 75 else "coral"
+    return {"score": min(100, round(risk)), "level": level, "color": color, "factors": factors}
+
+# ── Slaapschuld tracker ──────────────────────────────────────────────────────
+def build_sleep_debt(sleep_data, target_hours=7.5):
+    """Cumulatief slaaptekort over de laatste 7 dagen."""
+    if not sleep_data:
+        return {"debt_hours": 0, "avg_hours": 0, "days": 0}
+    recent = sleep_data[-7:]
+    total = sum(s.get("duration_h", 0) for s in recent)
+    days = len(recent)
+    avg = total / max(days, 1)
+    debt = max(0, (target_hours * days) - total)
+    return {
+        "debt_hours": round(debt, 1),
+        "avg_hours": round(avg, 1),
+        "days": days,
+        "target": target_hours,
+        "daily": [{"date": s.get("date"), "hours": s.get("duration_h", 0), "deficit": round(target_hours - s.get("duration_h", 0), 1)} for s in recent],
+    }
+
+# ── Week samenvatting ─────────────────────────────────────────────────────────
+def build_week_summary(recent_acts, sleep_data, hrv_data, training_load, strength_mob, weeks):
+    """Compacte samenvatting van de huidige week."""
+    wk = week_number(today())
+    wk_data = weeks.get(wk, {"km": 0, "runs": 0, "load": 0})
+    # Runs deze week
+    week_start = monday(today())
+    week_runs = [a for a in recent_acts if a.get("date") and dt.date.fromisoformat(a["date"]) >= week_start]
+    # Slaap deze week
+    week_sleep = [s for s in sleep_data if s.get("date") and dt.date.fromisoformat(s["date"]) >= week_start]
+    avg_sleep = statistics.mean([s.get("duration_h", 0) for s in week_sleep]) if week_sleep else 0
+    avg_deep = statistics.mean([s.get("deep_pct", 0) for s in week_sleep]) if week_sleep else 0
+    # HRV trend
+    week_hrv = [h for h in hrv_data if h.get("date") and h["date"] >= week_start.isoformat()[:10]]
+    hrv_status = week_hrv[-1].get("status") if week_hrv else "—"
+    # Strength/mobility
+    sm = strength_mob.get(str(wk), {"strength": [], "mobility": []})
+    return {
+        "week": wk,
+        "km": round(wk_data.get("km", 0), 1),
+        "runs": len(week_runs),
+        "avg_sleep_h": round(avg_sleep, 1),
+        "avg_deep_pct": round(avg_deep, 1),
+        "hrv_status": hrv_status,
+        "strength_count": len(sm.get("strength", [])),
+        "mobility_count": len(sm.get("mobility", [])),
+        "ctl": training_load[-1].get("ctl") if training_load else None,
+        "form": training_load[-1].get("form") if training_load else None,
+    }
+
+# ── Schoen kilometerstand ─────────────────────────────────────────────────────
+def fetch_gear(client):
+    """Haalt schoenen/gear op met kilometerstand."""
+    try:
+        data = client.get_gear()
+        result = []
+        for g in (data if isinstance(data, list) else []):
+            if g.get("gearType") == "SHOE" or "shoe" in (g.get("displayName") or "").lower() or g.get("gearTypePk") == 1:
+                dist = g.get("distanceMeters") or g.get("distance") or 0
+                result.append({
+                    "name": g.get("displayName") or g.get("customMakeModel") or "Schoen",
+                    "km": round(dist / 1000, 1) if dist > 100 else round(dist, 1),
+                    "activities": g.get("activityCount") or 0,
+                    "active": g.get("isActive") or g.get("active") or False,
+                })
+        return [s for s in sorted(result, key=lambda x: x["km"], reverse=True) if s["active"]]
+    except Exception as e:
+        print(f"Gear fout: {e}")
+        return []
+
 # ── Efficiency factor ─────────────────────────────────────────────────────────
 def build_ef(recent_acts):
     ef_list = []
@@ -834,6 +947,10 @@ def main():
         "longRuns":          build_long_runs(raw_acts),
         "ltRuns":            build_lt_runs(raw_acts),
         "strengthMobility":  build_strength_mobility(all_acts),
+        "piriformisRisk":    build_piriformis_risk(recent_acts, sleep_data, training_load),
+        "sleepDebt":         build_sleep_debt(sleep_data),
+        "weekSummary":       build_week_summary(recent_acts, sleep_data, hrv_data, training_load, build_strength_mobility(all_acts), weeks),
+        "gear":              fetch_gear(client),
     }
 
     out_path = HERE / "data.json"

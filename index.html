@@ -159,8 +159,10 @@
   .trend-up{color:var(--go);font-size:11px;font-family:var(--mono)}
   .trend-dn{color:var(--coral);font-size:11px;font-family:var(--mono)}
   .trend-eq{color:var(--muted);font-size:11px;font-family:var(--mono)}
-  @media(max-width:1080px){.c3,.c4,.c5,.c6,.c7,.c8,.c9{grid-column:span 12}.chips{grid-template-columns:repeat(3,1fr)}.brand h1{font-size:34px}.inputs{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:560px){body{padding:14px}.chips{grid-template-columns:repeat(2,1fr)}.predbox .lead .k{font-size:36px}}
+  @media(max-width:1080px){.c3,.c4,.c5,.c6,.c7,.c8,.c9{grid-column:span 12}.chips{grid-template-columns:repeat(3,1fr)}.brand h1{font-size:34px}.inputs{grid-template-columns:repeat(2,1fr)}.grid{gap:10px}}
+  @media(max-width:768px){.chips{grid-template-columns:repeat(2,1fr)}.tabs{gap:0}.tab{padding:9px 10px;font-size:14px}.pred .k{font-size:32px}.brand h1{font-size:28px}.chart-h{height:170px}.chart-h.tall{height:200px}}
+  @media(max-width:560px){body{padding:10px}.chips{grid-template-columns:1fr 1fr}.chip .v{font-size:18px}.predbox .lead .k{font-size:30px}.run-stats{gap:8px}.wk-day{grid-template-columns:50px 50px 1fr auto;gap:6px;padding:7px 9px}.card{padding:12px 13px}.tabs{overflow-x:auto;-webkit-overflow-scrolling:touch}}
+  @media(max-width:400px){.chips{grid-template-columns:1fr}.brand h1{font-size:24px}.big{font-size:24px}.tab{font-size:12px;padding:8px 8px}}
 </style>
 </head>
 <body>
@@ -176,6 +178,7 @@
       <div class="l">Garmin race prediction · marathon</div>
       <div class="k" id="m-pred">—</div>
       <div style="display:flex;align-items:center;gap:8px"><div class="r" id="m-predr">—</div><span id="m-pred-trend" class="trend-eq"></span></div>
+      <div id="race-countdown" style="margin-top:8px;font-family:var(--mono);font-size:10px;color:var(--dim)"></div>
     </div>
   </header>
   <div class="progress"><i id="m-prog"></i><div class="taper" id="m-taper"><s>Taper</s></div></div>
@@ -264,6 +267,15 @@
       <div class="chart-h"><canvas id="hrvChart"></canvas></div>
       <div id="m-hrv-status" style="margin-top:8px;font-size:12px"></div>
     </div>
+    <div class="card c4"><h2><span class="dot"></span>Week Samenvatting<span class="info" tabindex="0">i<span class="tip"><b>Overzicht van de huidige trainingsweek.</b> Runs, volume, slaap, HRV en kracht/mobiliteit in één kaart.</span></span></h2><div class="cap">Huidige week in vogelvlucht.</div>
+      <div id="week-summary"></div>
+    </div>
+    <div class="card c4"><h2><span class="dot am"></span>Slaapschuld<span class="info" tabindex="0">i<span class="tip"><b>Cumulatief slaaptekort over de laatste 7 dagen vs 7.5u/nacht doel.</b> Meer dan 5u schuld = merkbaar prestatie- en herstelverlies.</span></span></h2><div class="cap">Cumulatief slaaptekort laatste 7 dagen vs 7.5u/nacht doel.</div>
+      <div id="sleep-debt-display"></div>
+    </div>
+    <div class="card c4"><h2><span class="dot cy"></span>Schoenen<span class="info" tabindex="0">i<span class="tip"><b>Kilometerstand van je actieve hardloopschoenen.</b> Vervang na 500-800 km afhankelijk van het model. Carbon schoenen eerder.</span></span></h2><div class="cap">Kilometerstand actieve schoenen — vervang na 500–800 km.</div>
+      <div id="gear-display"></div>
+    </div>
     <div class="card c12" id="ai-card"><h2><span class="dot cy"></span>AI Coaching Feedback · Pfitzinger Coach<span class="info" tabindex="0">i<span class="tip"><b>Dagelijks gegenereerd door Claude</b> op basis van Garmin data — zones, cadans, beenbalans, HRV, Body Battery en trainingsbelasting. Direct na elke sync bijgewerkt.</span></span></h2>
       <div id="ai-body" style="margin-top:14px;font-size:13.5px;line-height:1.7;color:var(--text)"><span style="color:var(--muted)">Laden…</span></div>
       <div id="ai-meta" style="margin-top:10px;font-size:11px;color:var(--dim)"></div>
@@ -329,7 +341,7 @@ const SAMPLE={
   pmc:{dates:[],ctl:[],atl:[],form:[],acwr:[]},
   volume:{labels:[],done:[]},
   zones:[],week7:[],ef:[],
-  recentActivities:[],bodyBattery:[],sleep:[],hrv:[],rhr:[],stress:[],weight:[],vo2:[],longRuns:[],ltRuns:[],strengthMobility:{},
+  recentActivities:[],bodyBattery:[],sleep:[],hrv:[],rhr:[],stress:[],weight:[],vo2:[],longRuns:[],ltRuns:[],strengthMobility:{},piriformisRisk:{score:0,level:'—',factors:[]},sleepDebt:{debt_hours:0,avg_hours:0},weekSummary:{},gear:[],
   racePredictions:{},trainingReadiness:{},weeks:{}
 };
 let DATA=SAMPLE;
@@ -389,7 +401,7 @@ function populate(){
   })(),
     {l:'ATL Ramp',v:(DATA.pmc?.atl?.at(-1)??'—').toString()+' <span class="unit">atl</span>',s:`CTL ${DATA.pmc?.ctl?.at(-1)??'—'} · Form ${DATA.pmc?.form?.at(-1)??'—'}`,st:'var(--amber)',tip:'<b>Acute trainingsbelasting (ATL).</b> Hoge ATL ten opzichte van CTL = vermoeid. Form (CTL−ATL) negatief = beladen maar opbouwend.'},
     {l:'Easy / Hard',v:k.easyHard||'—',s:'80/20 doel (Pfitzinger)',st:'var(--go)',tip:'<b>Aandeel easy vs hard training laatste 28d.</b> Pfitzinger-model: ~80% easy bouwt het aerobe fundament.'},
-    {l:'Body Battery',v:bb?(bb.charged||'—').toString():'—',s:bb?`+${bb.charged} opgeladen / −${bb.drained} verbruikt`:'geen data',st:'var(--cyan)',tip:'<b>Garmin Body Battery.</b> Opgeladen door slaap, verbruikt door training en stress. Ideaal boven 75 starten aan een trainingsdag.'},
+    {l:'Body Battery',v:bb?`<span style="font-size:14px">+${bb.charged||0} / −${bb.drained||0}</span>`:'—',s:bb?`netto ${(bb.charged||0)-(bb.drained||0)} · ${bb.level||'—'}`:'geen data',st:bb&&(bb.charged||0)-(bb.drained||0)>30?'var(--go)':bb&&(bb.charged||0)-(bb.drained||0)>10?'var(--cyan)':'var(--amber)',tip:'<b>Garmin Body Battery.</b> +opgeladen vannacht / −verbruikt vandaag. Netto positief = je hebt meer hersteld dan verbruikt.'},
     {l:'Readiness',v:`<span style="font-size:18px;color:${rdColor}">${rdScore??'—'}</span>`,s:rdLevel,st:rdColor,tip:'<b>Garmin Training Readiness (0–100).</b> Samengesteld uit HRV-status, slaap, Body Battery, recent herstel en stressniveau.'}
   ];
   document.getElementById('chips').innerHTML=chips.map(c=>`<div class="chip" style="--st:${c.st}"><div class="l">${c.l}<span class="info" tabindex="0">i<span class="tip">${c.tip}</span></span></div><div class="v">${c.v}</div><div class="s">${c.s}</div></div>`).join('');
@@ -572,6 +584,53 @@ const builders={
       const lastHrv=hrv.at(-1);
       const statusColor={BALANCED:C.go,LOW:C.coral,UNBALANCED:C.amber}[lastHrv?.status]||C.muted;
       document.getElementById('m-hrv-status').innerHTML=lastHrv?`<span style="color:${statusColor};font-family:var(--mono);font-size:12px">${lastHrv.weekly||lastHrv.hrv_avg||'—'} ms 7d gem</span> <span class="hrv-badge ${lastHrv.status||''}">${lastHrv.status||'—'}</span><br><span style="color:var(--dim);font-size:10px;margin-top:4px;display:block">Baseline ${lastHrv.baseline_low||59}–${lastHrv.baseline_high||82} ms · 5min max ${lastHrv.hrv5||'—'} ms</span>`:'';
+    }
+    // Week summary
+    const ws=DATA.weekSummary||{};
+    const wsEl=document.getElementById('week-summary');
+    if(wsEl&&ws.week){
+      wsEl.innerHTML=`
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px">
+          <div class="rs"><div class="rl">Volume</div><div class="rv">${ws.km||0} km</div></div>
+          <div class="rs"><div class="rl">Runs</div><div class="rv">${ws.runs||0}</div></div>
+          <div class="rs"><div class="rl">Slaap gem</div><div class="rv" style="color:${ws.avg_sleep_h>=7?C.go:ws.avg_sleep_h>=6?C.amber:C.coral}">${ws.avg_sleep_h||'—'}u</div></div>
+          <div class="rs"><div class="rl">Deep gem</div><div class="rv" style="color:${ws.avg_deep_pct>=15?C.go:C.amber}">${ws.avg_deep_pct||'—'}%</div></div>
+          <div class="rs"><div class="rl">HRV</div><div class="rv"><span class="hrv-badge ${ws.hrv_status||''}">${ws.hrv_status||'—'}</span></div></div>
+          <div class="rs"><div class="rl">CTL/Form</div><div class="rv">${ws.ctl||'—'} / ${ws.form||'—'}</div></div>
+          <div class="rs"><div class="rl">Kracht</div><div class="rv" style="color:${ws.strength_count>=2?C.go:ws.strength_count>=1?C.amber:C.coral}">${ws.strength_count||0}/2</div></div>
+          <div class="rs"><div class="rl">Mobiliteit</div><div class="rv" style="color:${ws.mobility_count>=5?C.go:ws.mobility_count>=3?C.amber:C.coral}">${ws.mobility_count||0}/5</div></div>
+        </div>`;
+    }
+    // Sleep debt
+    const sd=DATA.sleepDebt||{};
+    const sdEl=document.getElementById('sleep-debt-display');
+    if(sdEl){
+      const debtColor=sd.debt_hours<3?C.go:sd.debt_hours<6?C.amber:C.coral;
+      sdEl.innerHTML=`
+        <div style="margin-top:8px;text-align:center">
+          <div style="font-family:var(--mono);font-size:36px;font-weight:600;color:${debtColor}">${sd.debt_hours||0}u</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">schuld afgelopen ${sd.days||7} dagen</div>
+          <div style="font-size:11px;color:var(--muted)">gem ${sd.avg_hours||'—'}u/nacht vs ${sd.target||7.5}u doel</div>
+        </div>
+        ${sd.daily?'<div style="display:flex;gap:3px;margin-top:10px;height:40px;align-items:flex-end">'+sd.daily.map(d=>{
+          const pct=Math.min(100,Math.max(10,d.hours/10*100));
+          const col=d.hours>=7.5?C.go:d.hours>=6.5?C.amber:C.coral;
+          return '<div title="'+d.date+': '+d.hours+'u" style="flex:1;height:'+pct+'%;background:'+col+';border-radius:3px;min-height:4px"></div>';
+        }).join('')+'</div>':''}`;
+    }
+    // Gear
+    const gear=DATA.gear||[];
+    const gearEl=document.getElementById('gear-display');
+    if(gearEl){
+      gearEl.innerHTML=gear.length?gear.map(g=>{
+        const pct=Math.min(100,g.km/800*100);
+        const col=g.km>700?C.coral:g.km>500?C.amber:C.go;
+        return `<div style="margin:8px 0">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>${g.name}</span><span style="font-family:var(--mono);color:${col}">${g.km} km</span></div>
+          <div style="height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${col};border-radius:3px"></div></div>
+          <div style="font-size:9px;color:var(--dim);margin-top:2px">${g.activities} activiteiten · ${g.km>700?'vervangen!':g.km>500?'binnenkort vervangen':'OK'}</div>
+        </div>`;
+      }).join(''):'<div style="color:var(--muted);font-size:12px;margin-top:8px">Geen actieve schoenen gevonden in Garmin.</div>';
     }
     loadAiFeedback();
   },
@@ -761,6 +820,17 @@ async function init(){
     if(res.ok){const j=await res.json();DATA=Object.assign({},SAMPLE,j);DATA.meta=Object.assign({},SAMPLE.meta,j.meta||{});}
   }catch(e){}
   populate();show('load');
+  // Race countdown
+  const dtr=DATA.meta?.daysToRace;
+  if(dtr){
+    const weeks=Math.floor(dtr/7),days=dtr%7;
+    const taperStart=dtr-21;
+    const lastLong=dtr-14;
+    const cdEl=document.getElementById('race-countdown');
+    if(cdEl)cdEl.innerHTML=`${weeks}w ${days}d to go`+(taperStart>0?` · taper in ${Math.floor(taperStart/7)}w`:'')+(lastLong>0?` · laatste long run in ${Math.floor(lastLong/7)}w`:'');
+  }
+  // Auto-refresh elke 5 minuten
+  setTimeout(()=>location.reload(),300000);
 }
 init();
 </script>

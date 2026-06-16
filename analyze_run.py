@@ -21,32 +21,28 @@ OUT_PATH  = HERE / "ai_feedback.json"
 
 ATHLETE_CONTEXT = """
 Atletenprofiel:
-- Doel: zo snel mogelijk lopen op 11 oktober 2026 — maximale prestatie op basis van de data
-- Max HR: 190 BPM | LTHR: 173–174 BPM
+- Doel: zo snel mogelijk lopen op 11 oktober 2026 — maximale prestatie
+- Plan: Pfitzinger 18/55 hybrid
+- Max HR 190 | LTHR 173–174
 
-Pfitzinger workout-types en doelzones (persoonlijk gekalibreerd):
-- Recovery / Herstel:      121–145 bpm (64–76% max HR) — hersteldagen, shake-out runs
-- Easy / General Aerobic:  140–158 bpm (74–83% max HR) — meeste easy runs
-- Endurance / Long Run:    146–164 bpm (77–86% max HR) — lange duurlopen zonder MP
-- Marathon Pace (MP):      154–168 bpm (81–88% max HR) — MP-segmenten in long runs
-- Lactate Threshold (LT):  166–173 bpm (87–91% max HR) — tempo runs rond LTHR 174
-- VO2max / Intervals:      176–184 bpm (93–97% max HR) — korte snelle intervallen
+Pfitzinger zones:
+- Recovery: <146 bpm
+- General aerobic: 138–156 bpm
+- Long run: 144–161 bpm
+- Marathon pace: 157–169 bpm
+- Lactate threshold: 157–175 bpm
+- VO2max intervals: 179–182 bpm
 
-Cadans per trainingstype (beoordeel NOOIT op run-gemiddelde — altijd in context van intensiteit):
-- Recovery:        155–165 spm (bereik 150–168)
-- Easy/Aerobic:    162–172 spm (bereik 158–175)
-- Long Run:        164–174 spm (bereik 160–176)
-- Marathon Pace:   168–178 spm (bereik 165–180)
-- LT/Tempo:        172–182 spm (bereik 170–185)
-- VO2max/Interval: 178–188 spm (bereik 175–190+)
-Warm-up en cool-down laps tellen NIET mee voor cadansbeoordeling.
+Cadans per type:
+- Recovery/Easy (>5:30/km): 155–172 spm normaal
+- Long run: 164–174 spm
+- MP (<5:00/km): 168–180 spm
+- LT/VO2max: 172–188+ spm
+Gemiddelde cadans per run is misleidend door warm-up — beoordeel altijd in context van intensiteit.
 
-Gebruik ALTIJD bovenstaande zones bij het beoordelen van runs. Categoriseer elke run eerst op type, dan pas op zone-uitvoering.
-Plan: Pfitzinger 18/55 hybrid, 55–70 km/week
-Voorgeschiedenis: marathon DNF door gluteus/piriformis kramp rechts — niet door conditie
-Huidige focus: gluteus-activatie, heupstabiliteit, core (2×/week)
-Cadans: bij easy/recovery (>5:30/km) is 170-175 spm normaal en acceptabel. Bij MP-tempo (<5:00/km) doel 178-180 spm. Bij LT/VO2max >180 spm. Gemiddelde cadans over een run is misleidend door warm-up — beoordeel cadans altijd in context van de intensiteit van dat moment.
-Beenbalans doel: <2% asymmetrie (huidig: ~52% links = 4% afwijking)
+Voorgeschiedenis: marathon DNF door rechter gluteus/piriformis kramp — niet door conditie
+Beenbalans doel: <2% asymmetrie (huidig ~52% links = structurele afwijking)
+Huidige focus: gluteus-activatie rechts, heupstabiliteit, core (2x/week)
 """.strip()
 
 
@@ -127,8 +123,16 @@ def build_prompt(data):
                     act_hrs = [s["hr"] for s in active]
                     act_cads = [s["cad"] for s in active if s.get("cad")]
                     # Check HR drift in actieve blokken (teken van vermoeidheid)
-                    hr_drift = act_hrs[-1] - act_hrs[0] if len(act_hrs) > 1 else 0
-                    drift_str = f" | HR drift actief: {int(hr_drift):+d} bpm ({'vermoeidheid' if hr_drift > 8 else 'stabiel'})" if len(act_hrs) > 1 else ""
+                    # Filter strides uit (plotselinge HR-sprong >15 bpm in laatste 1-2 laps)
+                    core_hrs = list(act_hrs)
+                    while len(core_hrs) > 2 and core_hrs[-1] - core_hrs[-2] > 12:
+                        core_hrs.pop()  # verwijder strides-laps
+                    hr_drift = core_hrs[-1] - core_hrs[0] if len(core_hrs) > 1 else 0
+                    strides_detected = len(core_hrs) < len(act_hrs)
+                    drift_note = 'vermoeidheid' if hr_drift > 8 else 'stabiel'
+                    if strides_detected:
+                        drift_note += f', {len(act_hrs)-len(core_hrs)} strides-laps uitgefilterd'
+                    drift_str = f" | HR drift kern: {int(hr_drift):+d} bpm ({drift_note})" if len(core_hrs) > 1 else ""
                     run_lines.append(
                         f"    Actieve blokken ({len(active)} laps): HR {min(act_hrs)}–{max(act_hrs)} bpm"
                         + (f" | cadans {min(act_cads)}–{max(act_cads)} spm" if act_cads else "")
@@ -153,7 +157,10 @@ Trainingsstatus:
 - Ramp rate: {ramp} ({ramp_note}) | Easy/hard 28d: {easy_hard}
 
 Herstel vandaag:
-- Body Battery: {bb_today.get('charged')} opgeladen / {bb_today.get('drained')} verbruikt ({bb_today.get('level')}) {f"| Slaap: {sleep_today.get('duration_h')}u (deep {sleep_today.get('deep_pct')}%, REM {sleep_today.get('rem_pct')}%)" if sleep_today else ''} {f"| HRV: {hrv_today.get('hrv5')} (status: {hrv_today.get('status')})" if hrv_today else ''} {f"| RHR: {rhr_today.get('rhr')} bpm" if rhr_today else ''} {f"| Stress: {stress_avg}" if stress_avg else ''} {f"| Gewicht: {weight} kg" if weight else ''}
+- Body Battery: +{bb_today.get('charged')} opgeladen vannacht, -{bb_today.get('drained')} verbruikt vandaag, netto {bb_today.get('net', '?')}, status {bb_today.get('level')} (NB: charged/drained zijn dagcijfers, niet het actuele BB-niveau)
+- Slaap: {f"{sleep_today.get('duration_h')}u (deep {sleep_today.get('deep_pct')}%, REM {sleep_today.get('rem_pct')}%, score {sleep_today.get('quality_score','?')})" if sleep_today else 'geen data'}
+- HRV: {f"{hrv_today.get('hrv5')} ms 5min max, weekly avg {hrv_today.get('weekly','?')} ms, status {hrv_today.get('status')}" if hrv_today else 'geen data'}
+- RHR: {f"{rhr_today.get('rhr')} bpm" if rhr_today else 'geen data'} | Stress: {stress_avg or 'geen data'} | Gewicht: {f"{weight} kg" if weight else 'geen data'}
 - Training readiness: {readiness.get('score')} ({readiness.get('level')}) — {readiness.get('feedback') or '—'}
 
 Recente runs (nieuwste eerst):
@@ -161,17 +168,14 @@ Recente runs (nieuwste eerst):
 
 Komende week: {upcoming}
 
-Analyseer als strenge Pfitzinger 18/55 coach. Schrijf als één vloeiende tekst zonder headers.
+Geef een complete Pfitzinger coaching analyse:
+1. Zone-uitvoering — zat de run in de juiste Pfitzinger-zone voor dit type training? Analyseer actieve laps apart van warm-up/cooldown. Strides aan het eind van een run apart beoordelen, niet als HR-drift.
+2. Beenbalans & loopeconomie — L/R balans trend, GCT, vertical oscillation, vertical ratio, stride length, cadans in context van intensiteit (niet gemiddelde cadans over hele run)
+3. Herstelstatus — Body Battery (actueel niveau) + slaapkwaliteit (duur + deep% + REM%) + HRV status en trend vs baseline + training readiness — trek een samenhangend oordeel
+4. Belasting — ACWR, CTL/ATL/form trend, training status — is de opbouw verantwoord voor deze fase van het Pfitzinger-blok?
+5. Als de data ruimte toont (HRV BALANCED, goede slaap, BB hoog, ACWR <1.2): adviseer actief om die ruimte te benutten met een concreet voorstel
 
-Zone-uitvoering: Was de run wat Pfitzinger voorschreef? Noem afwijkingen bij naam — een easy run boven 161 bpm is geen easy run.
-Loopeconomie: Cadans vs 180 spm doel. Beenbalans rechts >1.5% asymmetrie = piriformis risicosignaal. GCT, vertical ratio, step speed loss als efficiëntie-indicators.
-Herstelstatus: Body Battery + slaapkwaliteit (duur + deep% + REM%) + HRV + RHR als één conclusie: hersteld, matig of onderhersteld.
-Belasting: ACWR, CTL/ATL/form, ramp rate. Op schema voor week {week}/{total_weeks}?
-Race predictor: Beweegt de {predicted} richting het doel? Zo niet: wat ontbreekt?
-
-CRUCIAAL: Als de data ruimte toont (HRV BALANCED + Body Battery >70 + ACWR <1.0 + form positief + slaakscore >75) — adviseer dan actief om die ruimte te benutten met een concreet voorstel. Een coach die alleen beschermt bouwt geen marathonlopers.
-
-Analyseer workouts op lap-niveau: negeer warm-up/cool-down voor de kernanalyse. Bij intervaltraining: beoordeel elk actief blok individueel op HR-drift (vermoeidheid) en herstelsnelheid tussen blokken. Geef feedback in drie vaste blokken: 1) STATUS, 2) DIAGNOSE, 3) DIRECTIEF. Geen locaties. Maximaal 5 bondige alinea's. Sluit af met exact één concrete instructie voor de volgende training met specifieke pace, HR-zone of afstand."""
+Geen locaties vermelden. Gebruik concrete cijfers uit de data. Sluit af met één concrete instructie voor de volgende geplande training."""
 
     return prompt
 
@@ -186,20 +190,8 @@ def call_anthropic(prompt):
         },
         json={
             "model":      "claude-sonnet-4-6",
-            "max_tokens": 900,
-            "system": (
-                "Je bent een Pfitzinger 18/55 marathoncoach. Direct en datagedreven. "
-                "Schrijf ALLEEN over afwijkingen en risicos. Wat goed ging benoem je niet. "
-                "Geen uitleg van zones, geen vergelijkingen, geen bevestigingen dat iets klopt. "
-                "Alleen: wat wijkt af, wat betekent dat, wat moet er veranderen. "
-                "Analyseer op lap-niveau: negeer warm-up/cooldown. "
-                "HR-drift tussen intervalblokken is een vermoeidheidssignaal. "
-                "Als data ruimte toont (HRV BALANCED + BB >70 + ACWR <1.0 + form positief): "
-                "adviseer actief opschalen met concreet voorstel. "
-                "Structuur: 1) STATUS (een zin), 2) AFWIJKINGEN (alleen wat niet klopt), "
-                "3) DIRECTIEF (volgende training met specifieke pace/zone/afstand). "
-                "Geen locaties. Max 3 alineas van elk max 40 woorden."
-            ),
+            "max_tokens": 1500,
+            "system": "Je bent een professionele Pfitzinger 18/55 marathoncoach die Garmin-data analyseert. Schrijf in het Nederlands. Geef een complete, datagedreven analyse zoals een elite coach dat na een training zou doen. Wees direct maar grondig — benoem wat goed ging én wat niet. Gebruik concrete cijfers uit de data. Geen locaties vermelden. Sluit af met één concrete instructie voor de volgende training.",
             "messages": [{"role": "user", "content": prompt}],
         },
         timeout=45,
