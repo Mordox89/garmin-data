@@ -746,15 +746,32 @@ def fetch_gear(client):
         data = client.get_gear()
         result = []
         for g in (data if isinstance(data, list) else []):
-            if g.get("gearType") == "SHOE" or "shoe" in (g.get("displayName") or "").lower() or g.get("gearTypePk") == 1:
-                dist = g.get("distanceMeters") or g.get("distance") or 0
-                result.append({
-                    "name": g.get("displayName") or g.get("customMakeModel") or "Schoen",
-                    "km": round(dist / 1000, 1) if dist > 100 else round(dist, 1),
-                    "activities": g.get("activityCount") or 0,
-                    "active": g.get("isActive") or g.get("active") or False,
-                })
-        return [s for s in sorted(result, key=lambda x: x["km"], reverse=True) if s["active"]]
+            # Garmin geeft gearTypePk=1 voor schoenen; ook displayName-fallback
+            is_shoe = (
+                g.get("gearTypePk") == 1
+                or g.get("gearType") == "SHOE"
+                or "shoe" in (g.get("displayName") or "").lower()
+            )
+            if not is_shoe:
+                continue
+            dist = g.get("totalDistance") or g.get("distanceMeters") or g.get("distance") or 0
+            # Garmin geeft afstand soms in meters (>500), soms al in km (<500)
+            km = round(dist / 1000, 1) if dist > 500 else round(dist, 1)
+            # Garmin actief-veld heet gearStatusName ("active") of isActive (bool)
+            status = g.get("gearStatusName") or ""
+            active = (
+                status.lower() == "active"
+                or g.get("isActive") is True
+                or g.get("active") is True
+            )
+            result.append({
+                "name": g.get("displayName") or g.get("customMakeModel") or "Schoen",
+                "km": km,
+                "activities": g.get("activityCount") or 0,
+                "active": active,
+            })
+        # Toon alle schoenen (actief en inactief), gesorteerd op km
+        return sorted(result, key=lambda x: x["km"], reverse=True)
     except Exception as e:
         print(f"Gear fout: {e}")
         return []
