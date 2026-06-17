@@ -138,7 +138,7 @@ def main():
     if not api_key:
         sys.exit("ANTHROPIC_API_KEY niet gevonden. Stel in als omgevingsvariabele of in .env")
 
-    with open(DATA_PATH) as f:
+    with open(DATA_PATH, encoding="utf-8-sig", errors="replace") as f:
         data = json.load(f)
 
     recent = data.get("recentActivities", [])
@@ -175,7 +175,7 @@ def main():
     report["generatedAt"] = datetime.now().isoformat()
     data["coachReport"] = report
 
-    with open(DATA_PATH, "w") as f:
+    with open(DATA_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
     verdict = report.get("lastRun", {}).get("verdict", "—")
