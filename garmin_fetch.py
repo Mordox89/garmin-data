@@ -739,55 +739,6 @@ def build_week_summary(recent_acts, sleep_data, hrv_data, training_load, strengt
         "form": training_load[-1].get("form") if training_load else None,
     }
 
-# ── Schoen kilometerstand ─────────────────────────────────────────────────────
-def fetch_gear(client):
-    """Haalt schoenen/gear op met kilometerstand."""
-    try:
-        raw = client.get_gear()
-        # garminconnect geeft een dict met "gear" lijst of direct een lijst
-        if isinstance(raw, dict):
-            items = raw.get("gear") or raw.get("gearList") or []
-        elif isinstance(raw, list):
-            items = raw
-        else:
-            items = []
-        result = []
-        for g in items:
-            # Twee mogelijke structuren: type/status/stats of gearTypePk/gearStatusName
-            gtype = (g.get("type") or g.get("gearType") or "").lower()
-            is_shoe = (
-                gtype in ("shoes", "shoe", "running_shoe")
-                or g.get("gearTypePk") == 1
-                or "shoe" in (g.get("name") or g.get("displayName") or "").lower()
-            )
-            if not is_shoe:
-                continue
-            # Afstand: MCP geeft stats.total_distance_km, API geeft distanceMeters
-            stats = g.get("stats") or {}
-            km_val = stats.get("total_distance_km") or g.get("total_distance_km")
-            if km_val is None:
-                dist_m = g.get("totalDistance") or g.get("distanceMeters") or g.get("distance") or 0
-                km_val = round(dist_m / 1000, 1) if dist_m > 500 else round(float(dist_m), 1)
-            else:
-                km_val = round(float(km_val), 1)
-            status = (g.get("status") or g.get("gearStatusName") or "").lower()
-            active = (
-                status == "active"
-                or g.get("isActive") is True
-                or g.get("active") is True
-            )
-            result.append({
-                "name": g.get("name") or g.get("full_name") or g.get("displayName") or "Schoen",
-                "full_name": g.get("full_name") or g.get("customMakeModel") or "",
-                "km": km_val,
-                "max_km": g.get("max_distance_km") or 800,
-                "activities": stats.get("total_activities") or g.get("activityCount") or 0,
-                "active": active,
-            })
-        return sorted(result, key=lambda x: x["km"], reverse=True)
-    except Exception as e:
-        print(f"Gear fout: {e}")
-        return []
 
 # ── Efficiency factor ─────────────────────────────────────────────────────────
 def build_ef(recent_acts):
@@ -980,7 +931,6 @@ def main():
         "piriformisRisk":    build_piriformis_risk(recent_acts, sleep_data, training_load),
         "sleepDebt":         build_sleep_debt(sleep_data),
         "weekSummary":       build_week_summary(recent_acts, sleep_data, hrv_data, training_load, build_strength_mobility(all_acts), weeks),
-        "gear":              fetch_gear(client),
     }
 
     out_path = HERE / "data.json"

@@ -274,9 +274,7 @@
     <div class="card c4"><h2><span class="dot am"></span>Slaapschuld<span class="info" tabindex="0">i<span class="tip"><b>Cumulatief slaaptekort over de laatste 7 dagen vs 7.5u/nacht doel.</b> Meer dan 5u schuld = merkbaar prestatie- en herstelverlies.</span></span></h2><div class="cap">Cumulatief slaaptekort laatste 7 dagen vs 7.5u/nacht doel.</div>
       <div id="sleep-debt-display"></div>
     </div>
-    <div class="card c4"><h2><span class="dot cy"></span>Schoenen<span class="info" tabindex="0">i<span class="tip"><b>Kilometerstand van je actieve hardloopschoenen.</b> Vervang na 500-800 km afhankelijk van het model. Carbon schoenen eerder.</span></span></h2><div class="cap">Kilometerstand actieve schoenen — vervang na 500–800 km.</div>
-      <div id="gear-display"></div>
-    </div>
+
 
   </div></div>
 
@@ -344,7 +342,7 @@ const SAMPLE={
   pmc:{dates:[],ctl:[],atl:[],form:[],acwr:[]},
   volume:{labels:[],done:[]},
   zones:[],week7:[],ef:[],
-  recentActivities:[],bodyBattery:[],sleep:[],hrv:[],rhr:[],stress:[],weight:[],vo2:[],longRuns:[],ltRuns:[],strengthMobility:{},piriformisRisk:{score:0,level:'—',factors:[]},sleepDebt:{debt_hours:0,avg_hours:0},weekSummary:{},gear:[],
+  recentActivities:[],bodyBattery:[],sleep:[],hrv:[],rhr:[],stress:[],weight:[],vo2:[],longRuns:[],ltRuns:[],strengthMobility:{},piriformisRisk:{score:0,level:'—',factors:[]},sleepDebt:{debt_hours:0,avg_hours:0},weekSummary:{},
   racePredictions:{},trainingReadiness:{},weeks:{}
 };
 let DATA=SAMPLE;
@@ -622,19 +620,6 @@ const builders={
         }).join('')+'</div>':''}`;
     }
     // Gear
-    const gear=DATA.gear||[];
-    const gearEl=document.getElementById('gear-display');
-    if(gearEl){
-      gearEl.innerHTML=gear.length?gear.map(g=>{
-        const pct=Math.min(100,g.km/800*100);
-        const col=g.km>700?C.coral:g.km>500?C.amber:C.go;
-        return `<div style="margin:8px 0">
-          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>${g.name}</span><span style="font-family:var(--mono);color:${col}">${g.km} km</span></div>
-          <div style="height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${col};border-radius:3px"></div></div>
-          <div style="font-size:9px;color:var(--dim);margin-top:2px">${g.activities} activiteiten · ${g.km>700?'vervangen!':g.km>500?'binnenkort vervangen':'OK'}</div>
-        </div>`;
-      }).join(''):'<div style="color:var(--muted);font-size:12px;margin-top:8px">Geen actieve schoenen gevonden in Garmin.</div>';
-    }
     loadAiFeedback();
   },
   body(){
