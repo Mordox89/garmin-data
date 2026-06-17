@@ -1046,8 +1046,8 @@
     {
       "date": "2026-06-17",
       "charged": 55,
-      "drained": 53,
-      "net": 2,
+      "drained": 62,
+      "net": -7,
       "level": null
     }
   ],
@@ -1470,7 +1470,7 @@
     },
     {
       "date": "2026-06-17",
-      "avg_stress": 25
+      "avg_stress": 30
     }
   ],
   "weight": [
@@ -1743,209 +1743,5 @@
     "mobility_count": 0,
     "ctl": 679.0,
     "form": -153.0
-  },
-  "coachReport": {
-    "generatedAt": "2026-06-17T12:35:20.792934",
-    "lastRun": {
-      "verdict": "voldoende",
-      "summary": "Solide aerobe 16km in Copenhagen binnen de GA-zone, maar verhoogde GCT en step speed loss wijzen op vermoeidheidsaccumulatie. Het forse negatieve TSB van -153 is het grootste aandachtspunt."
-    },
-    "sections": [
-      {
-        "id": "zone",
-        "title": "Zone-uitvoering",
-        "icon": "heart-rate-monitor",
-        "verdict": "goed",
-        "metrics": [
-          {
-            "label": "Gemiddelde hartslag",
-            "value": "149",
-            "unit": "bpm",
-            "delta": "-3 bpm t.o.v. run -1",
-            "deltaDir": "pos"
-          },
-          {
-            "label": "Max hartslag",
-            "value": "160",
-            "unit": "bpm",
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "Tempo",
-            "value": "5:36",
-            "unit": "/km",
-            "delta": "+2 sec/km t.o.v. run -1",
-            "deltaDir": "neg"
-          },
-          {
-            "label": "GA-zone naleving (138-156 bpm)",
-            "value": "grotendeels correct",
-            "unit": null,
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "Trainingsload",
-            "value": "193",
-            "unit": "AU",
-            "delta": null,
-            "deltaDir": null
-          }
-        ],
-        "insight": "De gemiddelde HR van 149 bpm valt netjes in de Pfitzinger GA-zone (138-156 bpm), wat aangeeft dat de intensiteit correct was gedoseerd. De max HR van 160 bpm toont korte uitschieters net boven de zone, waarschijnlijk bij klimstukken of versnellingen — geen structureel probleem. Het tempo van 5:36/km is 2 seconden langzamer dan run -1 bij lagere HR, wat een lichte verzwaring van de aerobe inspanning suggereert door cumulatieve vermoeidheid."
-      },
-      {
-        "id": "economy",
-        "title": "Loopeconomie",
-        "icon": "lightning-bolt",
-        "verdict": "aandacht",
-        "metrics": [
-          {
-            "label": "GCT",
-            "value": "275.9",
-            "unit": "ms",
-            "delta": "+18.2 ms t.o.v. run -1 (257.7ms)",
-            "deltaDir": "neg"
-          },
-          {
-            "label": "Vertical ratio",
-            "value": "8.39",
-            "unit": "%",
-            "delta": "+0.79% t.o.v. run -1 (7.6%)",
-            "deltaDir": "neg"
-          },
-          {
-            "label": "Step speed loss",
-            "value": "6.2",
-            "unit": "%",
-            "delta": "+2.2% t.o.v. run -1 (4.0%)",
-            "deltaDir": "neg"
-          },
-          {
-            "label": "Cadans",
-            "value": "162",
-            "unit": "spm",
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "Staplengte",
-            "value": "108.1",
-            "unit": "cm",
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "Vertical oscillatie",
-            "value": "9.2",
-            "unit": "cm",
-            "delta": null,
-            "deltaDir": null
-          }
-        ],
-        "insight": "De GCT van 275.9 ms is significant gestegen ten opzichte van run -1 (+18.2 ms) en zelfs run -2 (265.5 ms) — een duidelijk signaal van neuromusculaire vermoeidheid. De vertical ratio van 8.39% is eveneens verslechterd: meer energie gaat verloren aan verticale beweging in plaats van voorwaartse propulsie. De step speed loss van 6.2% is zorgwekkend hoog; bij een uitgeruste atleet verwacht je waarden onder 3-4%. Cadans van 162 spm is aan de lage kant voor Pfitzinger-methodiek — streven naar 168-172 spm zou de GCT en vertical ratio passief verbeteren."
-      },
-      {
-        "id": "balance",
-        "title": "Loopbalans",
-        "icon": "scale",
-        "verdict": "aandacht",
-        "metrics": [
-          {
-            "label": "Beenbalans links",
-            "value": "52.0",
-            "unit": "%",
-            "delta": "+0.2% t.o.v. run -1 (51.8%)",
-            "deltaDir": "neg"
-          },
-          {
-            "label": "Asymmetrie",
-            "value": "2.0",
-            "unit": "%",
-            "delta": "stabiel verhoogd (run -2: 2.7%)",
-            "deltaDir": "neu"
-          },
-          {
-            "label": "Piriformis risico",
-            "value": "34",
-            "unit": "/100 (matig)",
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "7-daags balansgemiddelde",
-            "value": "52.4",
-            "unit": "% links",
-            "delta": null,
-            "deltaDir": null
-          }
-        ],
-        "insight": "Een beenbalans van 52.0% links houdt een consistente overbelasting van het linkerbeen in stand over alle drie gemeten runs. De asymmetrie daalt licht van 2.7% naar 2.0%, maar blijft boven de drempel van 1.5% die Pfitzinger als acceptabel beschouwt voor langdurige training. Het piriformis risico van 34/100 is matig maar wordt versterkt door slaaptekort en cumulatieve vermoeidheid. Voer dagelijks enkelzijdige glute-activatie oefeningen uit (single-leg deadlift, clamshells) om de rechterzijtrekking te corrigeren."
-      },
-      {
-        "id": "recovery",
-        "title": "Herstel & Belastingsbalans",
-        "icon": "battery",
-        "verdict": "zorg",
-        "metrics": [
-          {
-            "label": "HRV status",
-            "value": "BALANCED",
-            "unit": null,
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "Slaapgemiddelde (7d)",
-            "value": "7.0",
-            "unit": "u/nacht",
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "Slaapschuld",
-            "value": "3.7",
-            "unit": "uur",
-            "delta": null,
-            "deltaDir": "neg"
-          },
-          {
-            "label": "CTL (fitness)",
-            "value": "679",
-            "unit": "AU",
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "ATL (vermoeidheid)",
-            "value": "832",
-            "unit": "AU",
-            "delta": null,
-            "deltaDir": "neg"
-          },
-          {
-            "label": "Form/TSB",
-            "value": "-153",
-            "unit": "AU",
-            "delta": null,
-            "deltaDir": "neg"
-          },
-          {
-            "label": "ACWR",
-            "value": "1.2",
-            "unit": null,
-            "delta": null,
-            "deltaDir": "neu"
-          }
-        ],
-        "insight": "Een TSB van -153 is extreem negatief en het meest alarmerende cijfer in dit rapport — dit overschrijdt ruimschoots de rode zone (onder -30 is al risicovol). De ATL van 832 versus CTL van 679 toont aan dat het trainingsvolume de aanpassingscapaciteit fors overtreft. De ACWR van 1.2 suggereert een matige overbelasting, maar in combinatie met de slaapschuld van 3.7 uur en de verslechterde loopeconomie is het totaalplaatje zorgwekkend. HRV staat op BALANCED, wat enige buffercapaciteit aangeeft, maar dit kan vertraagd reageren op cumulatieve overbelasting."
-      }
-    ],
-    "conclusion": {
-      "verdict": "zorg",
-      "text": "Reduceer de trainingsbelasting de komende 48 uur drastisch: geen kwaliteitssessies, maximum één korte herstelloop van 6-8 km onder 140 bpm of volledige rustdag. Prioriteer slaap boven aanvullende training — streef naar minimaal 8.5 uur per nacht om de slaapschuld van 3.7 uur te reduceren. Het TSB van -153 vereist actief herstelbeleid; zonder interventie neemt het blessurerisico (met name piriformis/IT-band links) significant toe. Voer geen tweede drempeltraining in deze week in."
-    },
-    "nextSessionAdvice": "Volgende sessie: maximaal 8 km herstelloop bij 135-142 bpm (onder GA-drempelwaarde), vlak parcours, tempo 6:00-6:15/km. Focus op cadans richting 168 spm om GCT passief te verlagen. Voer vooraf 5 min glute-activatie uit (clamshells + single-leg glute bridge) om de linker-rechter asymmetrie te adresseren. Controleer HRV bij het wakker worden — bij een daling van meer dan 10% ten opzichte van baseline: volledige rustdag inlassen."
   }
 }

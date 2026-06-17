@@ -37,6 +37,9 @@ jobs:
   deploy:
     needs: ai-feedback
     runs-on: ubuntu-latest
+    concurrency:
+      group: pages-deployment
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
