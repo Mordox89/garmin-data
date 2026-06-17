@@ -810,11 +810,47 @@ function loadAiFeedback(){
   root.innerHTML=h;
 }
 
-async function init(){
+// Laadstatus banner
+function setLoadBanner(msg, color){
+  let b=document.getElementById('load-banner');
+  if(!b){
+    b=document.createElement('div');
+    b.id='load-banner';
+    b.style.cssText='position:fixed;bottom:12px;right:12px;padding:8px 14px;border-radius:8px;font-size:12px;z-index:9999;transition:opacity .4s';
+    document.body.appendChild(b);
+  }
+  b.textContent=msg;
+  b.style.background=color==='ok'?'rgba(34,197,94,.15)':color==='warn'?'rgba(245,158,11,.15)':'rgba(239,68,68,.15)';
+  b.style.color=color==='ok'?'#4ade80':color==='warn'?'#fbbf24':'#f87171';
+  b.style.border='0.5px solid '+(color==='ok'?'rgba(34,197,94,.3)':color==='warn'?'rgba(245,158,11,.3)':'rgba(239,68,68,.3)');
+  b.style.opacity='1';
+  if(color==='ok')setTimeout(()=>{b.style.opacity='0';},3000);
+}
+
+async function fetchData(attempt=1){
+  const MAX=4;
+  const DELAYS=[0,8000,20000,40000];
   try{
-    const res=await fetch('data.json',{cache:'no-store'});
-    if(res.ok){const j=await res.json();DATA=Object.assign({},SAMPLE,j);DATA.meta=Object.assign({},SAMPLE.meta,j.meta||{});}
-  }catch(e){}
+    if(attempt>1)setLoadBanner(`Data laden… poging ${attempt}/${MAX}`, 'warn');
+    const res=await fetch('data.json?_='+Date.now(),{cache:'no-store'});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const j=await res.json();
+    DATA=Object.assign({},SAMPLE,j);
+    DATA.meta=Object.assign({},SAMPLE.meta,j.meta||{});
+    if(attempt>1)setLoadBanner('Data geladen ✓','ok');
+    return true;
+  }catch(e){
+    if(attempt<MAX){
+      await new Promise(r=>setTimeout(r,DELAYS[attempt]));
+      return fetchData(attempt+1);
+    }
+    setLoadBanner('Data niet beschikbaar — dashboard toont voorbeelddata','err');
+    return false;
+  }
+}
+
+async function init(){
+  await fetchData();
   populate();show('load');
   // Race countdown
   const dtr=DATA.meta?.daysToRace;

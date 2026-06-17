@@ -17,7 +17,7 @@
     "trainingStatus": "PRODUCTIVE_3"
   },
   "kpi": {
-    "adherence": "ï¿½",
+    "adherence": "—",
     "ramp": 84.0,
     "rampNote": "te hoog",
     "rampSt": "warn",
@@ -1046,8 +1046,8 @@
     {
       "date": "2026-06-17",
       "charged": 55,
-      "drained": 46,
-      "net": 9,
+      "drained": 53,
+      "net": 2,
       "level": null
     }
   ],
@@ -1470,7 +1470,7 @@
     },
     {
       "date": "2026-06-17",
-      "avg_stress": 23
+      "avg_stress": 25
     }
   ],
   "weight": [
