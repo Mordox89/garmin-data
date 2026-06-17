@@ -744,6 +744,10 @@ def fetch_gear(client):
     """Haalt schoenen/gear op met kilometerstand."""
     try:
         data = client.get_gear()
+        print(f"  Gear API response type: {type(data).__name__}, waarde: {str(data)[:200]}")
+        # get_gear() kan een lijst of een dict met 'gearList' teruggeven
+        if isinstance(data, dict):
+            data = data.get("gearList") or data.get("gear") or []
         result = []
         for g in (data if isinstance(data, list) else []):
             # Garmin geeft gearTypePk=1 voor schoenen; ook displayName-fallback
