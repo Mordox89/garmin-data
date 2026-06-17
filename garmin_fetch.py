@@ -743,38 +743,47 @@ def build_week_summary(recent_acts, sleep_data, hrv_data, training_load, strengt
 def fetch_gear(client):
     """Haalt schoenen/gear op met kilometerstand."""
     try:
-        data = client.get_gear()
-        print(f"  Gear API response type: {type(data).__name__}, waarde: {str(data)[:200]}")
-        # get_gear() kan een lijst of een dict met 'gearList' teruggeven
-        if isinstance(data, dict):
-            data = data.get("gearList") or data.get("gear") or []
+        raw = client.get_gear()
+        # garminconnect geeft een dict met "gear" lijst of direct een lijst
+        if isinstance(raw, dict):
+            items = raw.get("gear") or raw.get("gearList") or []
+        elif isinstance(raw, list):
+            items = raw
+        else:
+            items = []
         result = []
-        for g in (data if isinstance(data, list) else []):
-            # Garmin geeft gearTypePk=1 voor schoenen; ook displayName-fallback
+        for g in items:
+            # Twee mogelijke structuren: type/status/stats of gearTypePk/gearStatusName
+            gtype = (g.get("type") or g.get("gearType") or "").lower()
             is_shoe = (
-                g.get("gearTypePk") == 1
-                or g.get("gearType") == "SHOE"
-                or "shoe" in (g.get("displayName") or "").lower()
+                gtype in ("shoes", "shoe", "running_shoe")
+                or g.get("gearTypePk") == 1
+                or "shoe" in (g.get("name") or g.get("displayName") or "").lower()
             )
             if not is_shoe:
                 continue
-            dist = g.get("totalDistance") or g.get("distanceMeters") or g.get("distance") or 0
-            # Garmin geeft afstand soms in meters (>500), soms al in km (<500)
-            km = round(dist / 1000, 1) if dist > 500 else round(dist, 1)
-            # Garmin actief-veld heet gearStatusName ("active") of isActive (bool)
-            status = g.get("gearStatusName") or ""
+            # Afstand: MCP geeft stats.total_distance_km, API geeft distanceMeters
+            stats = g.get("stats") or {}
+            km_val = stats.get("total_distance_km") or g.get("total_distance_km")
+            if km_val is None:
+                dist_m = g.get("totalDistance") or g.get("distanceMeters") or g.get("distance") or 0
+                km_val = round(dist_m / 1000, 1) if dist_m > 500 else round(float(dist_m), 1)
+            else:
+                km_val = round(float(km_val), 1)
+            status = (g.get("status") or g.get("gearStatusName") or "").lower()
             active = (
-                status.lower() == "active"
+                status == "active"
                 or g.get("isActive") is True
                 or g.get("active") is True
             )
             result.append({
-                "name": g.get("displayName") or g.get("customMakeModel") or "Schoen",
-                "km": km,
-                "activities": g.get("activityCount") or 0,
+                "name": g.get("name") or g.get("full_name") or g.get("displayName") or "Schoen",
+                "full_name": g.get("full_name") or g.get("customMakeModel") or "",
+                "km": km_val,
+                "max_km": g.get("max_distance_km") or 800,
+                "activities": stats.get("total_activities") or g.get("activityCount") or 0,
                 "active": active,
             })
-        # Toon alle schoenen (actief en inactief), gesorteerd op km
         return sorted(result, key=lambda x: x["km"], reverse=True)
     except Exception as e:
         print(f"Gear fout: {e}")
