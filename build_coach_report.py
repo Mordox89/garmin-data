@@ -77,8 +77,13 @@ def build_prompt(data: dict) -> str:
     bb = data.get("bodyBattery", [])
     bb_latest = bb[-1] if bb else {}
 
-    tl = data.get("pmc", [])
-    tl_latest = tl[-1] if tl else {}
+    pmc = data.get("pmc", {})
+    tl_latest = {
+        "ctl":  pmc.get("ctl",  [None])[-1],
+        "atl":  pmc.get("atl",  [None])[-1],
+        "form": pmc.get("form", [None])[-1],
+        "acwr": pmc.get("acwr", [None])[-1],
+    }
 
     piri = data.get("piriformisRisk", {})
     sleep_debt = data.get("sleepDebt", {})
