@@ -1,41 +1,33 @@
 name: AI Feedback
-
 on:
   push:
     branches: [main]
     paths:
       - 'data.json'
   workflow_dispatch:
-
 concurrency:
   group: main-branch
   cancel-in-progress: false
-
 permissions:
   contents: write
-
 jobs:
   ai-feedback:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
-      - run: pip install requests
-
-      - name: Generate AI feedback
+      - run: pip install anthropic
+      - name: Generate coach rapport
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python analyze_run.py
-
-      - name: Commit ai_feedback.json
+        run: python build_coach_report.py
+      - name: Commit data.json
         run: |
           git config user.name  "telemetry-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add ai_feedback.json
+          git add data.json
           git diff --staged --quiet && echo "Geen wijzigingen" && exit 0
-          git commit -m "AI feedback: $(date -u +%Y-%m-%d)"
+          git commit -m "Coach rapport: $(date -u +%Y-%m-%d)"
           git push
