@@ -17,7 +17,7 @@
     "trainingStatus": "PRODUCTIVE_3"
   },
   "kpi": {
-    "adherence": "�",
+    "adherence": "�",
     "ramp": 84.0,
     "rampNote": "te hoog",
     "rampSt": "warn",
@@ -1744,5 +1744,209 @@
     "ctl": 679.0,
     "form": -153.0
   },
-  "gear": []
+  "gear": [],
+  "coachReport": {
+    "generatedAt": "2026-06-17T08:47:52.757714",
+    "lastRun": {
+      "verdict": "voldoende",
+      "summary": "Solide aerobe 16km in Copenhagen binnen de GA-zone, maar verhoogde vermoeidheidsmarkers (GCT +18ms, step speed loss +2.2%) wijzen op accumulerende belasting. De run is technisch uitgevoerd maar de body reageert zichtbaar op de hoge trainingsdruk."
+    },
+    "sections": [
+      {
+        "id": "zone",
+        "title": "Zone-uitvoering",
+        "icon": "heart-rate-monitor",
+        "verdict": "goed",
+        "metrics": [
+          {
+            "label": "Gemiddeld hartslag",
+            "value": "149",
+            "unit": "bpm",
+            "delta": "-3 bpm t.o.v. run -1",
+            "deltaDir": "pos"
+          },
+          {
+            "label": "Max hartslag",
+            "value": "160",
+            "unit": "bpm",
+            "delta": null,
+            "deltaDir": null
+          },
+          {
+            "label": "Tempo",
+            "value": "5:36",
+            "unit": "/km",
+            "delta": "+2s/km t.o.v. run -1",
+            "deltaDir": "neg"
+          },
+          {
+            "label": "Zone-naleving GA (138-156 bpm)",
+            "value": "Grotendeels compliant",
+            "unit": null,
+            "delta": null,
+            "deltaDir": null
+          },
+          {
+            "label": "HR-drift risico",
+            "value": "Laag — max 160 bpm",
+            "unit": null,
+            "delta": null,
+            "deltaDir": null
+          }
+        ],
+        "insight": "Gemiddeld HR van 149 bpm zit netjes in de Pfitzinger GA-zone (138-156 bpm), en de max van 160 bpm overschrijdt de grens slechts marginaal. Het tempo van 5:36/km is 9s/km langzamer dan run -2, wat correct is voor een herstelgerichte aerobe dag. Er is geen zorgwekkende hartfrequentiedrift zichtbaar — de zone-discipline is goed."
+      },
+      {
+        "id": "economy",
+        "title": "Loopeconomie",
+        "icon": "running",
+        "verdict": "aandacht",
+        "metrics": [
+          {
+            "label": "GCT (grondcontacttijd)",
+            "value": "275.9",
+            "unit": "ms",
+            "delta": "+18.2ms t.o.v. run -1",
+            "deltaDir": "neg"
+          },
+          {
+            "label": "Vertical ratio",
+            "value": "8.39",
+            "unit": "%",
+            "delta": "+0.69% t.o.v. run -1",
+            "deltaDir": "neg"
+          },
+          {
+            "label": "Step speed loss",
+            "value": "6.2",
+            "unit": "%",
+            "delta": "+2.2% t.o.v. run -1",
+            "deltaDir": "neg"
+          },
+          {
+            "label": "Cadans",
+            "value": "162",
+            "unit": "spm",
+            "delta": null,
+            "deltaDir": null
+          },
+          {
+            "label": "Staplengte",
+            "value": "108.1",
+            "unit": "cm",
+            "delta": null,
+            "deltaDir": null
+          },
+          {
+            "label": "Vertical oscillatie",
+            "value": "9.2",
+            "unit": "cm",
+            "delta": null,
+            "deltaDir": null
+          }
+        ],
+        "insight": "De GCT is met 18ms gestegen ten opzichte van run -1 (257ms) en zelfs 10ms boven run -2 (265ms) — dit patroon wijst op vermoeidheid in de heup- en kuitstabilisatoren, niet op technisch falen. De step speed loss van 6.2% is de hoogste in drie runs en bevestigt dit. Cadans van 162 spm is aan de lage kant voor GA-lopen; streef naar 168-172 spm om GCT passief te verkorten zonder extra inspanning."
+      },
+      {
+        "id": "balance",
+        "title": "Loopbalans",
+        "icon": "balance",
+        "verdict": "aandacht",
+        "metrics": [
+          {
+            "label": "Beenbalans links",
+            "value": "52.0",
+            "unit": "%",
+            "delta": "+0.2% t.o.v. run -1",
+            "deltaDir": "neg"
+          },
+          {
+            "label": "Asymmetrie (afwijking van 50%)",
+            "value": "2.0",
+            "unit": "%",
+            "delta": "Stabiel — trend: 52.7% → 51.8% → 52.0%",
+            "deltaDir": "neu"
+          },
+          {
+            "label": "Piriformis risico",
+            "value": "34/100 (matig)",
+            "unit": null,
+            "delta": null,
+            "deltaDir": null
+          },
+          {
+            "label": "Asymmetrie trend (3 runs)",
+            "value": "Persistente linker dominantie",
+            "unit": null,
+            "delta": null,
+            "deltaDir": "neg"
+          }
+        ],
+        "insight": "De beenbalans schommelt consistent rond 52% links over alle drie recente runs — dit is geen toeval maar een structureel compensatiepatroon. Gecombineerd met het piriformis risico van 34/100 en slaaptekort is dit een vroeg signaal dat het rechter been minder kracht absorbeert. Voer vandaag of morgen single-leg glute bridges (3×15 rechts) en clamshells uit als preventieve maatregel."
+      },
+      {
+        "id": "recovery",
+        "title": "Herstelstatus",
+        "icon": "recovery",
+        "verdict": "zorg",
+        "metrics": [
+          {
+            "label": "HRV status",
+            "value": "BALANCED",
+            "unit": null,
+            "delta": null,
+            "deltaDir": "neu"
+          },
+          {
+            "label": "Slaap gemiddeld (7d)",
+            "value": "7.0",
+            "unit": "u/nacht",
+            "delta": null,
+            "deltaDir": null
+          },
+          {
+            "label": "Slaapschuld",
+            "value": "3.7",
+            "unit": "uur",
+            "delta": null,
+            "deltaDir": "neg"
+          },
+          {
+            "label": "CTL (fitness)",
+            "value": "679",
+            "unit": "AU",
+            "delta": null,
+            "deltaDir": null
+          },
+          {
+            "label": "ATL (vermoeidheid)",
+            "value": "832",
+            "unit": "AU",
+            "delta": null,
+            "deltaDir": null
+          },
+          {
+            "label": "Form/TSB",
+            "value": "-153",
+            "unit": "AU",
+            "delta": null,
+            "deltaDir": "neg"
+          },
+          {
+            "label": "ACWR",
+            "value": "1.2",
+            "unit": null,
+            "delta": null,
+            "deltaDir": "neu"
+          }
+        ],
+        "insight": "Een TSB van -153 is uitzonderlijk diep negatief — dit niveau is alleen acceptabel in een bewuste opbouwblok piek, maar verhoogt het blessurerisico significant. De slaapschuld van 3.7 uur ondermijnt spierherstel en HRV-kwaliteit. ACWR van 1.2 is technisch nog veilig (<1.3), maar de combinatie van hoge ATL, slaaptekort en persistent asymmetrie vereist onmiddellijke aandacht. De komende 48 uur zijn kritiek voor herstelbeheer."
+      }
+    ],
+    "conclusion": {
+      "verdict": "aandacht",
+      "text": "De run zelf was goed uitgevoerd binnen de juiste zone, maar de onderliggende herstelstatus vraagt directe actie. Prioriteit de komende 24-48 uur: (1) geen extra trainingsbelasting toevoegen, (2) slaap verlengen naar minimaal 8 uur — dit is je meest effectieve herstelinterventie, (3) voer preventieve krachtoefeningen voor gluteus en piriformis uit (rechts gefocust), en (4) beoordeel of de volgende geplande run intensiteit of volume verlaagd kan worden om TSB richting -100 te brengen."
+    },
+    "nextSessionAdvice": "Plan de volgende training als een echte herstelrun: maximaal 10-12 km op 5:50-6:10/km met HR strikt onder 148 bpm. Geen tempowerk of drempelintervallen totdat TSB boven -120 is. Begin de sessie met 5 minuten dynamische warming-up inclusief heupopeners om de beenbalans te resetten. Controleer na afloop opnieuw GCT — als dit boven 280ms blijft, overweeg een volledige rustdag."
+  }
 }
