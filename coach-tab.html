@@ -1,0 +1,175 @@
+<!-- ═══════════════════════════════════════════════════════
+     AI COACH TAB  —  plak dit in je dashboard HTML
+     Verwacht: window.dashData.coachReport (uit data.json)
+     ═══════════════════════════════════════════════════════ -->
+
+<div id="coach-panel">
+
+  <!-- Leeg/laad-staat -->
+  <div id="coach-empty" style="display:none; padding: 3rem 1rem; text-align: center; color: #888;">
+    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏃</div>
+    <p style="font-size: 14px;">Geen coach rapport beschikbaar.<br>Voer <code>python build_coach_report.py</code> uit na de sync.</p>
+  </div>
+
+  <!-- Rapport container -->
+  <div id="coach-report" style="display:none; max-width: 800px; margin: 0 auto; padding: 0.5rem 0;">
+
+    <!-- Header -->
+    <div id="coach-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding: 14px 18px;
+         background: var(--card-bg, #1a1a1a); border: 0.5px solid var(--border, #333);
+         border-radius: 12px;">
+      <div id="coach-verdict-dot" style="width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;"></div>
+      <div style="flex: 1;">
+        <div id="coach-run-name" style="font-size: 13px; font-weight: 500; color: var(--text, #eee);"></div>
+        <div id="coach-run-summary" style="font-size: 12px; color: var(--text-muted, #999); margin-top: 2px; line-height: 1.5;"></div>
+      </div>
+      <div id="coach-timestamp" style="font-size: 11px; color: var(--text-muted, #999); text-align: right; flex-shrink: 0;"></div>
+    </div>
+
+    <!-- Secties -->
+    <div id="coach-sections" style="display: flex; flex-direction: column; gap: 10px;"></div>
+
+    <!-- Conclusie -->
+    <div id="coach-conclusion" style="margin-top: 10px; border-radius: 12px; overflow: hidden;
+         border: 0.5px solid var(--border, #333);">
+      <div id="coach-conclusion-bar" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 13.01 9 10.01"/>
+        </svg>
+        <span id="coach-conclusion-text" style="font-size: 13px; font-weight: 500;"></span>
+      </div>
+      <div id="coach-next" style="padding: 10px 16px 14px; font-size: 12px; line-height: 1.6;
+           color: var(--text-muted, #999); border-top: 0.5px solid var(--border, #333);"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function() {
+
+  const VERDICT_COLORS = {
+    goed:      { dot: '#22c55e', badge: { bg: '#14532d', text: '#86efac' }, bar: { bg: '#14532d', text: '#86efac' } },
+    voldoende: { dot: '#3b82f6', badge: { bg: '#1e3a5f', text: '#93c5fd' }, bar: { bg: '#1e3a5f', text: '#93c5fd' } },
+    aandacht:  { dot: '#f59e0b', badge: { bg: '#451a03', text: '#fcd34d' }, bar: { bg: '#451a03', text: '#fcd34d' } },
+    zorg:      { dot: '#ef4444', badge: { bg: '#450a0a', text: '#fca5a5' }, bar: { bg: '#450a0a', text: '#fca5a5' } },
+  };
+
+  const SECTION_ICONS = {
+    zone:     `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+    economy:  `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+    balance:  `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+    recovery: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
+  };
+
+  const DELTA_ARROW = { pos: '↑ ', neg: '↓ ', neu: '' };
+  const DELTA_COLOR = { pos: '#22c55e', neg: '#ef4444', neu: '#888' };
+
+  function verdictColors(v) {
+    return VERDICT_COLORS[v] || VERDICT_COLORS['voldoende'];
+  }
+
+  function formatTimestamp(iso) {
+    if (!iso) return '';
+    try {
+      const d = new Date(iso);
+      return d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' }) + ' ' +
+             d.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+    } catch { return iso.slice(0, 16).replace('T', ' '); }
+  }
+
+  function renderMetric(m) {
+    const dc = m.deltaDir ? DELTA_COLOR[m.deltaDir] : '#888';
+    const da = m.deltaDir ? DELTA_ARROW[m.deltaDir] : '';
+    return `
+      <div style="background: var(--metric-bg, #111); border-radius: 8px; padding: 10px 12px; min-width: 0;">
+        <div style="font-size: 11px; color: var(--text-muted, #999); margin-bottom: 2px;">${m.label}</div>
+        <div style="font-size: 17px; font-weight: 500; color: var(--text, #eee); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+          ${m.value}${m.unit ? '<span style="font-size:11px; font-weight:400; margin-left:2px; color:#888;">' + m.unit + '</span>' : ''}
+        </div>
+        ${m.delta ? `<div style="font-size: 11px; color: ${dc}; margin-top: 2px;">${da}${m.delta}</div>` : ''}
+      </div>`;
+  }
+
+  function renderSection(s) {
+    const vc = verdictColors(s.verdict);
+    const icon = SECTION_ICONS[s.id] || SECTION_ICONS['zone'];
+    const metrics = (s.metrics || []).map(renderMetric).join('');
+    const colCount = Math.min(s.metrics?.length || 3, 4);
+
+    return `
+      <div style="background: var(--card-bg, #1a1a1a); border: 0.5px solid var(--border, #333); border-radius: 12px; overflow: hidden;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 11px 16px;
+             border-bottom: 0.5px solid var(--border, #333);">
+          <div style="width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center;
+               justify-content: center; background: ${vc.badge.bg}; color: ${vc.badge.text}; flex-shrink: 0;">
+            ${icon}
+          </div>
+          <span style="font-size: 13px; font-weight: 500; color: var(--text, #eee); flex: 1;">${s.title}</span>
+          <span style="font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 100px;
+               background: ${vc.badge.bg}; color: ${vc.badge.text};">${s.verdict}</span>
+        </div>
+        <div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: grid; grid-template-columns: repeat(${colCount}, minmax(0, 1fr)); gap: 8px;">
+            ${metrics}
+          </div>
+          ${s.insight ? `
+          <div style="font-size: 12px; color: var(--text-muted, #bbb); line-height: 1.6; padding: 8px 12px;
+               border-left: 2px solid var(--border-accent, #444); background: var(--metric-bg, #111); border-radius: 0;">
+            ${s.insight}
+          </div>` : ''}
+        </div>
+      </div>`;
+  }
+
+  function renderReport(report, runName) {
+    const vc = verdictColors(report.lastRun?.verdict);
+    const conclusionVc = verdictColors(report.conclusion?.verdict);
+
+    // Header
+    document.getElementById('coach-verdict-dot').style.background = vc.dot;
+    document.getElementById('coach-run-name').textContent = runName || 'Laatste run';
+    document.getElementById('coach-run-summary').textContent = report.lastRun?.summary || '';
+    document.getElementById('coach-timestamp').textContent = formatTimestamp(report.generatedAt);
+
+    // Secties
+    const sectionsEl = document.getElementById('coach-sections');
+    sectionsEl.innerHTML = (report.sections || []).map(renderSection).join('');
+
+    // Conclusie
+    const bar = document.getElementById('coach-conclusion-bar');
+    bar.style.background = conclusionVc.bar.bg;
+    bar.style.color = conclusionVc.bar.text;
+    document.getElementById('coach-conclusion-text').textContent = report.conclusion?.text || '';
+    document.getElementById('coach-next').innerHTML =
+      '<strong style="color: var(--text, #eee); font-size: 12px;">Volgende sessie:</strong> ' +
+      (report.nextSessionAdvice || '');
+
+    document.getElementById('coach-empty').style.display = 'none';
+    document.getElementById('coach-report').style.display = 'block';
+  }
+
+  function initCoach() {
+    const data = window.dashData;
+    if (!data || !data.coachReport) {
+      document.getElementById('coach-empty').style.display = 'block';
+      return;
+    }
+    const runName = data.recentActivities?.[0]?.name || 'Laatste run';
+    renderReport(data.coachReport, runName);
+  }
+
+  // Wacht tot dashData beschikbaar is (polling als nodig)
+  if (window.dashData) {
+    initCoach();
+  } else {
+    const poll = setInterval(() => {
+      if (window.dashData) { clearInterval(poll); initCoach(); }
+    }, 100);
+    setTimeout(() => clearInterval(poll), 5000);
+  }
+
+})();
+</script>
