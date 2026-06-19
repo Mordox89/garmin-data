@@ -381,6 +381,31 @@ def fetch_scheduled_workouts(client):
     return sorted(result, key=lambda x: x.get("date") or "")
 
 # ── Activiteiten verwerken ────────────────────────────────────────────────────
+def fetch_activity_weather(client, activity_id):
+    """Haalt weerdata op voor een activiteit. Corrigeert Garmin's Fahrenheit-als-Celsius bug."""
+    try:
+        w = client.get_activity_weather(activity_id)
+        if not w:
+            return None
+        temp = w.get("temperature") or w.get("temperatureC") or w.get("apparentTemperature")
+        humidity = w.get("relativeHumidity") or w.get("humidity")
+        wind = w.get("windSpeed")
+        if temp is None:
+            return None
+        # Garmin slaat soms Fahrenheit op als Celsius (waarden >40 zijn verdacht voor hardlopen)
+        if temp > 40:
+            temp = round((temp - 32) * 5 / 9, 1)
+        else:
+            temp = round(float(temp), 1)
+        return {
+            "temp_c": temp,
+            "humidity": round(float(humidity)) if humidity else None,
+            "wind_mps": round(float(wind), 1) if wind else None,
+        }
+    except Exception:
+        return None
+
+
 def process_activities(client, raw_acts):
     recent = []
     weeks  = {}
@@ -498,6 +523,8 @@ def process_activities(client, raw_acts):
             "stride_cm":      round(stride_len, 1)     if stride_len     else None,
             "vert_ratio":     vr,
             "step_speed_loss": round(float(step_spd_loss), 1) if step_spd_loss else None,
+            "elev_gain":      round(a.get("elevationGain") or 0),
+            "weather":        fetch_activity_weather(client, act_id),
             "splits":         splits_out,
         })
 
@@ -739,6 +766,42 @@ def build_week_summary(recent_acts, sleep_data, hrv_data, training_load, strengt
         "form": training_load[-1].get("form") if training_load else None,
     }
 
+# ── Schoen kilometerstand ─────────────────────────────────────────────────────
+def fetch_gear(client):
+    """Haalt schoenen/gear op met kilometerstand."""
+    try:
+        data = client.get_gear()
+        result = []
+        for g in (data if isinstance(data, list) else []):
+            # Garmin geeft gearTypePk=1 voor schoenen; ook displayName-fallback
+            is_shoe = (
+                g.get("gearTypePk") == 1
+                or g.get("gearType") == "SHOE"
+                or "shoe" in (g.get("displayName") or "").lower()
+            )
+            if not is_shoe:
+                continue
+            dist = g.get("totalDistance") or g.get("distanceMeters") or g.get("distance") or 0
+            # Garmin geeft afstand soms in meters (>500), soms al in km (<500)
+            km = round(dist / 1000, 1) if dist > 500 else round(dist, 1)
+            # Garmin actief-veld heet gearStatusName ("active") of isActive (bool)
+            status = g.get("gearStatusName") or ""
+            active = (
+                status.lower() == "active"
+                or g.get("isActive") is True
+                or g.get("active") is True
+            )
+            result.append({
+                "name": g.get("displayName") or g.get("customMakeModel") or "Schoen",
+                "km": km,
+                "activities": g.get("activityCount") or 0,
+                "active": active,
+            })
+        # Toon alle schoenen (actief en inactief), gesorteerd op km
+        return sorted(result, key=lambda x: x["km"], reverse=True)
+    except Exception as e:
+        print(f"Gear fout: {e}")
+        return []
 
 # ── Efficiency factor ─────────────────────────────────────────────────────────
 def build_ef(recent_acts):
@@ -931,6 +994,7 @@ def main():
         "piriformisRisk":    build_piriformis_risk(recent_acts, sleep_data, training_load),
         "sleepDebt":         build_sleep_debt(sleep_data),
         "weekSummary":       build_week_summary(recent_acts, sleep_data, hrv_data, training_load, build_strength_mobility(all_acts), weeks),
+        "gear":              fetch_gear(client),
     }
 
     out_path = HERE / "data.json"

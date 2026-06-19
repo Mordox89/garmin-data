@@ -3,28 +3,28 @@
     "phase": "Week 2/18",
     "week": 2,
     "totalWeeks": 18,
-    "daysToRace": 115,
-    "predicted": "3:44:37",
+    "daysToRace": 114,
+    "predicted": "3:44:53",
     "predictedRange": null,
-    "vo2": 48.6,
-    "updated": "2026-06-18",
+    "vo2": 48.7,
+    "updated": "2026-06-19",
     "live": true,
     "unit": "km",
-    "ctl": 669.0,
-    "atl": 697.0,
-    "form": -28.0,
+    "ctl": 683.0,
+    "atl": 737.0,
+    "form": -54.0,
     "acwr": 1.0,
     "trainingStatus": "PRODUCTIVE_3"
   },
   "kpi": {
-    "adherence": "�",
-    "ramp": 68.0,
+    "adherence": "�",
+    "ramp": 44.0,
     "rampNote": "te hoog",
     "rampSt": "warn",
-    "easyHard": "80% easy",
-    "totalVol": 81.8,
-    "volAvg": 40.9,
-    "readiness": 25
+    "easyHard": "100% easy",
+    "totalVol": 89.8,
+    "volAvg": 44.9,
+    "readiness": 76
   },
   "pmc": {
     "dates": [
@@ -45,7 +45,8 @@
       "2026-06-15",
       "2026-06-16",
       "2026-06-17",
-      "2026-06-18"
+      "2026-06-18",
+      "2026-06-19"
     ],
     "ctl": [
       403.0,
@@ -65,7 +66,8 @@
       665.0,
       650.0,
       679.0,
-      669.0
+      678.0,
+      683.0
     ],
     "atl": [
       695.0,
@@ -85,7 +87,8 @@
       846.0,
       714.0,
       832.0,
-      697.0
+      745.0,
+      737.0
     ],
     "form": [
       -292.0,
@@ -105,7 +108,8 @@
       -181.0,
       -64.0,
       -153.0,
-      -28.0
+      -67.0,
+      -54.0
     ],
     "acwr": [
       1.7,
@@ -125,6 +129,7 @@
       1.2,
       1.0,
       1.2,
+      1.0,
       1.0
     ]
   },
@@ -135,53 +140,45 @@
     ],
     "done": [
       52.0,
-      29.7
+      37.8
     ],
     "plan": []
   },
   "zones": [
     {
       "n": "Recovery",
-      "v": 14,
+      "v": 20,
       "c": "#2f7d52"
     },
     {
       "n": "Easy/Aerobic",
-      "v": 47,
+      "v": 45,
       "c": "#34e07d"
     },
     {
       "n": "Long Run/MP",
-      "v": 33,
+      "v": 30,
       "c": "#45c8e0"
     },
     {
       "n": "LT/Tempo",
-      "v": 5,
+      "v": 4,
       "c": "#ffb43a"
     },
     {
       "n": "VO2max",
-      "v": 2,
+      "v": 1,
       "c": "#ff5e6c"
     }
   ],
   "week7": [
     {
       "d": "Vandaag",
-      "date": "2026-06-18",
+      "date": "2026-06-19",
       "ds": "Training",
       "t": "run",
       "km": null,
-      "completed": false
-    },
-    {
-      "d": "Vr",
-      "date": "2026-06-19",
-      "ds": "Recovery 8km",
-      "t": "run",
-      "km": null,
-      "completed": false
+      "completed": true
     },
     {
       "d": "Za",
@@ -214,16 +211,110 @@
       "t": "run",
       "km": null,
       "completed": false
+    },
+    {
+      "d": "Vr",
+      "date": "2026-06-26",
+      "ds": "Recovery 6km",
+      "t": "run",
+      "km": null,
+      "completed": false
     }
   ],
   "ef": [
-    2.375,
     2.418,
     2.428,
     2.938,
-    2.474
+    2.474,
+    2.526
   ],
   "recentActivities": [
+    {
+      "date": "2026-06-19",
+      "name": "Apeldoorn - Recovery 8km",
+      "activity_id": 23301844030,
+      "dist_km": 8.01,
+      "moving_time_s": 2801,
+      "pace": "5:49/km",
+      "avg_hr": 142,
+      "max_hr": 152,
+      "cadence_spm": 170,
+      "load": 94,
+      "balance_left": 51.9,
+      "gct_ms": 270.0,
+      "vert_osc_cm": 8.5,
+      "stride_cm": 100.6,
+      "vert_ratio": 8.24,
+      "step_speed_loss": 5.6,
+      "elev_gain": 14,
+      "weather": null,
+      "splits": [
+        {
+          "km": 1.0,
+          "pace": "6:10/km",
+          "hr": 133.0,
+          "cad": 165,
+          "power": 331.0,
+          "elev_gain": 1.0
+        },
+        {
+          "km": 1.0,
+          "pace": "5:44/km",
+          "hr": 142.0,
+          "cad": 170,
+          "power": 355.0,
+          "elev_gain": 0.0
+        },
+        {
+          "km": 1.0,
+          "pace": "5:50/km",
+          "hr": 143.0,
+          "cad": 170,
+          "power": 368.0,
+          "elev_gain": 6.0
+        },
+        {
+          "km": 1.0,
+          "pace": "5:46/km",
+          "hr": 140.0,
+          "cad": 171,
+          "power": 359.0,
+          "elev_gain": 0.0
+        },
+        {
+          "km": 1.0,
+          "pace": "5:45/km",
+          "hr": 144.0,
+          "cad": 172,
+          "power": 370.0,
+          "elev_gain": 0.0
+        },
+        {
+          "km": 1.0,
+          "pace": "5:47/km",
+          "hr": 145.0,
+          "cad": 171,
+          "power": 360.0,
+          "elev_gain": 0.0
+        },
+        {
+          "km": 1.0,
+          "pace": "5:51/km",
+          "hr": 145.0,
+          "cad": 169,
+          "power": 367.0,
+          "elev_gain": 7.0
+        },
+        {
+          "km": 1.0,
+          "pace": "5:42/km",
+          "hr": 146.0,
+          "cad": 170,
+          "power": 359.0,
+          "elev_gain": 0.0
+        }
+      ]
+    },
     {
       "date": "2026-06-17",
       "name": "Copenhagen - Aerobic 16km",
@@ -241,6 +332,8 @@
       "stride_cm": 108.1,
       "vert_ratio": 8.39,
       "step_speed_loss": 6.2,
+      "elev_gain": 39,
+      "weather": null,
       "splits": [
         {
           "km": 1.0,
@@ -397,6 +490,8 @@
       "stride_cm": 107.1,
       "vert_ratio": 7.6,
       "step_speed_loss": 4.0,
+      "elev_gain": 23,
+      "weather": null,
       "splits": [
         {
           "km": 1.0,
@@ -593,6 +688,8 @@
       "stride_cm": 108.0,
       "vert_ratio": 7.7,
       "step_speed_loss": 5.3,
+      "elev_gain": 14,
+      "weather": null,
       "splits": [
         {
           "km": 1.0,
@@ -765,6 +862,8 @@
       "stride_cm": 98.4,
       "vert_ratio": 8.27,
       "step_speed_loss": 5.1,
+      "elev_gain": 14,
+      "weather": null,
       "splits": [
         {
           "km": 1.0,
@@ -815,148 +914,9 @@
           "elev_gain": 1.0
         }
       ]
-    },
-    {
-      "date": "2026-06-10",
-      "name": "Apeldoorn - Aerobic 14km",
-      "activity_id": 23195466901,
-      "dist_km": 14.01,
-      "moving_time_s": 4618,
-      "pace": "5:29/km",
-      "avg_hr": 157,
-      "max_hr": 166,
-      "cadence_spm": 168,
-      "load": 199,
-      "balance_left": 52.2,
-      "gct_ms": 267.4,
-      "vert_osc_cm": 8.6,
-      "stride_cm": 107.9,
-      "vert_ratio": 7.76,
-      "step_speed_loss": 5.5,
-      "splits": [
-        {
-          "km": 1.0,
-          "pace": "5:40/km",
-          "hr": 144.0,
-          "cad": 165,
-          "power": 363.0,
-          "elev_gain": 9.0
-        },
-        {
-          "km": 1.0,
-          "pace": "5:31/km",
-          "hr": 153.0,
-          "cad": 167,
-          "power": 362.0,
-          "elev_gain": 0.0
-        },
-        {
-          "km": 1.0,
-          "pace": "5:24/km",
-          "hr": 156.0,
-          "cad": 168,
-          "power": 371.0,
-          "elev_gain": 0.0
-        },
-        {
-          "km": 1.0,
-          "pace": "5:18/km",
-          "hr": 157.0,
-          "cad": 169,
-          "power": 369.0,
-          "elev_gain": 0.0
-        },
-        {
-          "km": 1.0,
-          "pace": "5:21/km",
-          "hr": 155.0,
-          "cad": 169,
-          "power": 370.0,
-          "elev_gain": 1.0
-        },
-        {
-          "km": 1.0,
-          "pace": "5:27/km",
-          "hr": 158.0,
-          "cad": 168,
-          "power": 362.0,
-          "elev_gain": 0.0
-        },
-        {
-          "km": 1.0,
-          "pace": "5:27/km",
-          "hr": 159.0,
-          "cad": 169,
-          "power": 361.0,
-          "elev_gain": 0.0
-        },
-        {
-          "km": 1.0,
-          "pace": "5:32/km",
-          "hr": 159.0,
-          "cad": 168,
-          "power": 370.0,
-          "elev_gain": 0.0
-        },
-        {
-          "km": 1.0,
-          "pace": "5:30/km",
-          "hr": 159.0,
-          "cad": 169,
-          "power": 368.0,
-          "elev_gain": 1.0
-        },
-        {
-          "km": 1.0,
-          "pace": "5:34/km",
-          "hr": 160.0,
-          "cad": 168,
-          "power": 379.0,
-          "elev_gain": 2.0
-        },
-        {
-          "km": 1.0,
-          "pace": "5:32/km",
-          "hr": 156.0,
-          "cad": 168,
-          "power": 387.0,
-          "elev_gain": 4.0
-        },
-        {
-          "km": 1.0,
-          "pace": "5:31/km",
-          "hr": 158.0,
-          "cad": 168,
-          "power": 388.0,
-          "elev_gain": 1.0
-        },
-        {
-          "km": 1.0,
-          "pace": "5:34/km",
-          "hr": 162.0,
-          "cad": 168,
-          "power": 392.0,
-          "elev_gain": 6.0
-        },
-        {
-          "km": 1.0,
-          "pace": "5:27/km",
-          "hr": 160.0,
-          "cad": 167,
-          "power": 378.0,
-          "elev_gain": 1.0
-        }
-      ]
     }
   ],
   "bodyBattery": [
-    {
-      "date": "2026-06-04",
-      "charged": 66,
-      "drained": 55,
-      "net": 11,
-      "level": null
-    },
     {
       "date": "2026-06-05",
       "charged": 51,
@@ -1050,25 +1010,20 @@
     },
     {
       "date": "2026-06-18",
-      "charged": 63,
-      "drained": 13,
-      "net": 50,
+      "charged": 74,
+      "drained": 57,
+      "net": 17,
+      "level": null
+    },
+    {
+      "date": "2026-06-19",
+      "charged": 56,
+      "drained": 24,
+      "net": 32,
       "level": null
     }
   ],
   "sleep": [
-    {
-      "date": "2026-06-04",
-      "duration_h": 6.6,
-      "deep_pct": 8.4,
-      "rem_pct": 19.0,
-      "score": 61,
-      "hrv_avg": 12.0,
-      "quality_score": 61,
-      "dur_ok": false,
-      "deep_ok": false,
-      "rem_ok": false
-    },
     {
       "date": "2026-06-05",
       "duration_h": 7.4,
@@ -1224,18 +1179,21 @@
       "dur_ok": true,
       "deep_ok": false,
       "rem_ok": false
+    },
+    {
+      "date": "2026-06-19",
+      "duration_h": 7.3,
+      "deep_pct": 6.8,
+      "rem_pct": 10.9,
+      "score": 76,
+      "hrv_avg": 13.0,
+      "quality_score": 76,
+      "dur_ok": true,
+      "deep_ok": false,
+      "rem_ok": false
     }
   ],
   "hrv": [
-    {
-      "date": "2026-06-04",
-      "hrv5": 86,
-      "hrv_avg": null,
-      "weekly": 66,
-      "status": "BALANCED",
-      "baseline_low": 59,
-      "baseline_high": 82
-    },
     {
       "date": "2026-06-05",
       "hrv5": 89,
@@ -1352,13 +1310,18 @@
       "status": "BALANCED",
       "baseline_low": 59,
       "baseline_high": 82
+    },
+    {
+      "date": "2026-06-19",
+      "hrv5": 90,
+      "hrv_avg": null,
+      "weekly": 61,
+      "status": "BALANCED",
+      "baseline_low": 59,
+      "baseline_high": 82
     }
   ],
   "rhr": [
-    {
-      "date": "2026-06-04",
-      "rhr": 48
-    },
     {
       "date": "2026-06-05",
       "rhr": 47
@@ -1413,14 +1376,14 @@
     },
     {
       "date": "2026-06-18",
+      "rhr": 48
+    },
+    {
+      "date": "2026-06-19",
       "rhr": 49
     }
   ],
   "stress": [
-    {
-      "date": "2026-06-04",
-      "avg_stress": 20
-    },
     {
       "date": "2026-06-05",
       "avg_stress": 38
@@ -1475,14 +1438,14 @@
     },
     {
       "date": "2026-06-18",
-      "avg_stress": 13
+      "avg_stress": 17
+    },
+    {
+      "date": "2026-06-19",
+      "avg_stress": 14
     }
   ],
   "weight": [
-    {
-      "date": "2026-05-19",
-      "kg": 87.7
-    },
     {
       "date": "2026-05-20",
       "kg": 88.3
@@ -1574,6 +1537,10 @@
     {
       "date": "2026-06-18",
       "kg": 89.0
+    },
+    {
+      "date": "2026-06-19",
+      "kg": 87.1
     }
   ],
   "vo2": [
@@ -1590,19 +1557,19 @@
       "vo2": 48.6
     },
     {
-      "date": "2026-06-18",
-      "vo2": 48.6
+      "date": "2026-06-19",
+      "vo2": 48.7
     }
   ],
   "racePredictions": {
-    "5k": "0:21:52",
-    "10k": "0:45:44",
-    "hm": "1:39:49",
-    "fm": "3:44:37"
+    "5k": "0:21:53",
+    "10k": "0:45:45",
+    "hm": "1:39:51",
+    "fm": "3:44:53"
   },
   "trainingReadiness": {
-    "score": 25,
-    "level": "LOW",
+    "score": 76,
+    "level": "HIGH",
     "feedback": null
   },
   "weeks": {
@@ -1612,9 +1579,9 @@
       "load": 747.1166076660156
     },
     "2": {
-      "km": 29.749958984375,
-      "runs": 2,
-      "load": 435.6761779785156
+      "km": 37.75587890625,
+      "runs": 3,
+      "load": 529.5216979980469
     }
   },
   "longRuns": [
@@ -1681,8 +1648,19 @@
       ]
     },
     "2": {
-      "strength": [],
+      "strength": [
+        {
+          "date": "2026-06-18",
+          "name": "Strength",
+          "duration_s": 1177
+        }
+      ],
       "mobility": [
+        {
+          "date": "2026-06-18",
+          "name": "Mobiliteit",
+          "duration_s": 753
+        },
         {
           "date": "2026-06-17",
           "name": "Mobiliteit",
@@ -1692,25 +1670,19 @@
     }
   },
   "piriformisRisk": {
-    "score": 24,
+    "score": 23,
     "level": "laag",
     "color": "go",
     "factors": [
-      "beenbalans 52.4% L (2.4% asymmetrie)",
-      "slaap 7.0u/nacht (tekort)"
+      "beenbalans 52.3% L (2.3% asymmetrie)"
     ]
   },
   "sleepDebt": {
-    "debt_hours": 4.2,
-    "avg_hours": 6.9,
+    "debt_hours": 2.7,
+    "avg_hours": 7.1,
     "days": 7,
     "target": 7.5,
     "daily": [
-      {
-        "date": "2026-06-12",
-        "hours": 5.8,
-        "deficit": 1.7
-      },
       {
         "date": "2026-06-13",
         "hours": 7.8,
@@ -1740,223 +1712,25 @@
         "date": "2026-06-18",
         "hours": 8.6,
         "deficit": -1.1
+      },
+      {
+        "date": "2026-06-19",
+        "hours": 7.3,
+        "deficit": 0.2
       }
     ]
   },
   "weekSummary": {
     "week": 2,
-    "km": 29.7,
-    "runs": 2,
-    "avg_sleep_h": 6.9,
-    "avg_deep_pct": 13.8,
+    "km": 37.8,
+    "runs": 3,
+    "avg_sleep_h": 7.0,
+    "avg_deep_pct": 12.4,
     "hrv_status": "BALANCED",
-    "strength_count": 0,
-    "mobility_count": 1,
-    "ctl": 669.0,
-    "form": -28.0
+    "strength_count": 1,
+    "mobility_count": 2,
+    "ctl": 683.0,
+    "form": -54.0
   },
-  "coachReport": {
-    "generatedAt": "2026-06-18T10:07:10.063443",
-    "lastRun": {
-      "verdict": "voldoende",
-      "summary": "Een solide aerobe 16km in Kopenhagen met gemiddeld HR 149 bpm netjes binnen de GA-zone, maar de economy-metrics verslechterden ten opzichte van vorige runs. De licht verhoogde GCT en step speed loss vragen aandacht bij een al negatieve form."
-    },
-    "sections": [
-      {
-        "id": "zone",
-        "title": "Zone-uitvoering",
-        "icon": "heart-rate-monitor",
-        "verdict": "goed",
-        "metrics": [
-          {
-            "label": "Gemiddeld HR",
-            "value": "149",
-            "unit": "bpm",
-            "delta": "-3 bpm vs run -1",
-            "deltaDir": "pos"
-          },
-          {
-            "label": "Max HR",
-            "value": "160",
-            "unit": "bpm",
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "Tempo",
-            "value": "5:36",
-            "unit": "/km",
-            "delta": "+2s/km vs run -1",
-            "deltaDir": "neg"
-          },
-          {
-            "label": "HR in GA-zone (138-156)",
-            "value": "binnen zone",
-            "unit": null,
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "Max HR boven GA-plafond",
-            "value": "160 bpm (+4 bpm boven 156)",
-            "unit": "bpm",
-            "delta": null,
-            "deltaDir": "neg"
-          }
-        ],
-        "insight": "Het gemiddelde HR van 149 bpm ligt comfortabel in de Pfitzinger GA-zone (138-156 bpm) — een goede uitvoering voor een aerobe duurloop. De max HR van 160 bpm overschrijdt het GA-plafond licht, wat wijst op een korte inspanningspiek, waarschijnlijk een helling of acceleratie. Tempo is 9s/km langzamer dan run -2 bij vergelijkbaar HR, wat duidt op lichte vermoeidheidsaccumulatie."
-      },
-      {
-        "id": "economy",
-        "title": "Loopeconomie",
-        "icon": "chart-line",
-        "verdict": "aandacht",
-        "metrics": [
-          {
-            "label": "GCT (Ground Contact Time)",
-            "value": "275.9",
-            "unit": "ms",
-            "delta": "+18.2ms vs run -1 | +10.4ms vs run -2",
-            "deltaDir": "neg"
-          },
-          {
-            "label": "Vertical ratio",
-            "value": "8.39",
-            "unit": "%",
-            "delta": "+0.79% vs run -1 | +0.69% vs run -2",
-            "deltaDir": "neg"
-          },
-          {
-            "label": "Vertical oscillatie",
-            "value": "9.2",
-            "unit": "cm",
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "Step speed loss",
-            "value": "6.2",
-            "unit": "%",
-            "delta": "+2.2% vs run -1 | +0.9% vs run -2",
-            "deltaDir": "neg"
-          },
-          {
-            "label": "Cadans",
-            "value": "162",
-            "unit": "spm",
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "Stride length",
-            "value": "108.1",
-            "unit": "cm",
-            "delta": null,
-            "deltaDir": null
-          }
-        ],
-        "insight": "Alle drie de economy-indicatoren verslechterden consistent ten opzichte van beide vorige runs: GCT steeg naar 275.9ms (+18ms vs run -1), vertical ratio naar 8.39% en step speed loss naar 6.2%. Dit patroon — langere grondcontacttijd, meer verticale verspilling en toenemend snelheidsverlies per stap — is een klassiek vermoeidheidssignaal. Cadans van 162 spm is aan de lage kant voor Pfitzinger-aerobe runs; streven naar 168-172 spm kan GCT en vertical ratio verbeteren."
-      },
-      {
-        "id": "balance",
-        "title": "Loopbalans",
-        "icon": "scale-balance",
-        "verdict": "voldoende",
-        "metrics": [
-          {
-            "label": "Beenbalans links",
-            "value": "52.0",
-            "unit": "%",
-            "delta": "+0.2% vs run -1 | -0.7% vs run -2",
-            "deltaDir": "neu"
-          },
-          {
-            "label": "Asymmetrie",
-            "value": "2.0",
-            "unit": "%",
-            "delta": "stabiel rond 2-2.7%",
-            "deltaDir": "neu"
-          },
-          {
-            "label": "Piriformis risico",
-            "value": "24/100 (laag)",
-            "unit": null,
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "Asymmetrie trend (3 runs)",
-            "value": "51.8% → 52.7% → 52.0%",
-            "unit": "links%",
-            "delta": null,
-            "deltaDir": null
-          }
-        ],
-        "insight": "De beenbalans schommelt stabiel tussen 51.8-52.7% links over de laatste drie runs — een consistente lichte linkervoorkeur maar zonder escalerende trend. Het piriformisrisico blijft laag (24/100) ondanks de slaapschuld als bijdragende factor. Zolang de asymmetrie onder 3% blijft en niet toeneemt richting een marathonblok, is actie niet urgent. Blijf piriformis-mobiliteit opnemen in het herstelroutine als preventie."
-      },
-      {
-        "id": "recovery",
-        "title": "Herstel & Form",
-        "icon": "bed-heart",
-        "verdict": "aandacht",
-        "metrics": [
-          {
-            "label": "HRV status",
-            "value": "BALANCED",
-            "unit": null,
-            "delta": null,
-            "deltaDir": "pos"
-          },
-          {
-            "label": "Form / TSB",
-            "value": "-28.0",
-            "unit": null,
-            "delta": null,
-            "deltaDir": "neg"
-          },
-          {
-            "label": "CTL (fitness)",
-            "value": "669.0",
-            "unit": null,
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "ATL (vermoeidheid)",
-            "value": "697.0",
-            "unit": null,
-            "delta": null,
-            "deltaDir": "neg"
-          },
-          {
-            "label": "ACWR",
-            "value": "1.0",
-            "unit": null,
-            "delta": null,
-            "deltaDir": "neu"
-          },
-          {
-            "label": "Slaap gemiddeld (7d)",
-            "value": "6.9",
-            "unit": "u/nacht",
-            "delta": "slaapschuld 4.2u",
-            "deltaDir": "neg"
-          },
-          {
-            "label": "Body battery",
-            "value": "onbekend",
-            "unit": null,
-            "delta": null,
-            "deltaDir": null
-          }
-        ],
-        "insight": "HRV geeft 'BALANCED' aan maar de PMC-data vertelt een ander verhaal: TSB van -28 betekent dat ATL (vermoeidheid) significant boven CTL uitstijgt — je bevindt je in een vermoeidheidsblok. De slaapschuld van 4.2u over 7 dagen is de grootste risicofactor: onvoldoende slaap vertraagt fysiologisch herstel en verklaart deels de verslechterde economy-metrics van vandaag. ACWR van 1.0 is neutraal en vormt geen blessurerisico op zich, maar combineer dit niet met extra intensiteit."
-      }
-    ],
-    "conclusion": {
-      "verdict": "aandacht",
-      "text": "De komende 24-48 uur prioriteit geven aan slaap: minimaal 8-8.5u per nacht om de slaapschuld van 4.2u actief af te bouwen. Voeg geen extra training toe — TSB van -28 vraagt om consolidatie, niet om meer volume. Indien er een herstelrun gepland staat, maximaal 8-10km bij HR onder 145 bpm. Doe vanavond 10 minuten piriformis- en heupmobiliteitsoefeningen."
-    },
-    "nextSessionAdvice": "Volgende training pas uitvoeren als TSB richting -20 beweegt en slaap minimaal 2 nachten goed is geweest (≥8u). Plan een gemakkelijke herstelrun van 10km of een rustdag afhankelijk van hoe ochtend-HRV zich ontwikkelt. Richt cadans bewust op 168+ spm om de GCT-drift uit deze run te corrigeren. Geen tempowerk of LT-intervallen totdat form boven -15 uitkomt."
-  }
+  "gear": []
 }

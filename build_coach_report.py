@@ -61,7 +61,8 @@ Secties:
 - recovery: HRV status, slaap, body battery, form/TSB
 
 Gebruik Nederlandse tekst voor alle waarden. Wees direct en concreet — geen algemeenheden.
-Pfitzinger context: GA zone 138-156 bpm, LT zone 157-175 bpm, marathon pace 154-168 bpm."""
+Pfitzinger context: GA zone 138-156 bpm, LT zone 157-175 bpm, marathon pace 154-168 bpm.
+Weer-context: boven 18°C stijgt HR ~1 bpm per graad bij gelijke inspanning. Boven 22°C is HR-drift deels warmte-effect, geen pure vermoeidheid. Weeg dit mee bij zone-beoordeling."""
 
 
 def build_prompt(data: dict) -> str:
@@ -98,6 +99,8 @@ Tempo: {last.get('pace')} /km
 Gem HR: {last.get('avg_hr')} bpm | Max HR: {last.get('max_hr')} bpm
 Cadans: {last.get('cadence_spm')} spm
 Trainingsload: {last.get('load')}
+Elevation gain: {last.get('elev_gain')} m
+Weer: {f"{last['weather']['temp_c']}°C, {last['weather']['humidity']}% RV, wind {last['weather']['wind_mps']} m/s" if last.get('weather') else 'onbekend'}
 
 Beenbalans links: {last.get('balance_left')}%
 GCT: {last.get('gct_ms')} ms
@@ -107,8 +110,8 @@ Step speed loss: {last.get('step_speed_loss')}%
 Stride length: {last.get('stride_cm')} cm
 
 ## Vorige runs (voor trend)
-Run -1 ({prev.get('date')}): {prev.get('dist_km')}km @ {prev.get('pace')}, HR {prev.get('avg_hr')}, balans {prev.get('balance_left')}%, GCT {prev.get('gct_ms')}ms, vert.ratio {prev.get('vert_ratio')}%, step loss {prev.get('step_speed_loss')}%
-Run -2 ({prev2.get('date')}): {prev2.get('dist_km')}km @ {prev2.get('pace')}, HR {prev2.get('avg_hr')}, balans {prev2.get('balance_left')}%, GCT {prev2.get('gct_ms')}ms, vert.ratio {prev2.get('vert_ratio')}%, step loss {prev2.get('step_speed_loss')}%
+Run -1 ({prev.get('date')}): {prev.get('dist_km')}km @ {prev.get('pace')}, HR {prev.get('avg_hr')}, elev {prev.get('elev_gain')}m, balans {prev.get('balance_left')}%, GCT {prev.get('gct_ms')}ms, vert.ratio {prev.get('vert_ratio')}%, step loss {prev.get('step_speed_loss')}%
+Run -2 ({prev2.get('date')}): {prev2.get('dist_km')}km @ {prev2.get('pace')}, HR {prev2.get('avg_hr')}, elev {prev2.get('elev_gain')}m, balans {prev2.get('balance_left')}%, GCT {prev2.get('gct_ms')}ms, vert.ratio {prev2.get('vert_ratio')}%, step loss {prev2.get('step_speed_loss')}%
 
 ## Herstelstatus
 HRV status: {hrv_latest.get('status')} | HRV waarde: {hrv_latest.get('lastNight5MinHigh')} ms
