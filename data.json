@@ -17,7 +17,7 @@
     "trainingStatus": "PRODUCTIVE_3"
   },
   "kpi": {
-    "adherence": "�",
+    "adherence": "�",
     "ramp": 104.0,
     "rampNote": "te hoog",
     "rampSt": "warn",
@@ -1864,142 +1864,149 @@
   },
   "gear": [],
   "coachReport": {
-    "generatedAt": "2026-06-19T07:29:11.421995",
+    "generatedAt": "2026-06-20T06:37:20.167348",
     "lastRun": {
-      "verdict": "goed",
-      "summary": "Solide recovery-run van 8 km op 5:49/km met HR keurig binnen GA-zone. Alle parameters wijzen op een goed uitgevoerde herstelloop zonder overbelasting."
+      "verdict": "voldoende",
+      "summary": "Solide MP long run van 21 km met een gemiddeld tempo van 5:24/km en HR van 156 bpm, net op de bovengrens van de GA-zone. De uitvoering is technisch verbeterd ten opzichte van vorige runs, maar de extreme vermoeidheidsaccumulatie (TSB -208) vereist directe aandacht."
     },
     "sections": [
       {
         "id": "zone",
         "title": "Zone-uitvoering",
         "icon": "heart-rate-monitor",
-        "verdict": "goed",
+        "verdict": "voldoende",
         "metrics": [
           {
             "label": "Gemiddelde HR",
-            "value": "142",
+            "value": "156",
             "unit": "bpm",
-            "delta": "-7 bpm t.o.v. run -1",
-            "deltaDir": "pos"
+            "delta": "+14 bpm t.o.v. run -1 (GA herstelrun)",
+            "deltaDir": "neg"
           },
           {
             "label": "Max HR",
-            "value": "152",
+            "value": "166",
             "unit": "bpm",
-            "delta": null,
-            "deltaDir": null
-          },
-          {
-            "label": "GA-zone naleving (138-156 bpm)",
-            "value": "volledig binnen zone",
-            "unit": null,
             "delta": null,
             "deltaDir": null
           },
           {
             "label": "Tempo",
-            "value": "5:49",
+            "value": "5:24",
             "unit": "/km",
-            "delta": "+13 sec t.o.v. run -1",
+            "delta": "-25 sec/km t.o.v. run -1",
             "deltaDir": "pos"
           },
           {
-            "label": "Elevation gain",
-            "value": "14",
-            "unit": "m",
-            "delta": "-25 m t.o.v. run -1",
-            "deltaDir": "neu"
+            "label": "HR-zone naleving",
+            "value": "Bovengrens GA / onderkant MP-zone",
+            "unit": null,
+            "delta": null,
+            "deltaDir": null
+          },
+          {
+            "label": "Trainingsload",
+            "value": "265",
+            "unit": "AU",
+            "delta": null,
+            "deltaDir": null
           }
         ],
-        "insight": "HR van 142 bpm zit precies in het lagere deel van de GA-zone — ideaal voor een recovery-run. Het rustigere tempo (+13 sec/km) ten opzichte van run -1 is correct gedisciplineerd gedrag: het lichaam krijgt ruimte om te herstellen zonder de Form/TSB verder te verzwaren. Geen HR-drift zichtbaar bij deze vlakke route, wat bevestigt dat de inspanning gecontroleerd was."
+        "insight": "Een HR van 156 bpm bij 5:24/km tempo zit precies op de grens van GA (138-156) en de onderkant van marathon pace zone (154-168 bpm) — dit is acceptabel voor een MP long run. De max HR van 166 bpm suggereert enkele pieken boven MP-zone, maar gezien het vlakke profiel (21 m stijging) is dit waarschijnlijk het gevolg van cumulatieve vermoeidheid eerder in de run dan van slechte pacinng. Zonder weersdata kan warmte-effect niet worden uitgesloten; bij temperaturen boven 22°C zou een HR van 156 bpm effectief lager biologisch belastend zijn."
       },
       {
         "id": "economy",
         "title": "Loopeconomie",
-        "icon": "lightning-bolt",
-        "verdict": "voldoende",
+        "icon": "running",
+        "verdict": "goed",
         "metrics": [
           {
             "label": "Cadans",
-            "value": "170",
+            "value": "169",
             "unit": "spm",
             "delta": null,
             "deltaDir": null
           },
           {
             "label": "GCT",
-            "value": "270.0",
+            "value": "248.1",
             "unit": "ms",
-            "delta": "-5.9 ms t.o.v. run -1",
+            "delta": "-21.9 ms t.o.v. run -1 | -27.8 ms t.o.v. run -2",
             "deltaDir": "pos"
           },
           {
             "label": "Vertical ratio",
-            "value": "8.24",
+            "value": "7.74",
             "unit": "%",
-            "delta": "-0.15% t.o.v. run -1",
+            "delta": "-0.50% t.o.v. run -1 | -0.65% t.o.v. run -2",
             "deltaDir": "pos"
           },
           {
+            "label": "Vertical oscillatie",
+            "value": "8.8",
+            "unit": "cm",
+            "delta": null,
+            "deltaDir": null
+          },
+          {
             "label": "Step speed loss",
-            "value": "5.6",
+            "value": "5.3",
             "unit": "%",
-            "delta": "-0.6% t.o.v. run -1",
+            "delta": "-0.3% t.o.v. run -1 | -0.9% t.o.v. run -2",
             "deltaDir": "pos"
           },
           {
             "label": "Stride length",
-            "value": "100.6",
+            "value": "110.8",
             "unit": "cm",
             "delta": null,
             "deltaDir": null
           }
         ],
-        "insight": "GCT van 270 ms en vertical ratio van 8.24% zijn licht verbeterd ten opzichte van run -1, wat positief is gezien het langzamere tempo — bij een recovery-run verwacht je doorgaans hogere waarden. Cadans van 170 spm is aan de lage kant voor Pfitzinger-normen (ideaal ≥174 spm); bij kwaliteitstrainingen verdient dit aandacht. Step speed loss van 5.6% is acceptabel voor een easy run maar lag bij run -2 (snellere GA-run) al op 4.0% — volg dit bij volgende intensere sessies."
+        "insight": "Opvallend: alle economie-metrics verbeteren consistent over drie runs terwijl het tempo stijgt — GCT daalt van 275.9 naar 248.1 ms, vertical ratio van 8.39% naar 7.74%, en step speed loss van 6.2% naar 5.3%. Dit is een sterk signaal van verbeterende loopefficiëntie op hogere belasting. Cadans van 169 spm ligt aan de lage kant voor marathon tempo; een lichte verhoging naar 172-175 spm zou de stride length iets kunnen comprimeren en impact reduceren, wat bij de huidige hoge vermoeidheidsaccumulatie bescherming biedt."
       },
       {
         "id": "balance",
-        "title": "Loopbalans",
-        "icon": "scale",
-        "verdict": "goed",
+        "title": "Beenbalans & Blessurerisiico",
+        "icon": "balance",
+        "verdict": "aandacht",
         "metrics": [
           {
             "label": "Beenbalans links",
-            "value": "51.9",
+            "value": "54.0",
             "unit": "%",
-            "delta": "-0.1% t.o.v. run -1",
-            "deltaDir": "pos"
+            "delta": "+2.1% t.o.v. run -1 (51.9%) | +2.0% t.o.v. run -2 (52.0%)",
+            "deltaDir": "neg"
           },
           {
             "label": "Asymmetrie",
-            "value": "1.9%",
-            "unit": null,
-            "delta": "stabiel over 3 runs",
-            "deltaDir": "neu"
+            "value": "4.0",
+            "unit": "% linksoverschot",
+            "delta": "+2.0% t.o.v. vorige runs (~2%)",
+            "deltaDir": "neg"
           },
           {
             "label": "Piriformis risico",
-            "value": "23/100",
+            "value": "25/100",
             "unit": null,
             "delta": null,
             "deltaDir": null
           },
           {
-            "label": "Trend (3 runs)",
-            "value": "52.0 → 51.8 → 51.9%",
-            "unit": "links",
+            "label": "Risico trend",
+            "value": "Stijgend door toegenomen asymmetrie bij hogere belasting",
+            "unit": null,
             "delta": null,
             "deltaDir": null
           }
         ],
-        "insight": "Beenbalans van 51.9% links is consistent stabiel over de laatste drie runs (bandbreedte 0.2%) — dit is geen verslechtering maar een structurele lichte voorkeur voor links. Piriformis risico van 23/100 is laag en geeft geen directe aanleiding tot zorg. Zolang de asymmetrie onder 2.5% blijft en er geen klachten zijn in heup of bil, hoeft geen actie ondernomen te worden."
+        "insight": "De beenbalans is bij de MP long run opgelopen naar 54.0% links — een stijging van 2% ten opzichte van de twee vorige runs die beide op ~52% zaten. Bij een hogere intensiteit en langere duur neemt de linksoverbelasting dus toe, wat een patroon is dat op vermoeidheid gebaseerde compensatie suggereert. Het piriformis risico staat formeel op 25/100 (laag), maar de asymmetrie van 4% bij MP-tempo verdient bewaking: als dit bij de komende long runs boven 54-55% blijft, is gerichte heup- en bilkrachtoefeningen aan te raden. Focus post-run op unilaterale krachtoefeningen rechts (single-leg deadlift, step-up rechts)."
       },
       {
         "id": "recovery",
-        "title": "Herstel & Belasting",
-        "icon": "battery",
-        "verdict": "aandacht",
+        "title": "Herstel & Belastingbalans",
+        "icon": "recovery",
+        "verdict": "zorg",
         "metrics": [
           {
             "label": "HRV status",
@@ -2010,54 +2017,54 @@
           },
           {
             "label": "Slaap gemiddeld (7d)",
-            "value": "7.1",
+            "value": "6.9",
             "unit": "u/nacht",
             "delta": null,
             "deltaDir": null
           },
           {
             "label": "Slaapschuld",
-            "value": "2.7",
+            "value": "4.1",
             "unit": "uur",
             "delta": null,
             "deltaDir": null
           },
           {
             "label": "CTL (fitness)",
-            "value": "683",
-            "unit": null,
+            "value": "729",
+            "unit": "AU",
             "delta": null,
             "deltaDir": null
           },
           {
             "label": "ATL (vermoeidheid)",
-            "value": "737",
-            "unit": null,
+            "value": "937",
+            "unit": "AU",
             "delta": null,
             "deltaDir": null
           },
           {
-            "label": "Form/TSB",
-            "value": "-54",
-            "unit": null,
+            "label": "Form / TSB",
+            "value": "-208",
+            "unit": "AU",
             "delta": null,
-            "deltaDir": "neg"
+            "deltaDir": null
           },
           {
             "label": "ACWR",
-            "value": "1.0",
+            "value": "1.2",
             "unit": null,
             "delta": null,
-            "deltaDir": "neu"
+            "deltaDir": null
           }
         ],
-        "insight": "Form/TSB van -54 is het meest kritieke signaal: dit duidt op significante cumulatieve vermoeidheid, diep in de 'overreaching zone'. HRV toont BALANCED, wat betekent dat het autonome zenuwstelsel nog compenseert, maar slaapschuld van 2.7 uur ondermijnt het herstelproces. ACWR van 1.0 is gunstig (geen acute overbelasting), maar de diepe negatieve Form vraagt om bewuste terugbouw. Deze recovery-run was de juiste keuze — houd de komende 48 uur elke verleiding tot extra volume of intensiteit in bedwang."
+        "insight": "Een TSB van -208 is extreem diep negatief — dit overstijgt ruimschoots de gebruikelijke trainingsdiepte van -20 tot -40 voor peakblokken in Pfitzinger-schema's en wijst op gevaarlijke overreachingsniveaus. De HRV meldt 'BALANCED' wat enigszins geruststelt, maar dit contrasteert sterk met de PMC-data. Slaapschuld van 4.1 uur in 7 dagen vertraagt actief het herstel en ondermijnt de trainingsrespons. De ACWR van 1.2 is op zich acceptabel (grens ligt bij 1.3-1.5), maar in combinatie met TSB -208 is de totale belasting niet duurzaam. Het is dringend nodig om het volume komende 3-5 dagen drastisch te reduceren."
       }
     ],
     "conclusion": {
-      "verdict": "aandacht",
-      "text": "De run zelf is uitstekend uitgevoerd, maar de onderliggende belastingsstatus vraagt om actief herstelmanagement. Prioriteit voor de komende 24-48 uur: slaap minimaal 8 uur per nacht om de slaapschuld van 2.7 uur af te bouwen, vermijd spontane extra kilometers, en eet voldoende koolhydraten voor glycogeenherstel. Form/TSB van -54 vereist 3-5 dagen gecontroleerde belasting voordat kwaliteitswerk (LT of marathon pace) verantwoord is."
+      "verdict": "zorg",
+      "text": "De run zelf was technisch goed uitgevoerd, maar de herstelstatus is kritiek. TSB van -208 en 4.1 uur slaapschuld maken een onmiddellijke recuperatieperiode noodzakelijk. Prioriteer de komende 48 uur: minimaal 8 uur slaap per nacht, geen intensieve training, en maximaal één korte herstelloop van 6-8 km op GA-tempo (HR onder 148 bpm). Eet koolhydraatrijk binnen 30 minuten na elke sessie om glycogeenherstel te ondersteunen. Behandel de beenbalansasymmetrie met 2x10 min mobilisatie rechts heup/piriformis voor het slapen."
     },
-    "nextSessionAdvice": "Volgende sessie: maximaal 10-12 km easy in GA-zone (138-150 bpm) of een volledige rustdag als slaap onder 7.5 uur blijft. Geen intervallen, geen drempelwerk, geen lange duur zolang TSB onder -40 staat. Controleer voor de volgende kwaliteitstraining of HRV nog steeds BALANCED is — daalt dit naar STRAINED, dan volgt eerst een extra hersteldag."
+    "nextSessionAdvice": "Volgende training: uitsluitend een GA herstelloop van maximaal 8 km bij HR 138-148 bpm en tempo rond 5:50-6:05/km. Geen intervallen, geen strides. Als slaap komende nacht minder dan 7.5 uur is, vervang de run door een rustdag of 30 minuten rustig wandelen. Herintroduceer kwaliteitstraining pas wanneer TSB boven -80 is gekomen."
   }
 }
