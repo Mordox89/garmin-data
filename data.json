@@ -21,7 +21,7 @@
     "ramp": 98.0,
     "rampNote": "te hoog",
     "rampSt": "warn",
-    "easyHard": "100% easy",
+    "easyHard": "64% easy",
     "totalVol": 126.8,
     "volAvg": 42.3,
     "readiness": 39
@@ -1131,15 +1131,17 @@
     {
       "date": "2026-06-22",
       "charged": 51,
-      "drained": 23,
-      "net": 28,
+      "drained": 26,
+      "net": 25,
       "level": null
     }
   ],
   "sleep": [
     {
       "date": "2026-06-09",
-      "duration_h": 8.1,
+      "duration_h": 8.8,
+      "night_h": 8.1,
+      "nap_h": 0.7,
       "deep_pct": 11.5,
       "rem_pct": 23.4,
       "score": 90,
@@ -1152,6 +1154,8 @@
     {
       "date": "2026-06-10",
       "duration_h": 6.6,
+      "night_h": 6.6,
+      "nap_h": 0.0,
       "deep_pct": 17.9,
       "rem_pct": 24.2,
       "score": 81,
@@ -1163,7 +1167,9 @@
     },
     {
       "date": "2026-06-11",
-      "duration_h": 9.1,
+      "duration_h": 9.7,
+      "night_h": 9.1,
+      "nap_h": 0.6,
       "deep_pct": 5.1,
       "rem_pct": 15.6,
       "score": 76,
@@ -1176,6 +1182,8 @@
     {
       "date": "2026-06-12",
       "duration_h": 5.8,
+      "night_h": 5.8,
+      "nap_h": 0.0,
       "deep_pct": 10.8,
       "rem_pct": 2.8,
       "score": 49,
@@ -1188,6 +1196,8 @@
     {
       "date": "2026-06-13",
       "duration_h": 7.8,
+      "night_h": 7.8,
+      "nap_h": 0.0,
       "deep_pct": 21.9,
       "rem_pct": 22.1,
       "score": 95,
@@ -1200,6 +1210,8 @@
     {
       "date": "2026-06-14",
       "duration_h": 7.1,
+      "night_h": 7.1,
+      "nap_h": 0.0,
       "deep_pct": 16.2,
       "rem_pct": 21.4,
       "score": 78,
@@ -1212,6 +1224,8 @@
     {
       "date": "2026-06-15",
       "duration_h": 6.7,
+      "night_h": 6.7,
+      "nap_h": 0.0,
       "deep_pct": 19.9,
       "rem_pct": 22.1,
       "score": 84,
@@ -1223,7 +1237,9 @@
     },
     {
       "date": "2026-06-16",
-      "duration_h": 5.8,
+      "duration_h": 6.3,
+      "night_h": 5.8,
+      "nap_h": 0.5,
       "deep_pct": 10.0,
       "rem_pct": 10.3,
       "score": 41,
@@ -1236,6 +1252,8 @@
     {
       "date": "2026-06-17",
       "duration_h": 6.5,
+      "night_h": 6.5,
+      "nap_h": 0.0,
       "deep_pct": 18.0,
       "rem_pct": 22.1,
       "score": 82,
@@ -1248,6 +1266,8 @@
     {
       "date": "2026-06-18",
       "duration_h": 8.6,
+      "night_h": 8.6,
+      "nap_h": 0.0,
       "deep_pct": 7.2,
       "rem_pct": 9.5,
       "score": 81,
@@ -1260,6 +1280,8 @@
     {
       "date": "2026-06-19",
       "duration_h": 7.3,
+      "night_h": 7.3,
+      "nap_h": 0.0,
       "deep_pct": 6.8,
       "rem_pct": 10.9,
       "score": 76,
@@ -1272,6 +1294,8 @@
     {
       "date": "2026-06-20",
       "duration_h": 6.9,
+      "night_h": 6.9,
+      "nap_h": 0.0,
       "deep_pct": 11.5,
       "rem_pct": 14.9,
       "score": 72,
@@ -1284,6 +1308,8 @@
     {
       "date": "2026-06-22",
       "duration_h": 5.7,
+      "night_h": 5.7,
+      "nap_h": 0.0,
       "deep_pct": 13.8,
       "rem_pct": 19.9,
       "score": 72,
@@ -1534,7 +1560,7 @@
     },
     {
       "date": "2026-06-22",
-      "avg_stress": 13
+      "avg_stress": 16
     }
   ],
   "weight": [
@@ -1805,8 +1831,8 @@
     ]
   },
   "sleepDebt": {
-    "debt_hours": 5.0,
-    "avg_hours": 6.8,
+    "debt_hours": 4.5,
+    "avg_hours": 6.9,
     "days": 7,
     "target": 7.5,
     "daily": [
@@ -1817,8 +1843,8 @@
       },
       {
         "date": "2026-06-16",
-        "hours": 5.8,
-        "deficit": 1.7
+        "hours": 6.3,
+        "deficit": 1.2
       },
       {
         "date": "2026-06-17",

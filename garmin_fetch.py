@@ -134,9 +134,13 @@ def fetch_sleep(client, days=14):
             secs = dto.get("sleepTimeSeconds") or 0
             if not secs:
                 continue
+            nap_secs = dto.get("napTimeSeconds") or 0
+            total_secs = secs + nap_secs
             result.append({
                 "date":       d_date.isoformat(),
-                "duration_h": round(secs / 3600, 1),
+                "duration_h": round(total_secs / 3600, 1),
+                "night_h":    round(secs / 3600, 1),
+                "nap_h":      round(nap_secs / 3600, 1),
                 "deep_pct":   round((dto.get("deepSleepSeconds") or 0) / secs * 100, 1),
                 "rem_pct":    round((dto.get("remSleepSeconds") or 0) / secs * 100, 1),
                 "score":      (dto.get("sleepScores") or {}).get("overall", {}).get("value") if isinstance(dto.get("sleepScores"), dict) else None,
@@ -573,7 +577,7 @@ def build_meta(race_preds, training_load, vo2_list):
         "trainingStatus":  training_status_str,
     }
 
-def build_kpi(weeks, training_load, recent_acts):
+def build_kpi(weeks, training_load, recent_acts, zone_secs=None):
     today_d = today()
     wk      = week_number(today_d)
     wk_data = weeks.get(wk, {})
@@ -589,18 +593,13 @@ def build_kpi(weeks, training_load, recent_acts):
         elif ramp >= 3: ramp_note = "optimaal"
         else:           ramp_note = "conservatief"
 
-    # Easy/hard split (28 dagen)
-    easy = hard = 0
-    cutoff = today_d - dt.timedelta(days=28)
-    for a in recent_acts:
-        date = dt.date.fromisoformat(a["date"][:10])
-        if date < cutoff:
-            continue
-        hr = a.get("avg_hr") or 0
-        if hr < 157:  easy += 1
-        else:         hard += 1
-    total_runs = easy + hard
-    easy_hard = f"{round(easy/total_runs*100)}% easy" if total_runs > 0 else "—"
+    # Easy/hard split op basis van tijd in zones (28 dagen)
+    # Easy = zones 0+1 (Recovery + Easy/Aerobic), Hard = zones 2-4 (Long/MP + LT + VO2max)
+    zone_secs = zone_secs or [0] * 5
+    easy_secs = sum(zone_secs[:2])
+    hard_secs = sum(zone_secs[2:])
+    total_secs_eh = easy_secs + hard_secs
+    easy_hard = f"{round(easy_secs/total_secs_eh*100)}% easy" if total_secs_eh > 0 else "—"
 
     return {
         "adherence":      "—",
@@ -966,7 +965,7 @@ def main():
 
     print("Data samenstellen...")
     meta  = build_meta(race_preds, training_load, vo2_data)
-    kpi   = build_kpi(weeks, training_load, recent_acts)
+    kpi   = build_kpi(weeks, training_load, recent_acts, zone_secs)
     kpi["readiness"] = readiness.get("score")
 
     OUT = {
