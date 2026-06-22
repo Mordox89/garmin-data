@@ -1131,8 +1131,8 @@
     {
       "date": "2026-06-22",
       "charged": 51,
-      "drained": 21,
-      "net": 30,
+      "drained": 23,
+      "net": 28,
       "level": null
     }
   ],
