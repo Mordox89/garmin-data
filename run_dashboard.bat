@@ -16,9 +16,7 @@ if errorlevel 1 (
 echo.
 echo [2/2] Pushen naar GitHub...
 git add data.json
-for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /value') do set dt=%%I
-set DATUM=%dt:~0,4%-%dt:~4,2%-%dt:~6,2%
-git commit -m "sync %DATUM%"
+git commit -m "sync"
 git pull --rebase -X theirs
 git push
 
