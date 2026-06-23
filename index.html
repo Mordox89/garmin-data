@@ -833,17 +833,16 @@ const builders={
       if(lt2.lthr){
         const ref=173.5;
         const diff=+(lt2.lthr-ref).toFixed(0);
-        const diffColor=diff>0?'var(--green)':diff<0?'var(--coral)':'var(--muted)';
-        const diffStr=diff>0?'+'+diff+' vs referentie':diff<0?diff+' vs referentie':'= referentie';
-        const paceStr=lt2.pace?'<div style="font-size:11px;color:var(--muted);margin-top:4px">LT Pace: '+Math.floor(lt2.pace/60)+':'+(lt2.pace%60).toString().padStart(2,'0')+'/km</div>':'';
-        ltEl.innerHTML='<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:6px">'
-          +'<span style="font-size:38px;font-weight:700;color:var(--text);font-family:var(--mono)">'+lt2.lthr+'</span>'
+        const diffColor=diff>1?'var(--green)':diff<-1?'var(--coral)':'var(--muted)';
+        const diffStr=diff>0?'▲ +'+diff+' vs ref':diff<0?'▼ '+diff+' vs ref':'= ref (173–174)';
+        const staleNote=lt2.is_stale?'<span style="color:var(--amber);font-size:10px"> · mogelijk verouderd</span>':'';
+        ltEl.innerHTML='<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px">'
+          +'<span style="font-size:42px;font-weight:700;color:var(--text);font-family:var(--mono)">'+lt2.lthr+'</span>'
           +'<span style="font-size:13px;color:var(--muted)">bpm</span>'
-          +'<span style="font-size:12px;color:'+diffColor+'">'+diffStr+'</span>'
+          +'<span style="font-size:12px;color:'+diffColor+';margin-left:4px">'+diffStr+'</span>'
           +'</div>'
-          +'<div style="font-size:11px;color:var(--dim)">Referentie: 173–174 bpm · Gemeten: '+(lt2.date||'onbekend').slice(0,10)+'</div>'
-          +paceStr
-          +'<div style="font-size:10px;color:var(--muted);margin-top:8px">Stijgende LTHR bij gelijk trainingsvolume = positieve aerobe aanpassing.</div>';
+          +'<div style="font-size:11px;color:var(--dim)">Gemeten: '+(lt2.date||'onbekend').slice(0,10)+staleNote+'</div>'
+          +'<div style="font-size:10px;color:var(--muted);margin-top:10px">Stijgende LTHR = aerobe aanpassing. Referentie: 173–174 bpm.</div>';
       } else {
         ltEl.innerHTML='<div style="color:var(--muted);font-size:12px">Geen lactaatdrempeldata beschikbaar.</div>';
       }
