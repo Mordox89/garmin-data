@@ -728,8 +728,8 @@ const builders={
         {label:'LT HR (bpm)',data:lt.map(r=>r.avg_hr),borderColor:C.coral,borderWidth:2,borderDash:[4,3],tension:.35,pointRadius:3,yAxisID:'y2'}
       ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>{if(c.datasetIndex===0)return'LT Pace: '+secToPace(c.raw)+' ('+( lt[c.dataIndex]?.lt_km||'?')+' km blok)';return'LT HR: '+c.raw+' bpm';}}}},scales:{x:{...G,grid:{display:false}},y:{...G,reverse:true,ticks:{color:C.amber,callback:v=>secToPace(v)}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:155,suggestedMax:185,ticks:{color:C.coral}}}}});
     } else {
-      const ltEl=document.getElementById('ltChart');
-      if(ltEl){const ctx=ltEl.getContext('2d');ctx.font='13px '+getComputedStyle(document.body).fontFamily;ctx.fillStyle='var(--muted)';ctx.textAlign='center';ctx.fillText('Nog geen LT runs in dit blok — verschijnt na eerste drempeltraining',ltEl.width/2,ltEl.height/2);}
+      const ltWrap=document.getElementById('ltChart')?.parentElement;
+      if(ltWrap){ltWrap.innerHTML='<div style="height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;text-align:center;padding:16px">Nog geen LT runs in dit blok —<br>verschijnt na eerste drempeltraining</div>';}
     }
     // HR vs Pace lijndiagram op datum (running economy trend) met temperatuurcorrectie
     const planStart='2026-06-08';
