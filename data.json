@@ -1008,8 +1008,8 @@
     {
       "date": "2026-06-23",
       "charged": 60,
-      "drained": 36,
-      "net": 24,
+      "drained": 55,
+      "net": 5,
       "level": null
     }
   ],
@@ -1460,7 +1460,7 @@
     },
     {
       "date": "2026-06-23",
-      "avg_stress": 14
+      "avg_stress": 17
     }
   ],
   "weight": [
@@ -1585,6 +1585,8 @@
     "hm": "1:39:53",
     "fm": "3:43:59"
   },
+  "enduranceScore": [],
+  "lactateThreshold": {},
   "trainingReadiness": {
     "score": 31,
     "level": "LOW",
