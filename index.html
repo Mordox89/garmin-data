@@ -310,7 +310,7 @@
       <div class="chart-h tall"><canvas id="longRunChart"></canvas></div>
       <div id="m-longrun-detail" style="margin-top:10px;font-size:11px;color:var(--muted)"></div>
     </div>
-    <div class="card c4"><h2><span class="dot am"></span>LT Runs · Drempel Trend<span class="info" tabindex="0">i<span class="tip"><b>Runs met gem HR &gt;160 bpm = threshold work.</b> Dalende pace bij gelijke HR = je drempel verbetert. Dit is de directe maatstaf voor marathonspecifieke kracht.</span></span></h2><div class="cap">Threshold runs — pace en HR trend. Dalende pace = je drempel verschuift.</div>
+    <div class="card c4"><h2><span class="dot am"></span>LT Runs · Drempel Trend<span class="info" tabindex="0">i<span class="tip"><b>LT-blokken binnen runs gedetecteerd op basis van splits.</b> Telt als LT-run bij ≥2 aaneengesloten km met HR ≥163 bpm — pikt zo ook intervallen binnen lange runs op. Dalende pace bij gelijke HR = drempel verbetert.</span></span></h2><div class="cap">Threshold runs — pace en HR trend. Dalende pace = je drempel verschuift.</div>
       <div class="chart-h tall"><canvas id="ltChart"></canvas></div>
     </div>
     <div class="card c4"><h2><span class="dot co"></span>Lactaatdrempel · LTHR<span class="info" tabindex="0">i<span class="tip"><b>Garmin's fysiologische drempelschatting.</b> Referentie: 173–174 bpm. Stijging bij gelijk volume = positieve aerobe aanpassing. Complementair aan de LT Runs chart hiernaast.</span></span></h2><div class="cap">Gemeten LTHR vs referentie 173–174 bpm.</div>
@@ -724,9 +724,12 @@ const builders={
       const paceToSec=p=>{if(!p)return null;const pts=p.split(':');return pts.length>=2?parseInt(pts[0])*60+parseInt(pts[1]):null;};
       const secToPace=s=>{if(!s)return'—';return Math.floor(s/60)+':'+(s%60).toString().padStart(2,'0')+'/km';};
       new Chart(ltChart,{type:'line',data:{labels:lt.map(r=>r.date?r.date.slice(5):''),datasets:[
-        {label:'Pace',data:lt.map(r=>paceToSec(r.pace)),borderColor:C.amber,borderWidth:2.5,tension:.35,pointRadius:4,yAxisID:'y'},
-        {label:'HR (bpm)',data:lt.map(r=>r.avg_hr),borderColor:C.coral,borderWidth:2,borderDash:[4,3],tension:.35,pointRadius:3,yAxisID:'y2'}
-      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>c.datasetIndex===0?'Pace: '+secToPace(c.raw):'HR: '+c.raw+' bpm'}}},scales:{x:{...G,grid:{display:false}},y:{...G,reverse:true,ticks:{color:C.amber,callback:v=>secToPace(v)}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:155,suggestedMax:185,ticks:{color:C.coral}}}}});
+        {label:'LT Pace',data:lt.map(r=>paceToSec(r.pace)),borderColor:C.amber,borderWidth:2.5,tension:.35,pointRadius:4,yAxisID:'y'},
+        {label:'LT HR (bpm)',data:lt.map(r=>r.avg_hr),borderColor:C.coral,borderWidth:2,borderDash:[4,3],tension:.35,pointRadius:3,yAxisID:'y2'}
+      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>{if(c.datasetIndex===0)return'LT Pace: '+secToPace(c.raw)+' ('+( lt[c.dataIndex]?.lt_km||'?')+' km blok)';return'LT HR: '+c.raw+' bpm';}}}},scales:{x:{...G,grid:{display:false}},y:{...G,reverse:true,ticks:{color:C.amber,callback:v=>secToPace(v)}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:155,suggestedMax:185,ticks:{color:C.coral}}}}});
+    } else {
+      const ltEl=document.getElementById('ltChart');
+      if(ltEl){const ctx=ltEl.getContext('2d');ctx.font='13px '+getComputedStyle(document.body).fontFamily;ctx.fillStyle='var(--muted)';ctx.textAlign='center';ctx.fillText('Nog geen LT runs in dit blok — verschijnt na eerste drempeltraining',ltEl.width/2,ltEl.height/2);}
     }
     // HR vs Pace lijndiagram op datum (running economy trend) met temperatuurcorrectie
     const planStart='2026-06-08';
