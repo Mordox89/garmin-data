@@ -1008,8 +1008,8 @@
     {
       "date": "2026-06-23",
       "charged": 60,
-      "drained": 25,
-      "net": 35,
+      "drained": 36,
+      "net": 24,
       "level": null
     }
   ],
@@ -1460,7 +1460,7 @@
     },
     {
       "date": "2026-06-23",
-      "avg_stress": 10
+      "avg_stress": 14
     }
   ],
   "weight": [
