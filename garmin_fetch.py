@@ -315,49 +315,66 @@ def fetch_race_predictions(client):
 
 def fetch_endurance_score(client, days=90):
     """Haalt Garmin Endurance Score op.
-    Range call geeft: {"weekly_breakdown": [{"week_start": "YYYY-MM-DD", "avg_score": 6559}, ...],
-                        "current_score": 6559, "current_date": "YYYY-MM-DD", "classification": "trained"}
+    garminconnect library /stats endpoint geeft een LIST van wekelijkse dicts terug.
+    Veldnamen per entry: geen vaststaande spec — debug print toont exacte structuur.
     """
     result = []
     try:
         end = today()
         start = PLAN_START - dt.timedelta(days=7)
         raw = client.get_endurance_score(start.isoformat(), end.isoformat())
+        print(f"  Endurance raw: type={type(raw).__name__}, value={str(raw)[:400]}")
+        # Normaliseer altijd naar lijst
         if isinstance(raw, dict):
-            # Wekelijkse breakdown gebruiken voor trendlijn
-            for entry in raw.get("weekly_breakdown", []):
-                date_val = entry.get("week_start")
-                score    = entry.get("avg_score") or entry.get("max_score")
-                if date_val and score:
+            entries = raw.get("weekly_breakdown") or [raw]
+        elif isinstance(raw, list):
+            entries = raw
+        else:
+            entries = []
+        for entry in entries:
+            if not isinstance(entry, dict):
+                continue
+            # Probeer alle bekende datumveldnamen
+            date_val = (entry.get("week_start") or entry.get("startDate")
+                        or entry.get("calendarDate") or entry.get("date"))
+            # Probeer alle bekende scoreveldnamen
+            score = (entry.get("avg_score") or entry.get("overallScore")
+                     or entry.get("score") or entry.get("current_score")
+                     or entry.get("max_score") or entry.get("value"))
+            if date_val and score:
+                try:
                     result.append({"date": str(date_val)[:10], "score": round(float(score), 1)})
-            # Actuele score altijd toevoegen als meest recente punt
-            cur_score = raw.get("current_score")
-            cur_date  = (raw.get("current_date") or today().isoformat())[:10]
-            if cur_score and (not result or result[-1]["date"] != cur_date):
-                result.append({"date": cur_date, "score": round(float(cur_score), 1)})
+                except (ValueError, TypeError):
+                    pass
+        # Als nog leeg: top-level current_score gebruiken (dict response)
+        if not result and isinstance(raw, dict):
+            cur = raw.get("current_score") or raw.get("overallScore") or raw.get("score")
+            cur_date = (raw.get("current_date") or raw.get("calendarDate") or today().isoformat())[:10]
+            if cur:
+                result.append({"date": cur_date, "score": round(float(cur), 1)})
     except Exception as e:
         print(f"Endurance score fout: {e}")
     return sorted(result, key=lambda x: x["date"])
 def fetch_lactate_threshold(client):
-    """Haalt meest recente lactaatdrempel (LTHR) op van Garmin.
-    MCP returnt: {"lactate_threshold_heart_rate_bpm": 174,
-                  "lactate_threshold_speed_mps": 0.363,  (dit is cycling FTP proxy, niet run pace)
-                  "speed_hr_date": "2026-05-11T14:31:43.267",
-                  "is_stale": false, "sport": "RUNNING"}
+    """Haalt meest recente lactaatdrempel (LTHR) op.
+    garminconnect library returnt:
+      {"speed_and_heart_rate": {"heartRate": 174, "calendarDate": "2026-05-11", ...}, "power": {...}}
     """
     try:
         raw = client.get_lactate_threshold()
-        if isinstance(raw, list):
-            raw = raw[-1] if raw else {}
-        lt = raw.get("lactate_threshold_heart_rate_bpm")
-        date_val = raw.get("speed_hr_date") or raw.get("date") or today().isoformat()
-        is_stale = raw.get("is_stale", False)
-        if lt:
-            return {
-                "date":     str(date_val)[:10],
-                "lthr":     round(float(lt)),
-                "is_stale": is_stale,
-            }
+        print(f"  Lactate raw: type={type(raw).__name__}, value={str(raw)[:300]}")
+        if isinstance(raw, dict):
+            shr = raw.get("speed_and_heart_rate") or {}
+            lt  = shr.get("heartRate") or shr.get("hearRate")
+            date_val = shr.get("calendarDate") or shr.get("date") or today().isoformat()
+            if lt:
+                return {"date": str(date_val)[:10], "lthr": round(float(lt)), "is_stale": False}
+        elif isinstance(raw, list):
+            for entry in raw:
+                lt = entry.get("heartRate") or entry.get("hearRate")
+                if lt:
+                    date_val = entry.get("calendarDate") or today().isoformat()
+                    return {"date": str(date_val)[:10], "lthr": round(float(lt)), "is_stale": False}
     except Exception as e:
         print(f"Lactate threshold fout: {e}")
     return {}
@@ -903,7 +920,7 @@ def build_lt_runs(raw_acts):
         if not date_str:
             continue
         date = dt.date.fromisoformat(date_str)
-        if date < PLAN_START:
+        if date < PLAN_START - dt.timedelta(days=60):
             continue
         hr = a.get("averageHR") or 0
         if hr < 163:  # threshold runs: HR >= LT zone (LT zone start ~163 bpm in Pfitzinger)
