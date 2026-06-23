@@ -342,25 +342,17 @@ def fetch_endurance_score(client, days=90):
         print(f"Endurance score fout: {e}")
     return sorted(result, key=lambda x: x["date"])
 def fetch_lactate_threshold(client):
-    """Haalt meest recente lactaatdrempel (LTHR) op van Garmin.
-    MCP returnt: {"lactate_threshold_heart_rate_bpm": 174,
-                  "lactate_threshold_speed_mps": 0.363,  (dit is cycling FTP proxy, niet run pace)
-                  "speed_hr_date": "2026-05-11T14:31:43.267",
-                  "is_stale": false, "sport": "RUNNING"}
+    """Haalt LTHR op. Library response (bewezen via CMD debug):
+    {"speed_and_heart_rate": {"heartRate": 174, "calendarDate": "2026-05-11T14:31:43.267", ...},
+     "power": {...}}
     """
     try:
         raw = client.get_lactate_threshold()
-        if isinstance(raw, list):
-            raw = raw[-1] if raw else {}
-        lt = raw.get("lactate_threshold_heart_rate_bpm")
-        date_val = raw.get("speed_hr_date") or raw.get("date") or today().isoformat()
-        is_stale = raw.get("is_stale", False)
+        shr = raw.get("speed_and_heart_rate") or {}
+        lt  = shr.get("heartRate") or shr.get("hearRate")
+        date_val = (shr.get("calendarDate") or shr.get("date") or today().isoformat())[:10]
         if lt:
-            return {
-                "date":     str(date_val)[:10],
-                "lthr":     round(float(lt)),
-                "is_stale": is_stale,
-            }
+            return {"date": date_val, "lthr": round(float(lt)), "is_stale": False}
     except Exception as e:
         print(f"Lactate threshold fout: {e}")
     return {}
@@ -818,42 +810,22 @@ def build_week_summary(recent_acts, sleep_data, hrv_data, training_load, strengt
 
 # ── Schoen kilometerstand ─────────────────────────────────────────────────────
 def fetch_gear(client):
-    """Haalt schoenen/gear op met kilometerstand."""
     try:
-        data = client.get_gear()
-        result = []
-        for g in (data if isinstance(data, list) else []):
-            # Garmin geeft gearTypePk=1 voor schoenen; ook displayName-fallback
-            is_shoe = (
-                g.get("gearTypePk") == 1
-                or g.get("gearType") == "SHOE"
-                or "shoe" in (g.get("displayName") or "").lower()
-            )
-            if not is_shoe:
-                continue
-            dist = g.get("totalDistance") or g.get("distanceMeters") or g.get("distance") or 0
-            # Garmin geeft afstand soms in meters (>500), soms al in km (<500)
-            km = round(dist / 1000, 1) if dist > 500 else round(dist, 1)
-            # Garmin actief-veld heet gearStatusName ("active") of isActive (bool)
-            status = g.get("gearStatusName") or ""
-            active = (
-                status.lower() == "active"
-                or g.get("isActive") is True
-                or g.get("active") is True
-            )
-            result.append({
-                "name": g.get("displayName") or g.get("customMakeModel") or "Schoen",
-                "km": km,
-                "activities": g.get("activityCount") or 0,
-                "active": active,
-            })
-        # Toon alle schoenen (actief en inactief), gesorteerd op km
-        return sorted(result, key=lambda x: x["km"], reverse=True)
+        profile = client.get_user_profile()
+        user_id = (profile.get("displayName") or profile.get("userProfilePK")
+                   or profile.get("userProfileNumber") or profile.get("userId"))
+        if not user_id:
+            return []
+        raw = client.get_gear(user_id)
+        if not isinstance(raw, list):
+            return []
+        return [{"name": g.get("displayName") or g.get("name"),
+                 "type": g.get("gearTypeName") or g.get("typeName"),
+                 "km":   round(float(g.get("totalDistance") or 0) / 1000, 0)}
+                for g in raw if g.get("displayName") or g.get("name")]
     except Exception as e:
         print(f"Gear fout: {e}")
         return []
-
-# ── Efficiency factor ─────────────────────────────────────────────────────────
 def build_ef(recent_acts):
     ef_list = []
     for a in sorted(recent_acts, key=lambda x: x["date"]):
@@ -906,7 +878,7 @@ def build_lt_runs(raw_acts):
         if not date_str:
             continue
         date = dt.date.fromisoformat(date_str)
-        if date < PLAN_START:
+        if date < PLAN_START - dt.timedelta(days=60):
             continue
         hr = a.get("averageHR") or 0
         if hr < 163:  # threshold runs: HR >= LT zone (LT zone start ~163 bpm in Pfitzinger)
