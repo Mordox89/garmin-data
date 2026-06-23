@@ -493,8 +493,22 @@ def process_activities(client, raw_acts):
                 secs = a.get(f"hrTimeInZone_{zi+1}") or 0
                 zone_secs[zi] += secs
 
-    # Laatste 5 runs met splits
-    for a in sorted(raw_acts, key=lambda x: x.get("startTimeLocal") or "", reverse=True)[:5]:
+    # Splits ophalen voor: laatste 5 runs + LT-kandidaten (HR 163-178) vanaf blokstart
+    cutoff = (PLAN_START - dt.timedelta(days=60)).isoformat()
+    lt_candidates = [
+        a for a in raw_acts
+        if (a.get("startTimeLocal") or "")[:10] >= cutoff
+        and 163 <= (a.get("averageHR") or 0) <= 178
+    ]
+    recent_5 = sorted(raw_acts, key=lambda x: x.get("startTimeLocal") or "", reverse=True)[:5]
+    seen_ids = set()
+    splits_fetch_list = []
+    for a in recent_5 + lt_candidates:
+        aid = a.get("activityId")
+        if aid and aid not in seen_ids:
+            seen_ids.add(aid)
+            splits_fetch_list.append(a)
+    for a in sorted(splits_fetch_list, key=lambda x: x.get("startTimeLocal") or "", reverse=True):
         date_str = (a.get("startTimeLocal") or "")[:10]
         dist     = (a.get("distance") or 0)
         t        = (a.get("duration") or a.get("movingDuration") or 0)
