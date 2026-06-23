@@ -191,7 +191,6 @@
     <button class="tab" data-tab="pace"><span class="n">04</span>Intensiteit &amp; Loopdata</button>
     <button class="tab" data-tab="ready"><span class="n">05</span>Readiness &amp; Plan</button>
     <button class="tab" data-tab="body"><span class="n">06</span>Herstel &amp; Lichaam</button>
-    <button class="tab" data-tab="coach"><span class="n">07</span>AI Coach</button>
   </div>
 
   <!-- TAB 01: FITNESS & LOAD -->
@@ -323,11 +322,6 @@
   <footer><span>MARATHON BUILD · TELEMETRY · GARMIN DIRECT</span><span id="m-updated">—</span></footer>
 </div>
 
-
-  <!-- TAB 07: AI COACH -->
-  <div class="panel-set" id="coach"><div style="max-width:860px;margin:0 auto;padding:0.5rem 0">
-    <div id="ai-coach-root"></div>
-  </div></div>
 <script>
 const C={go:'#34e07d',goDim:'#1c8a4f',amber:'#ffb43a',coral:'#ff5e6c',cyan:'#45c8e0',violet:'#9a87ff',text:'#e8edf3',muted:'#7d889a',dim:'#525c6b',grid:'rgba(255,255,255,.045)'};
 Chart.defaults.color=C.muted;Chart.defaults.font.family="'IBM Plex Mono', monospace";Chart.defaults.font.size=10.5;
@@ -620,7 +614,6 @@ const builders={
         }).join('')+'</div>':''}`;
     }
     // Gear
-    loadAiFeedback();
   },
   body(){
     // Weight
@@ -787,28 +780,6 @@ document.addEventListener('click',e=>{
   if(i){e.stopPropagation();i.classList.toggle('open');}
 });
 
-function loadAiFeedback(){
-  const root=document.getElementById('ai-coach-root');
-  if(!root)return;
-  const report=DATA&&DATA.coachReport;
-  if(!report){root.innerHTML='<span style="color:var(--muted);font-size:13px">Geen rapport — voer <code>python build_coach_report.py</code> uit na de sync.</span>';return;}
-  const VC={goed:{dot:'#22c55e',bg:'rgba(34,197,94,.12)',border:'rgba(34,197,94,.25)',text:'#4ade80'},voldoende:{dot:'#3b82f6',bg:'rgba(59,130,246,.12)',border:'rgba(59,130,246,.25)',text:'#60a5fa'},aandacht:{dot:'#f59e0b',bg:'rgba(245,158,11,.12)',border:'rgba(245,158,11,.25)',text:'#fbbf24'},zorg:{dot:'#ef4444',bg:'rgba(239,68,68,.12)',border:'rgba(239,68,68,.25)',text:'#f87171'}};
-  const vc=v=>VC[v]||VC.voldoende;
-  const DA={pos:'↑ ',neg:'↓ ',neu:''};
-  const DC={pos:'#4ade80',neg:'#f87171',neu:'var(--muted)'};
-  const ICONS={zone:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',economy:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',balance:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',recovery:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'};
-  const fmtTs=iso=>{if(!iso)return'';try{const d=new Date(iso);return d.toLocaleDateString('nl-NL',{day:'numeric',month:'short'})+' '+d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});}catch{return iso.slice(0,16).replace('T',' ');}};
-  const c=vc(report.lastRun&&report.lastRun.verdict);
-  let h=`<div style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:${c.bg};border:0.5px solid ${c.border};border-radius:10px;margin-bottom:12px"><div style="width:8px;height:8px;border-radius:50%;background:${c.dot};flex-shrink:0"></div><div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text)">${(DATA.recentActivities&&DATA.recentActivities[0]&&DATA.recentActivities[0].name)||'Laatste run'}</div><div style="font-size:12px;color:var(--muted);margin-top:2px;line-height:1.5">${(report.lastRun&&report.lastRun.summary)||''}</div></div><div style="font-size:11px;color:var(--dim);flex-shrink:0">${fmtTs(report.generatedAt)}</div></div>`;
-  (report.sections||[]).forEach(s=>{
-    const sv=vc(s.verdict);
-    const cols=Math.min((s.metrics||[]).length,4);
-    const metrics=(s.metrics||[]).map(m=>`<div style="background:var(--card);border-radius:7px;padding:9px 11px;min-width:0"><div style="font-size:11px;color:var(--muted);margin-bottom:2px">${m.label}</div><div style="font-size:16px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.value}${m.unit?`<span style="font-size:11px;font-weight:400;margin-left:2px;color:var(--dim)">${m.unit}</span>`:''}</div>${m.delta?`<div style="font-size:11px;color:${DC[m.deltaDir||'neu']};margin-top:2px">${DA[m.deltaDir||'neu']}${m.delta}</div>`:''}</div>`).join('');
-    h+=`<div style="background:var(--bg2,#1a1a1a);border:0.5px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:10px"><div style="display:flex;align-items:center;gap:9px;padding:10px 14px;border-bottom:0.5px solid var(--line)"><div style="width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:${sv.bg};color:${sv.text};flex-shrink:0">${ICONS[s.id]||ICONS.zone}</div><span style="font-size:13px;font-weight:600;color:var(--text);flex:1">${s.title}</span><span style="font-size:11px;font-weight:600;padding:2px 9px;border-radius:100px;background:${sv.bg};color:${sv.text}">${s.verdict}</span></div><div style="padding:11px 14px;display:flex;flex-direction:column;gap:9px"><div style="display:grid;grid-template-columns:repeat(${cols},minmax(0,1fr));gap:7px">${metrics}</div>${s.insight?`<div style="font-size:12px;color:var(--muted);line-height:1.6;padding:8px 11px;border-left:2px solid var(--line);background:var(--card)">${s.insight}</div>`:''}</div></div>`;
-  });
-  if(report.conclusion){const cv=vc(report.conclusion.verdict);h+=`<div style="border:0.5px solid ${cv.border};border-radius:10px;overflow:hidden"><div style="display:flex;align-items:center;gap:8px;padding:11px 14px;background:${cv.bg};color:${cv.text}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span style="font-size:13px;font-weight:600">${report.conclusion.text||''}</span></div>${report.nextSessionAdvice?`<div style="padding:9px 14px 12px;font-size:12px;color:var(--muted);line-height:1.6;border-top:0.5px solid ${cv.border}"><b style="color:var(--text)">Volgende sessie:</b> ${report.nextSessionAdvice}</div>`:''}</div>`;}
-  root.innerHTML=h;
-}
 
 // Laadstatus banner
 function setLoadBanner(msg, color){
