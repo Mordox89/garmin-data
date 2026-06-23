@@ -314,41 +314,60 @@ def fetch_race_predictions(client):
         return {}
 
 def fetch_endurance_score(client, days=90):
-    """Haalt Garmin Endurance Score op over het trainingsblok."""
+    """Haalt Garmin Endurance Score op over het trainingsblok.
+    De /stats endpoint geeft weekly aggregates terug als list van dicts.
+    Veldnamen: 'startDate', 'overallScore' of genest onder 'enduranceScoreDTO'.
+    """
     result = []
     try:
         end = today()
         start = PLAN_START - dt.timedelta(days=7)
         raw = client.get_endurance_score(start.isoformat(), end.isoformat())
-        if isinstance(raw, list):
-            for entry in raw:
-                date = entry.get("calendarDate") or entry.get("date")
-                score = entry.get("overallScore") or entry.get("score") or entry.get("enduranceScore")
-                if date and score:
-                    result.append({"date": date, "score": round(float(score), 1)})
-        elif isinstance(raw, dict):
-            date = raw.get("calendarDate") or raw.get("date") or today().isoformat()
-            score = raw.get("overallScore") or raw.get("score") or raw.get("enduranceScore")
-            if score:
-                result.append({"date": date, "score": round(float(score), 1)})
+        print(f"  Endurance score raw type: {type(raw)}, preview: {str(raw)[:200]}")
+        entries = raw if isinstance(raw, list) else ([raw] if isinstance(raw, dict) else [])
+        for entry in entries:
+            # Probeer geneste DTO eerst, dan direct op entry
+            dto = entry.get("enduranceScoreDTO") or entry
+            date_val = (dto.get("calendarDate") or dto.get("startDate")
+                        or entry.get("calendarDate") or entry.get("startDate"))
+            score_val = (dto.get("overallScore") or dto.get("score")
+                         or dto.get("enduranceScore") or dto.get("value")
+                         or entry.get("overallScore") or entry.get("score"))
+            if date_val and score_val:
+                try:
+                    result.append({"date": str(date_val)[:10], "score": round(float(score_val), 1)})
+                except (ValueError, TypeError):
+                    pass
     except Exception as e:
         print(f"Endurance score fout: {e}")
     return sorted(result, key=lambda x: x["date"])
 
 def fetch_lactate_threshold(client):
-    """Haalt meest recente lactaatdrempel (LTHR) op van Garmin."""
+    """Haalt meest recente lactaatdrempel (LTHR) op van Garmin.
+    Library returnt: {"speed_and_heart_rate": {"heartRate": ..., "calendarDate": ..., "speed": ...}, "power": {...}}
+    speed in m/s → omzetten naar sec/km pace.
+    """
     try:
         raw = client.get_lactate_threshold()
-        if isinstance(raw, list):
+        print(f"  Lactate raw preview: {str(raw)[:200]}")
+        shr = {}
+        if isinstance(raw, dict):
+            shr = raw.get("speed_and_heart_rate") or {}
+        elif isinstance(raw, list):
+            # Oudere library versie geeft direct list terug
             raw = raw[-1] if raw else {}
-        lt = raw.get("lactateThresholdHeartRate") or raw.get("heartRate") or raw.get("ltHeartRate")
-        pace_raw = raw.get("lactateThresholdPace") or raw.get("pace")
-        date = raw.get("calendarDate") or raw.get("date") or today().isoformat()
+            shr = raw
+        lt = shr.get("heartRate") or shr.get("hearRate")  # Garmin heeft historische typo
+        speed_ms = shr.get("speed")  # m/s
+        date_val = shr.get("calendarDate") or shr.get("date") or today().isoformat()
         if lt:
+            pace = None
+            if speed_ms and float(speed_ms) > 0:
+                pace = round(1000 / float(speed_ms))  # sec/km
             return {
-                "date":  date,
-                "lthr":  round(float(lt)),
-                "pace":  round(float(pace_raw), 1) if pace_raw else None,
+                "date": str(date_val)[:10],
+                "lthr": round(float(lt)),
+                "pace": pace,
             }
     except Exception as e:
         print(f"Lactate threshold fout: {e}")

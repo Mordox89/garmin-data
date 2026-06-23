@@ -219,9 +219,7 @@
       <div class="chart-h"><canvas id="enduranceChart"></canvas></div>
       <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px"><span class="big" style="color:var(--cyan)" id="m-endurance">—</span><span class="unit">score</span><span id="m-endurance-trend" class="trend-eq" style="margin-left:6px"></span></div>
     </div>
-    <div class="card c5"><h2><span class="dot co"></span>Lactaatdrempel · LTHR<span class="info" tabindex="0">i<span class="tip"><b>Garmin's schatting van je lactaatdrempel-hartslag.</b> Referentie: 173–174 bpm. Een stijgende LTHR bij gelijk trainingsvolume is een positief adaptatiemerk.</span></span></h2><div class="cap">Lactaatdrempel hartslag — referentie 173–174 bpm. Verschuiving signaleert aerobe aanpassing.</div>
-      <div id="lactate-display" style="margin-top:12px"></div>
-    </div>
+
   </div></div>
 
   <!-- TAB 02: VOLUME -->
@@ -314,6 +312,9 @@
     </div>
     <div class="card c4"><h2><span class="dot am"></span>LT Runs · Drempel Trend<span class="info" tabindex="0">i<span class="tip"><b>Runs met gem HR &gt;160 bpm = threshold work.</b> Dalende pace bij gelijke HR = je drempel verbetert. Dit is de directe maatstaf voor marathonspecifieke kracht.</span></span></h2><div class="cap">Threshold runs — pace en HR trend. Dalende pace = je drempel verschuift.</div>
       <div class="chart-h tall"><canvas id="ltChart"></canvas></div>
+    </div>
+    <div class="card c3"><h2><span class="dot co"></span>Lactaatdrempel · LTHR<span class="info" tabindex="0">i<span class="tip"><b>Garmin's fysiologische drempelschatting.</b> Referentie: 173–174 bpm. Stijging bij gelijk volume = positieve aerobe aanpassing. Complementair aan de LT Runs chart hiernaast.</span></span></h2><div class="cap">Gemeten LTHR vs referentie 173–174 bpm.</div>
+      <div id="lactate-display" style="margin-top:12px"></div>
     </div>
     <div class="card c6"><h2><span class="dot"></span>HR vs Pace · Running Economy<span class="info" tabindex="0">i<span class="tip"><b>Pace per hartslag — de meest directe maatstaf van loopeconomie.</b> Sneller bij dezelfde HR = je motor wordt efficiënter. Temperatuurcorrectie (~1 slag/°C boven 18°C) geeft een eerlijker beeld van aeroob vermogen op warme dagen.</span></span></h2><div class="cap">Snelheid per hartslag. Stijgende lijn = betere loopeconomie. Temperatuurcorrectie beschikbaar.</div>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
