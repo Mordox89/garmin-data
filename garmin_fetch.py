@@ -314,30 +314,53 @@ def fetch_race_predictions(client):
         return {}
 
 def fetch_endurance_score(client, days=90):
-    """Haalt Garmin Endurance Score op over het trainingsblok.
-    De /stats endpoint geeft weekly aggregates terug als list van dicts.
-    Veldnamen: 'startDate', 'overallScore' of genest onder 'enduranceScoreDTO'.
+    """Haalt Garmin Endurance Score op via dagelijkse single-day calls (wekelijks gesampleed).
+    Single-day call returnt een dict met o.a. 'overallScore', 'calendarDate'.
     """
     result = []
     try:
         end = today()
         start = PLAN_START - dt.timedelta(days=7)
-        raw = client.get_endurance_score(start.isoformat(), end.isoformat())
-        print(f"  Endurance score raw type: {type(raw)}, preview: {str(raw)[:200]}")
-        entries = raw if isinstance(raw, list) else ([raw] if isinstance(raw, dict) else [])
-        for entry in entries:
-            # Probeer geneste DTO eerst, dan direct op entry
-            dto = entry.get("enduranceScoreDTO") or entry
-            date_val = (dto.get("calendarDate") or dto.get("startDate")
-                        or entry.get("calendarDate") or entry.get("startDate"))
-            score_val = (dto.get("overallScore") or dto.get("score")
-                         or dto.get("enduranceScore") or dto.get("value")
-                         or entry.get("overallScore") or entry.get("score"))
-            if date_val and score_val:
-                try:
-                    result.append({"date": str(date_val)[:10], "score": round(float(score_val), 1)})
-                except (ValueError, TypeError):
-                    pass
+        current = start
+        while current <= end:
+            try:
+                raw = client.get_endurance_score(current.isoformat())
+                if isinstance(raw, dict):
+                    # Probeer direct veld, dan geneste structuren
+                    score = (raw.get("overallScore") or raw.get("score")
+                             or raw.get("enduranceScore") or raw.get("value"))
+                    # Soms genest onder payload/dto
+                    if score is None:
+                        for key in ("enduranceScoreDTO", "payload", "data"):
+                            sub = raw.get(key)
+                            if isinstance(sub, dict):
+                                score = (sub.get("overallScore") or sub.get("score")
+                                         or sub.get("value"))
+                                if score:
+                                    break
+                    date_val = raw.get("calendarDate") or raw.get("date") or current.isoformat()
+                    if score:
+                        result.append({"date": str(date_val)[:10], "score": round(float(score), 1)})
+            except Exception:
+                pass
+            current += dt.timedelta(days=7)
+        # Altijd vandaag toevoegen voor actuele waarde
+        try:
+            raw = client.get_endurance_score(today().isoformat())
+            if isinstance(raw, dict):
+                score = (raw.get("overallScore") or raw.get("score")
+                         or raw.get("enduranceScore") or raw.get("value"))
+                if score is None:
+                    for key in ("enduranceScoreDTO", "payload", "data"):
+                        sub = raw.get(key)
+                        if isinstance(sub, dict):
+                            score = sub.get("overallScore") or sub.get("score") or sub.get("value")
+                            if score:
+                                break
+                if score and (not result or result[-1]["date"] != today().isoformat()):
+                    result.append({"date": today().isoformat(), "score": round(float(score), 1)})
+        except Exception:
+            pass
     except Exception as e:
         print(f"Endurance score fout: {e}")
     return sorted(result, key=lambda x: x["date"])
@@ -918,7 +941,7 @@ def build_lt_runs(raw_acts):
         if date < PLAN_START:
             continue
         hr = a.get("averageHR") or 0
-        if hr < 170:  # alleen echte threshold runs (LTHR 173–174)
+        if hr < 163:  # threshold runs: HR >= LT zone (LT zone start ~163 bpm in Pfitzinger)
             continue
         speed = a.get("averageSpeed") or 0
         lt_runs.append({
