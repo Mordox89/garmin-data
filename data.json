@@ -1586,7 +1586,11 @@
     "fm": "3:43:59"
   },
   "enduranceScore": [],
-  "lactateThreshold": {},
+  "lactateThreshold": {
+    "date": "2026-05-11",
+    "lthr": 174,
+    "is_stale": false
+  },
   "trainingReadiness": {
     "score": 31,
     "level": "LOW",
