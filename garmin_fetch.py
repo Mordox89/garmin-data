@@ -313,6 +313,47 @@ def fetch_race_predictions(client):
         print(f"Race predictions fout: {e}")
         return {}
 
+def fetch_endurance_score(client, days=90):
+    """Haalt Garmin Endurance Score op over het trainingsblok."""
+    result = []
+    try:
+        end = today()
+        start = PLAN_START - dt.timedelta(days=7)
+        raw = client.get_endurance_score(start.isoformat(), end.isoformat())
+        if isinstance(raw, list):
+            for entry in raw:
+                date = entry.get("calendarDate") or entry.get("date")
+                score = entry.get("overallScore") or entry.get("score") or entry.get("enduranceScore")
+                if date and score:
+                    result.append({"date": date, "score": round(float(score), 1)})
+        elif isinstance(raw, dict):
+            date = raw.get("calendarDate") or raw.get("date") or today().isoformat()
+            score = raw.get("overallScore") or raw.get("score") or raw.get("enduranceScore")
+            if score:
+                result.append({"date": date, "score": round(float(score), 1)})
+    except Exception as e:
+        print(f"Endurance score fout: {e}")
+    return sorted(result, key=lambda x: x["date"])
+
+def fetch_lactate_threshold(client):
+    """Haalt meest recente lactaatdrempel (LTHR) op van Garmin."""
+    try:
+        raw = client.get_lactate_threshold()
+        if isinstance(raw, list):
+            raw = raw[-1] if raw else {}
+        lt = raw.get("lactateThresholdHeartRate") or raw.get("heartRate") or raw.get("ltHeartRate")
+        pace_raw = raw.get("lactateThresholdPace") or raw.get("pace")
+        date = raw.get("calendarDate") or raw.get("date") or today().isoformat()
+        if lt:
+            return {
+                "date":  date,
+                "lthr":  round(float(lt)),
+                "pace":  round(float(pace_raw), 1) if pace_raw else None,
+            }
+    except Exception as e:
+        print(f"Lactate threshold fout: {e}")
+    return {}
+
 def fetch_training_readiness(client):
     try:
         data = client.get_training_readiness(today().isoformat())
@@ -953,12 +994,14 @@ def main():
     stress_data  = fetch_stress(client, days=14)
 
     print("Conditiedata ophalen...")
-    training_load  = fetch_training_load(client, days=90)
-    vo2_data       = fetch_vo2max(client, days=90)
-    race_preds     = fetch_race_predictions(client)
-    readiness      = fetch_training_readiness(client)
-    weight_data    = fetch_weight(client, days=30)
-    scheduled      = fetch_scheduled_workouts(client)
+    training_load   = fetch_training_load(client, days=90)
+    vo2_data        = fetch_vo2max(client, days=90)
+    race_preds      = fetch_race_predictions(client)
+    endurance_score = fetch_endurance_score(client, days=90)
+    lactate_thresh  = fetch_lactate_threshold(client)
+    readiness       = fetch_training_readiness(client)
+    weight_data     = fetch_weight(client, days=30)
+    scheduled       = fetch_scheduled_workouts(client)
 
     print("Alle activiteiten ophalen voor strength/mobility...")
     all_acts = fetch_all_activities(client, days=130)
@@ -985,6 +1028,8 @@ def main():
         "weight":            weight_data,
         "vo2":               vo2_data,
         "racePredictions":   race_preds,
+        "enduranceScore":    endurance_score,
+        "lactateThreshold":  lactate_thresh,
         "trainingReadiness": readiness,
         "weeks":             {str(k): v for k, v in weeks.items()},
         "longRuns":          build_long_runs(raw_acts),

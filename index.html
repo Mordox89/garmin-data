@@ -215,6 +215,13 @@
     <div class="card c5"><h2><span class="dot"></span>Race Predictions<span class="info" tabindex="0">i<span class="tip"><b>Garmin's racetijdvoorspellingen op basis van je huidige VO₂max en trainingsdata.</b> Gebaseerd op dezelfde data als je horloge gebruikt voor je dagelijkse statistieken.</span></span></h2><div class="cap">Garmin's voorspellingen op basis van huidige conditie.</div>
       <div id="race-preds" style="margin-top:4px;display:flex;flex-direction:column;gap:10px"></div>
     </div>
+    <div class="card c7"><h2><span class="dot cy"></span>Endurance Score<span class="info" tabindex="0">i<span class="tip"><b>Garmin's maatstaf voor uithoudingsvermogen.</b> Meet je vermogen om langdurige inspanning vol te houden — aanvullend op VO&#x2082;max. Stijgende trend over het blok is het doel.</span></span></h2><div class="cap">Uithoudingsvermogen over het trainingsblok — aanvullend op VO&#x2082;max.</div>
+      <div class="chart-h"><canvas id="enduranceChart"></canvas></div>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px"><span class="big" style="color:var(--cyan)" id="m-endurance">—</span><span class="unit">score</span><span id="m-endurance-trend" class="trend-eq" style="margin-left:6px"></span></div>
+    </div>
+    <div class="card c5"><h2><span class="dot co"></span>Lactaatdrempel · LTHR<span class="info" tabindex="0">i<span class="tip"><b>Garmin's schatting van je lactaatdrempel-hartslag.</b> Referentie: 173–174 bpm. Een stijgende LTHR bij gelijk trainingsvolume is een positief adaptatiemerk.</span></span></h2><div class="cap">Lactaatdrempel hartslag — referentie 173–174 bpm. Verschuiving signaleert aerobe aanpassing.</div>
+      <div id="lactate-display" style="margin-top:12px"></div>
+    </div>
   </div></div>
 
   <!-- TAB 02: VOLUME -->
@@ -308,7 +315,13 @@
     <div class="card c4"><h2><span class="dot am"></span>LT Runs · Drempel Trend<span class="info" tabindex="0">i<span class="tip"><b>Runs met gem HR &gt;160 bpm = threshold work.</b> Dalende pace bij gelijke HR = je drempel verbetert. Dit is de directe maatstaf voor marathonspecifieke kracht.</span></span></h2><div class="cap">Threshold runs — pace en HR trend. Dalende pace = je drempel verschuift.</div>
       <div class="chart-h tall"><canvas id="ltChart"></canvas></div>
     </div>
-    <div class="card c6"><h2><span class="dot"></span>HR vs Pace · Running Economy<span class="info" tabindex="0">i<span class="tip"><b>Pace per hartslag — de meest directe maatstaf van loopeconomie.</b> Sneller bij dezelfde HR = je motor wordt efficiënter. Let op seizoenspatroon (hitte verhoogt HR bij gelijke pace).</span></span></h2><div class="cap">Snelheid per hartslag over de loopjes. Stijgende lijn = betere loopeconomie.</div>
+    <div class="card c6"><h2><span class="dot"></span>HR vs Pace · Running Economy<span class="info" tabindex="0">i<span class="tip"><b>Pace per hartslag — de meest directe maatstaf van loopeconomie.</b> Sneller bij dezelfde HR = je motor wordt efficiënter. Temperatuurcorrectie (~1 slag/°C boven 18°C) geeft een eerlijker beeld van aeroob vermogen op warme dagen.</span></span></h2><div class="cap">Snelheid per hartslag. Stijgende lijn = betere loopeconomie. Temperatuurcorrectie beschikbaar.</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <label style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;cursor:pointer">
+          <input type="checkbox" id="tempCorrect" style="cursor:pointer"> Temperatuurcorrectie (≥18°C)
+        </label>
+        <span id="tempCorrectInfo" style="font-size:10px;color:var(--dim)"></span>
+      </div>
       <div class="chart-h"><canvas id="hrPaceChart"></canvas></div>
     </div>
     <div class="card c6"><h2><span class="dot vl"></span>Loopeconomie · GCT &amp; Vert. Osc<span class="info" tabindex="0">i<span class="tip"><b>Ground Contact Time en Vertical Oscillation per run (Advanced Dynamics via HRM-600).</b> GCT doel: dalend, &lt;260ms op marathon pace. Vert. osc doel: &lt;9cm. Beiden indicatoren van loopefficiëntie.</span></span></h2><div class="cap">GCT en vertical oscillation over het blok — direct van HRM-600 Advanced Dynamics.</div>
@@ -714,16 +727,43 @@ const builders={
         {label:'HR (bpm)',data:lt.map(r=>r.avg_hr),borderColor:C.coral,borderWidth:2,borderDash:[4,3],tension:.35,pointRadius:3,yAxisID:'y2'}
       ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>c.datasetIndex===0?'Pace: '+secToPace(c.raw):'HR: '+c.raw+' bpm'}}},scales:{x:{...G,grid:{display:false}},y:{...G,reverse:true,ticks:{color:C.amber,callback:v=>secToPace(v)}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:155,suggestedMax:185,ticks:{color:C.coral}}}}});
     }
-    // HR vs Pace lijndiagram op datum (running economy trend)
+    // HR vs Pace lijndiagram op datum (running economy trend) met temperatuurcorrectie
     const planStart='2026-06-08';
     const ecoRuns=(DATA.recentActivities||[]).filter(r=>r.avg_hr&&r.pace&&r.date>=planStart).sort((a,b)=>a.date.localeCompare(b.date));
     if(ecoRuns.length){
       const p2s=p=>{if(!p)return null;const pts=p.split(':');return pts.length>=2?parseInt(pts[0])*60+parseInt(pts[1]):null;};
       const s2p=s=>{if(!s)return'--';return Math.floor(s/60)+':'+(s%60).toString().padStart(2,'0')+'/km';};
-      new Chart(hrPaceChart,{type:'line',data:{labels:ecoRuns.map(r=>r.date?r.date.slice(5):''),datasets:[
-        {label:'Pace',data:ecoRuns.map(r=>p2s(r.pace)),borderColor:C.cyan,borderWidth:2.5,tension:.35,pointRadius:5,fill:true,backgroundColor:'rgba(69,200,224,.08)',yAxisID:'y'},
-        {label:'HR (bpm)',data:ecoRuns.map(r=>r.avg_hr),borderColor:C.coral,borderWidth:2,borderDash:[4,3],tension:.35,pointRadius:4,yAxisID:'y2'}
-      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:c=>c.datasetIndex===0?'Pace: '+s2p(c.raw):'HR: '+c.raw+' bpm'}}},scales:{x:{...G,grid:{display:false}},y:{...G,reverse:true,ticks:{color:C.cyan,callback:v=>s2p(v)}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:130,suggestedMax:175,ticks:{color:C.coral}}}}});
+      const tempCorrectHR=(hr,temp)=>{if(!temp||temp<=18)return hr;return Math.max(hr-(temp-18),hr*0.92);};
+      let hrPaceChartInst=null;
+      const buildHrPaceChart=()=>{
+        const useTempCorr=document.getElementById('tempCorrect')?.checked;
+        const hrData=ecoRuns.map(r=>{
+          const hr=r.avg_hr;
+          if(useTempCorr&&r.weather?.temp&&r.weather.temp>18){
+            return Math.round(tempCorrectHR(hr,r.weather.temp));
+          }
+          return hr;
+        });
+        const tooltipExtra=ecoRuns.map(r=>{
+          if(r.weather?.temp)return r.weather.temp+'°C'+(r.weather.humidity?', '+r.weather.humidity+'%':'');
+          return null;
+        });
+        const hrLabel=useTempCorr?'HR gecorrigeerd (bpm)':'HR (bpm)';
+        const hrColor=useTempCorr?C.amber:C.coral;
+        if(hrPaceChartInst)hrPaceChartInst.destroy();
+        hrPaceChartInst=new Chart(hrPaceChart,{type:'line',data:{labels:ecoRuns.map(r=>r.date?r.date.slice(5):''),datasets:[
+          {label:'Pace',data:ecoRuns.map(r=>p2s(r.pace)),borderColor:C.cyan,borderWidth:2.5,tension:.35,pointRadius:5,fill:true,backgroundColor:'rgba(69,200,224,.08)',yAxisID:'y'},
+          {label:hrLabel,data:hrData,borderColor:hrColor,borderWidth:2,borderDash:[4,3],tension:.35,pointRadius:4,yAxisID:'y2'}
+        ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,padding:11,font:{size:9}}},tooltip:{callbacks:{label:(c,i)=>{if(c.datasetIndex===0)return'Pace: '+s2p(c.raw);const wx=tooltipExtra[c.dataIndex];return hrLabel+': '+c.raw+' bpm'+(wx?' ('+wx+')':'');},}}},scales:{x:{...G,grid:{display:false}},y:{...G,reverse:true,ticks:{color:C.cyan,callback:v=>s2p(v)}},y2:{position:'right',grid:{display:false},border:{display:false},suggestedMin:130,suggestedMax:175,ticks:{color:hrColor}}}}});
+        // Update info label
+        const infoEl=document.getElementById('tempCorrectInfo');
+        if(infoEl&&useTempCorr){
+          const hotRuns=ecoRuns.filter(r=>r.weather?.temp>18).length;
+          infoEl.textContent=hotRuns?hotRuns+' run'+(hotRuns>1?'s':'')+' gecorrigeerd':'geen warme runs';
+        } else if(infoEl){infoEl.textContent='';}
+      };
+      buildHrPaceChart();
+      document.getElementById('tempCorrect')?.addEventListener('change',buildHrPaceChart);
     }
     // GCT & Vertical Oscillation
     const dynRuns=(DATA.recentActivities||[]).filter(r=>r.gct_ms||r.vert_osc_cm).reverse();
@@ -765,6 +805,48 @@ const builders={
       return '<div style="display:grid;grid-template-columns:80px repeat('+smWeeks.length+',1fr);gap:5px;margin-bottom:5px;align-items:center"><span style="font-size:11px;color:var(--muted)">'+smLabels[type]+'</span>'+cells+'</div>';
     }).join('');
     smEl.innerHTML=hdr+rowHtml+'<div style="margin-top:8px;font-size:10px;color:var(--dim)">Groen = doel gehaald · Geel = gedeeltelijk · Grijs = geen sessie · Doel: kracht 2×, mobiliteit 5× per week</div>';
+
+    // Endurance Score chart
+    const endScores=(DATA.enduranceScore||[]).filter(d=>d.score&&d.date>=planStart);
+    const endEl=document.getElementById('enduranceChart');
+    const endValEl=document.getElementById('m-endurance');
+    const endTrendEl=document.getElementById('m-endurance-trend');
+    if(endScores.length&&endEl){
+      const lastScore=endScores[endScores.length-1]?.score;
+      const firstScore=endScores[0]?.score;
+      if(endValEl)endValEl.textContent=lastScore??'—';
+      if(endTrendEl&&lastScore&&firstScore){
+        const delta=+(lastScore-firstScore).toFixed(1);
+        endTrendEl.textContent=(delta>=0?'▲':'▼')+Math.abs(delta);
+        endTrendEl.className='trend-'+(delta>=0?'up':'dn');
+      }
+      new Chart(endEl,{type:'line',data:{labels:endScores.map(d=>d.date.slice(5)),datasets:[
+        {label:'Endurance Score',data:endScores.map(d=>d.score),borderColor:C.cyan,borderWidth:2.5,tension:.4,pointRadius:3,fill:true,backgroundColor:'rgba(69,200,224,.07)'}
+      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'Score: '+c.raw}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:30,ticks:{color:C.cyan}}}}});
+    } else if(endValEl){endValEl.textContent='—';}
+
+    // Lactate Threshold display
+    const lt2=DATA.lactateThreshold||{};
+    const ltEl=document.getElementById('lactate-display');
+    if(ltEl){
+      if(lt2.lthr){
+        const ref=173.5;
+        const diff=+(lt2.lthr-ref).toFixed(0);
+        const diffColor=diff>0?'var(--green)':diff<0?'var(--coral)':'var(--muted)';
+        const diffStr=diff>0?'+'+diff+' vs referentie':diff<0?diff+' vs referentie':'= referentie';
+        const paceStr=lt2.pace?'<div style="font-size:11px;color:var(--muted);margin-top:4px">LT Pace: '+Math.floor(lt2.pace/60)+':'+(lt2.pace%60).toString().padStart(2,'0')+'/km</div>':'';
+        ltEl.innerHTML='<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:6px">'
+          +'<span style="font-size:38px;font-weight:700;color:var(--text);font-family:var(--mono)">'+lt2.lthr+'</span>'
+          +'<span style="font-size:13px;color:var(--muted)">bpm</span>'
+          +'<span style="font-size:12px;color:'+diffColor+'">'+diffStr+'</span>'
+          +'</div>'
+          +'<div style="font-size:11px;color:var(--dim)">Referentie: 173–174 bpm · Gemeten: '+(lt2.date||'onbekend').slice(0,10)+'</div>'
+          +paceStr
+          +'<div style="font-size:10px;color:var(--muted);margin-top:8px">Stijgende LTHR bij gelijk trainingsvolume = positieve aerobe aanpassing.</div>';
+      } else {
+        ltEl.innerHTML='<div style="color:var(--muted);font-size:12px">Geen lactaatdrempeldata beschikbaar.</div>';
+      }
+    }
   }
 };
 
