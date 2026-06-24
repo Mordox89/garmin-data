@@ -498,7 +498,8 @@ def process_activities(client, raw_acts):
     lt_candidates = [
         a for a in raw_acts
         if (a.get("startTimeLocal") or "")[:10] >= cutoff
-        and 163 <= (a.get("averageHR") or 0) <= 178
+        and (a.get("averageHR") or 0) >= 155  # laag genoeg om LT-blokken binnen GA runs te pakken
+        and (a.get("maxHR") or 0) >= 163      # max HR boven LT zone = LT blok aanwezig
     ]
     recent_5 = sorted(raw_acts, key=lambda x: x.get("startTimeLocal") or "", reverse=True)[:5]
     seen_ids = set()
