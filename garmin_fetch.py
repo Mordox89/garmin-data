@@ -979,7 +979,8 @@ def build_lt_runs(recent_acts):
             p = s.get("pace")
             if p:
                 try:
-                    parts = str(p).split(":")
+                    p = str(p).replace("/km","").strip()
+                    parts = p.split(":")
                     secs.append(int(parts[0]) * 60 + int(parts[1]))
                 except Exception:
                     pass

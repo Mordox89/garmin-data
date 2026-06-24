@@ -2363,8 +2363,8 @@
     {
       "date": "2026-06-24",
       "charged": 43,
-      "drained": 20,
-      "net": 23,
+      "drained": 22,
+      "net": 21,
       "level": null
     }
   ],
@@ -3024,7 +3024,7 @@
       "name": "Apeldoorn - 21.1km marathon tempo",
       "avg_hr": 164,
       "max_hr": 169,
-      "pace": "4:40/km",
+      "pace": "4:28/km",
       "lt_km": 11.1,
       "method": "workout",
       "dist_km": 24.98
@@ -3034,7 +3034,7 @@
       "name": "Apeldoorn Hardlopen",
       "avg_hr": 166,
       "max_hr": 171,
-      "pace": "5:32/km",
+      "pace": "5:33/km",
       "lt_km": 2.0,
       "method": "splits",
       "dist_km": 6.01
@@ -3044,7 +3044,7 @@
       "name": "Apeldoorn - W1 FRI SST 4x4 min @ LT1 (light)",
       "avg_hr": 169,
       "max_hr": 178,
-      "pace": "5:43/km",
+      "pace": "4:37/km",
       "lt_km": 3.4,
       "method": "workout",
       "dist_km": 8.01
@@ -3054,7 +3054,7 @@
       "name": "Apeldoorn - W2 TUE SST 6x3 min",
       "avg_hr": 168,
       "max_hr": 175,
-      "pace": "5:37/km",
+      "pace": "4:36/km",
       "lt_km": 3.2,
       "method": "workout",
       "dist_km": 8.8
@@ -3064,7 +3064,7 @@
       "name": "Apeldoorn - W2 FRI SST 5x4 min",
       "avg_hr": 170,
       "max_hr": 173,
-      "pace": "5:33/km",
+      "pace": "4:40/km",
       "lt_km": 2.5,
       "method": "workout",
       "dist_km": 8.5
@@ -3074,7 +3074,7 @@
       "name": "Apeldoorn - Lactate threshold 13km",
       "avg_hr": 171,
       "max_hr": 177,
-      "pace": "5:04/km",
+      "pace": "4:29/km",
       "lt_km": 5.0,
       "method": "workout",
       "dist_km": 13.0
@@ -3084,7 +3084,7 @@
       "name": "Apeldoorn - MP Long Run 21km",
       "avg_hr": 163,
       "max_hr": 166,
-      "pace": "5:24/km",
+      "pace": "5:12/km",
       "lt_km": 3.0,
       "method": "workout",
       "dist_km": 21.0
@@ -3094,7 +3094,7 @@
       "name": "Apeldoorn - Lactate threshold 13km",
       "avg_hr": 170,
       "max_hr": 177,
-      "pace": "5:13/km",
+      "pace": "4:30/km",
       "lt_km": 7.0,
       "method": "workout",
       "dist_km": 13.0
