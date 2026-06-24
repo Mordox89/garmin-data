@@ -921,7 +921,7 @@ def build_lt_runs(recent_acts):
     Methode 2: aaneengesloten km-splits HR 163-178 (fallback vrije runs)
     Methode 3: avg_hr fallback als geen splits beschikbaar
     """
-    LT_HR_MIN = 163
+    LT_HR_MIN = 165
     LT_HR_MAX = 178
     MIN_LT_KM = 2
 

@@ -2363,8 +2363,8 @@
     {
       "date": "2026-06-24",
       "charged": 43,
-      "drained": 22,
-      "net": 21,
+      "drained": 33,
+      "net": 10,
       "level": null
     }
   ],
@@ -2815,7 +2815,7 @@
     },
     {
       "date": "2026-06-24",
-      "avg_stress": 7
+      "avg_stress": 15
     }
   ],
   "weight": [
@@ -3022,10 +3022,10 @@
     {
       "date": "2026-04-12",
       "name": "Apeldoorn - 21.1km marathon tempo",
-      "avg_hr": 164,
+      "avg_hr": 166,
       "max_hr": 169,
-      "pace": "4:28/km",
-      "lt_km": 11.1,
+      "pace": "4:29/km",
+      "lt_km": 5.1,
       "method": "workout",
       "dist_km": 24.98
     },
@@ -3042,10 +3042,10 @@
     {
       "date": "2026-05-29",
       "name": "Apeldoorn - W1 FRI SST 4x4 min @ LT1 (light)",
-      "avg_hr": 169,
+      "avg_hr": 170,
       "max_hr": 178,
-      "pace": "4:37/km",
-      "lt_km": 3.4,
+      "pace": "4:46/km",
+      "lt_km": 3.3,
       "method": "workout",
       "dist_km": 8.01
     },
@@ -3080,22 +3080,12 @@
       "dist_km": 13.0
     },
     {
-      "date": "2026-06-20",
-      "name": "Apeldoorn - MP Long Run 21km",
-      "avg_hr": 163,
-      "max_hr": 166,
-      "pace": "5:12/km",
-      "lt_km": 3.0,
-      "method": "workout",
-      "dist_km": 21.0
-    },
-    {
       "date": "2026-06-24",
       "name": "Apeldoorn - Lactate threshold 13km",
-      "avg_hr": 170,
+      "avg_hr": 171,
       "max_hr": 177,
       "pace": "4:30/km",
-      "lt_km": 7.0,
+      "lt_km": 6.0,
       "method": "workout",
       "dist_km": 13.0
     }
