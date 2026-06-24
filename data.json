@@ -290,7 +290,8 @@
           "hr": 142.0,
           "cad": 164,
           "power": 378.0,
-          "elev_gain": 7.0
+          "elev_gain": 7.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -298,7 +299,8 @@
           "hr": 147.0,
           "cad": 165,
           "power": 376.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -306,7 +308,8 @@
           "hr": 148.0,
           "cad": 167,
           "power": 382.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -314,7 +317,8 @@
           "hr": 164.0,
           "cad": 175,
           "power": 464.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -322,7 +326,8 @@
           "hr": 167.0,
           "cad": 176,
           "power": 442.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -330,7 +335,8 @@
           "hr": 169.0,
           "cad": 178,
           "power": 452.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -338,7 +344,8 @@
           "hr": 172.0,
           "cad": 177,
           "power": 444.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -346,7 +353,8 @@
           "hr": 169.0,
           "cad": 179,
           "power": 443.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -354,7 +362,8 @@
           "hr": 174.0,
           "cad": 180,
           "power": 443.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -362,7 +371,8 @@
           "hr": 173.0,
           "cad": 182,
           "power": 443.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -370,7 +380,8 @@
           "hr": 154.0,
           "cad": 153,
           "power": 281.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 1.0,
@@ -378,7 +389,8 @@
           "hr": 144.0,
           "cad": 147,
           "power": 285.0,
-          "elev_gain": 6.0
+          "elev_gain": 6.0,
+          "intensity": "REST"
         },
         {
           "km": 1.0,
@@ -386,7 +398,8 @@
           "hr": 153.0,
           "cad": 168,
           "power": 357.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         }
       ]
     },
@@ -416,7 +429,8 @@
           "hr": 127.0,
           "cad": 170,
           "power": 340.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -424,7 +438,8 @@
           "hr": 141.0,
           "cad": 172,
           "power": 346.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -432,7 +447,8 @@
           "hr": 143.0,
           "cad": 172,
           "power": 351.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -440,7 +456,8 @@
           "hr": 142.0,
           "cad": 171,
           "power": 341.0,
-          "elev_gain": 2.0
+          "elev_gain": 2.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -448,7 +465,8 @@
           "hr": 147.0,
           "cad": 172,
           "power": 362.0,
-          "elev_gain": 7.0
+          "elev_gain": 7.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -456,7 +474,8 @@
           "hr": 147.0,
           "cad": 172,
           "power": 338.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         }
       ]
     },
@@ -486,7 +505,8 @@
           "hr": 141.0,
           "cad": 166,
           "power": 379.0,
-          "elev_gain": 8.0
+          "elev_gain": 8.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -494,7 +514,8 @@
           "hr": 146.0,
           "cad": 171,
           "power": 382.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -502,7 +523,8 @@
           "hr": 148.0,
           "cad": 172,
           "power": 384.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -510,7 +532,8 @@
           "hr": 149.0,
           "cad": 174,
           "power": 412.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -518,7 +541,8 @@
           "hr": 151.0,
           "cad": 173,
           "power": 414.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -526,7 +550,8 @@
           "hr": 152.0,
           "cad": 174,
           "power": 412.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -534,7 +559,8 @@
           "hr": 152.0,
           "cad": 175,
           "power": 404.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -542,7 +568,8 @@
           "hr": 153.0,
           "cad": 175,
           "power": 402.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -550,7 +577,8 @@
           "hr": 149.0,
           "cad": 174,
           "power": 392.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -558,7 +586,8 @@
           "hr": 152.0,
           "cad": 174,
           "power": 389.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -566,7 +595,8 @@
           "hr": 153.0,
           "cad": 174,
           "power": 384.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -574,7 +604,8 @@
           "hr": 154.0,
           "cad": 174,
           "power": 389.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -582,7 +613,8 @@
           "hr": 154.0,
           "cad": 173,
           "power": 385.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -590,7 +622,8 @@
           "hr": 154.0,
           "cad": 174,
           "power": 387.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -598,7 +631,8 @@
           "hr": 157.0,
           "cad": 175,
           "power": 401.0,
-          "elev_gain": 9.0
+          "elev_gain": 9.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -606,7 +640,8 @@
           "hr": 154.0,
           "cad": 173,
           "power": 386.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         }
       ]
     },
@@ -636,7 +671,8 @@
           "hr": 138.0,
           "cad": 162,
           "power": 352.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -644,7 +680,8 @@
           "hr": 149.0,
           "cad": 169,
           "power": 369.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -652,7 +689,8 @@
           "hr": 150.0,
           "cad": 171,
           "power": 373.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -660,7 +698,8 @@
           "hr": 152.0,
           "cad": 171,
           "power": 375.0,
-          "elev_gain": 3.0
+          "elev_gain": 3.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -668,7 +707,8 @@
           "hr": 152.0,
           "cad": 171,
           "power": 370.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -676,7 +716,8 @@
           "hr": 150.0,
           "cad": 170,
           "power": 368.0,
-          "elev_gain": 2.0
+          "elev_gain": 2.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -684,7 +725,8 @@
           "hr": 154.0,
           "cad": 170,
           "power": 356.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -692,7 +734,8 @@
           "hr": 161.0,
           "cad": 172,
           "power": 391.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -700,7 +743,8 @@
           "hr": 163.0,
           "cad": 171,
           "power": 387.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -708,7 +752,8 @@
           "hr": 157.0,
           "cad": 171,
           "power": 375.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -716,7 +761,8 @@
           "hr": 160.0,
           "cad": 171,
           "power": 379.0,
-          "elev_gain": 3.0
+          "elev_gain": 3.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -724,7 +770,8 @@
           "hr": 153.0,
           "cad": 170,
           "power": 384.0,
-          "elev_gain": 2.0
+          "elev_gain": 2.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -732,7 +779,8 @@
           "hr": 161.0,
           "cad": 172,
           "power": 384.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -740,7 +788,8 @@
           "hr": 155.0,
           "cad": 158,
           "power": 330.0,
-          "elev_gain": 2.0
+          "elev_gain": 2.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -748,7 +797,8 @@
           "hr": 159.0,
           "cad": 171,
           "power": 382.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -756,7 +806,8 @@
           "hr": 160.0,
           "cad": 172,
           "power": 377.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -764,7 +815,8 @@
           "hr": 158.0,
           "cad": 172,
           "power": 373.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -772,7 +824,8 @@
           "hr": 163.0,
           "cad": 172,
           "power": 368.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -780,7 +833,8 @@
           "hr": 160.0,
           "cad": 170,
           "power": 371.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -788,7 +842,8 @@
           "hr": 164.0,
           "cad": 170,
           "power": 370.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -796,7 +851,8 @@
           "hr": 156.0,
           "cad": 161,
           "power": 311.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "REST"
         }
       ]
     },
@@ -826,7 +882,8 @@
           "hr": 133.0,
           "cad": 165,
           "power": 331.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -834,7 +891,8 @@
           "hr": 142.0,
           "cad": 170,
           "power": 355.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -842,7 +900,8 @@
           "hr": 143.0,
           "cad": 170,
           "power": 368.0,
-          "elev_gain": 6.0
+          "elev_gain": 6.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -850,7 +909,8 @@
           "hr": 140.0,
           "cad": 171,
           "power": 359.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -858,7 +918,8 @@
           "hr": 144.0,
           "cad": 172,
           "power": 370.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -866,7 +927,8 @@
           "hr": 145.0,
           "cad": 171,
           "power": 360.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -874,7 +936,8 @@
           "hr": 145.0,
           "cad": 169,
           "power": 367.0,
-          "elev_gain": 7.0
+          "elev_gain": 7.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -882,7 +945,8 @@
           "hr": 146.0,
           "cad": 170,
           "power": 359.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         }
       ]
     },
@@ -912,7 +976,8 @@
           "hr": 144.0,
           "cad": 165,
           "power": 363.0,
-          "elev_gain": 9.0
+          "elev_gain": 9.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -920,7 +985,8 @@
           "hr": 153.0,
           "cad": 167,
           "power": 362.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -928,7 +994,8 @@
           "hr": 156.0,
           "cad": 168,
           "power": 371.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -936,7 +1003,8 @@
           "hr": 157.0,
           "cad": 169,
           "power": 369.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -944,7 +1012,8 @@
           "hr": 155.0,
           "cad": 169,
           "power": 370.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -952,7 +1021,8 @@
           "hr": 158.0,
           "cad": 168,
           "power": 362.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -960,7 +1030,8 @@
           "hr": 159.0,
           "cad": 169,
           "power": 361.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -968,7 +1039,8 @@
           "hr": 159.0,
           "cad": 168,
           "power": 370.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -976,7 +1048,8 @@
           "hr": 159.0,
           "cad": 169,
           "power": 368.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -984,7 +1057,8 @@
           "hr": 160.0,
           "cad": 168,
           "power": 379.0,
-          "elev_gain": 2.0
+          "elev_gain": 2.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -992,7 +1066,8 @@
           "hr": 156.0,
           "cad": 168,
           "power": 387.0,
-          "elev_gain": 4.0
+          "elev_gain": 4.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1000,7 +1075,8 @@
           "hr": 158.0,
           "cad": 168,
           "power": 388.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1008,7 +1084,8 @@
           "hr": 162.0,
           "cad": 168,
           "power": 392.0,
-          "elev_gain": 6.0
+          "elev_gain": 6.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1016,7 +1093,8 @@
           "hr": 160.0,
           "cad": 167,
           "power": 378.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         }
       ]
     },
@@ -1046,7 +1124,8 @@
           "hr": 141.0,
           "cad": 161,
           "power": 375.0,
-          "elev_gain": 8.0
+          "elev_gain": 8.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -1054,7 +1133,8 @@
           "hr": 149.0,
           "cad": 165,
           "power": 381.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -1062,7 +1142,8 @@
           "hr": 150.0,
           "cad": 166,
           "power": 385.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -1070,7 +1151,8 @@
           "hr": 161.0,
           "cad": 173,
           "power": 439.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1078,7 +1160,8 @@
           "hr": 167.0,
           "cad": 177,
           "power": 438.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1086,7 +1169,8 @@
           "hr": 170.0,
           "cad": 177,
           "power": 451.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1094,7 +1178,8 @@
           "hr": 171.0,
           "cad": 177,
           "power": 445.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1102,7 +1187,8 @@
           "hr": 174.0,
           "cad": 179,
           "power": 447.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1110,7 +1196,8 @@
           "hr": 175.0,
           "cad": 178,
           "power": 463.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1118,7 +1205,8 @@
           "hr": 155.0,
           "cad": 168,
           "power": 372.0,
-          "elev_gain": 2.0
+          "elev_gain": 2.0,
+          "intensity": "REST"
         },
         {
           "km": 1.0,
@@ -1126,7 +1214,8 @@
           "hr": 158.0,
           "cad": 170,
           "power": 365.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 1.0,
@@ -1134,7 +1223,8 @@
           "hr": 159.0,
           "cad": 169,
           "power": 383.0,
-          "elev_gain": 6.0
+          "elev_gain": 6.0,
+          "intensity": "REST"
         },
         {
           "km": 1.0,
@@ -1142,7 +1232,8 @@
           "hr": 156.0,
           "cad": 167,
           "power": 377.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         }
       ]
     },
@@ -1172,7 +1263,8 @@
           "hr": 138.0,
           "cad": 165,
           "power": 328.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -1180,7 +1272,8 @@
           "hr": 148.0,
           "cad": 167,
           "power": 367.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 0.1,
@@ -1188,7 +1281,8 @@
           "hr": 159.0,
           "cad": 183,
           "power": 530.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1196,7 +1290,8 @@
           "hr": 145.0,
           "cad": 178,
           "power": 504.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1204,7 +1299,8 @@
           "hr": 144.0,
           "cad": 173,
           "power": 416.0,
-          "elev_gain": 2.0
+          "elev_gain": 2.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1212,7 +1308,8 @@
           "hr": 140.0,
           "cad": 173,
           "power": 487.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.89,
@@ -1220,7 +1317,8 @@
           "hr": 162.0,
           "cad": 175,
           "power": 460.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.16,
@@ -1228,7 +1326,8 @@
           "hr": 165.0,
           "cad": 163,
           "power": 337.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 0.87,
@@ -1236,7 +1335,8 @@
           "hr": 169.0,
           "cad": 175,
           "power": 455.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.15,
@@ -1244,7 +1344,8 @@
           "hr": 166.0,
           "cad": 162,
           "power": 319.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 0.85,
@@ -1252,7 +1353,8 @@
           "hr": 171.0,
           "cad": 173,
           "power": 455.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.16,
@@ -1260,7 +1362,8 @@
           "hr": 167.0,
           "cad": 164,
           "power": 314.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 0.77,
@@ -1268,7 +1371,8 @@
           "hr": 170.0,
           "cad": 174,
           "power": 467.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1276,7 +1380,8 @@
           "hr": 157.0,
           "cad": 167,
           "power": 371.0,
-          "elev_gain": 7.0
+          "elev_gain": 7.0,
+          "intensity": "REST"
         },
         {
           "km": 0.72,
@@ -1284,7 +1389,8 @@
           "hr": 157.0,
           "cad": 166,
           "power": 369.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "REST"
         }
       ]
     },
@@ -1314,7 +1420,8 @@
           "hr": 137.0,
           "cad": 166,
           "power": 334.0,
-          "elev_gain": 2.0
+          "elev_gain": 2.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -1322,7 +1429,8 @@
           "hr": 150.0,
           "cad": 166,
           "power": 372.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 0.1,
@@ -1330,7 +1438,8 @@
           "hr": 160.0,
           "cad": 176,
           "power": 545.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1338,7 +1447,8 @@
           "hr": 141.0,
           "cad": 180,
           "power": 423.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1346,7 +1456,8 @@
           "hr": 144.0,
           "cad": 183,
           "power": 545.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1354,7 +1465,8 @@
           "hr": 150.0,
           "cad": 125,
           "power": 229.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "REST"
         },
         {
           "km": 0.1,
@@ -1362,7 +1474,8 @@
           "hr": 148.0,
           "cad": 185,
           "power": 526.0,
-          "elev_gain": 3.0
+          "elev_gain": 3.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.65,
@@ -1370,7 +1483,8 @@
           "hr": 158.0,
           "cad": 176,
           "power": 423.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.16,
@@ -1378,7 +1492,8 @@
           "hr": 162.0,
           "cad": 165,
           "power": 350.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 0.65,
@@ -1386,7 +1501,8 @@
           "hr": 168.0,
           "cad": 178,
           "power": 446.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.16,
@@ -1394,7 +1510,8 @@
           "hr": 163.0,
           "cad": 165,
           "power": 327.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 0.64,
@@ -1402,7 +1519,8 @@
           "hr": 167.0,
           "cad": 178,
           "power": 443.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.15,
@@ -1410,7 +1528,8 @@
           "hr": 165.0,
           "cad": 164,
           "power": 314.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 0.65,
@@ -1418,7 +1537,8 @@
           "hr": 169.0,
           "cad": 179,
           "power": 432.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.16,
@@ -1426,7 +1546,8 @@
           "hr": 164.0,
           "cad": 164,
           "power": 302.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 0.64,
@@ -1434,7 +1555,8 @@
           "hr": 167.0,
           "cad": 178,
           "power": 458.0,
-          "elev_gain": 3.0
+          "elev_gain": 3.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.11,
@@ -1442,7 +1564,8 @@
           "hr": 158.0,
           "cad": 129,
           "power": 227.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 0.66,
@@ -1450,7 +1573,8 @@
           "hr": 170.0,
           "cad": 179,
           "power": 465.0,
-          "elev_gain": 5.0
+          "elev_gain": 5.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1458,7 +1582,8 @@
           "hr": 151.0,
           "cad": 168,
           "power": 321.0,
-          "elev_gain": 3.0
+          "elev_gain": 3.0,
+          "intensity": "REST"
         },
         {
           "km": 0.26,
@@ -1466,7 +1591,8 @@
           "hr": 151.0,
           "cad": 148,
           "power": 256.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         }
       ]
     },
@@ -1496,7 +1622,8 @@
           "hr": 125.0,
           "cad": 162,
           "power": 321.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 0.99,
@@ -1504,7 +1631,8 @@
           "hr": 152.0,
           "cad": 162,
           "power": 347.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 0.1,
@@ -1512,7 +1640,8 @@
           "hr": 163.0,
           "cad": 177,
           "power": 505.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1520,7 +1649,8 @@
           "hr": 152.0,
           "cad": 153,
           "power": 276.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1528,7 +1658,8 @@
           "hr": 145.0,
           "cad": 178,
           "power": 461.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1536,7 +1667,8 @@
           "hr": 144.0,
           "cad": 174,
           "power": 449.0,
-          "elev_gain": 2.0
+          "elev_gain": 2.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1544,7 +1676,8 @@
           "hr": 154.0,
           "cad": 123,
           "power": 226.0,
-          "elev_gain": 2.0
+          "elev_gain": 2.0,
+          "intensity": "REST"
         },
         {
           "km": 0.86,
@@ -1552,7 +1685,8 @@
           "hr": 166.0,
           "cad": 173,
           "power": 427.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.16,
@@ -1560,7 +1694,8 @@
           "hr": 168.0,
           "cad": 161,
           "power": 354.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 0.82,
@@ -1568,7 +1703,8 @@
           "hr": 174.0,
           "cad": 170,
           "power": 429.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.15,
@@ -1576,7 +1712,8 @@
           "hr": 160.0,
           "cad": 157,
           "power": 286.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 0.83,
@@ -1584,7 +1721,8 @@
           "hr": 170.0,
           "cad": 173,
           "power": 423.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.83,
@@ -1592,7 +1730,8 @@
           "hr": 170.0,
           "cad": 172,
           "power": 423.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1600,7 +1739,8 @@
           "hr": 162.0,
           "cad": 163,
           "power": 352.0,
-          "elev_gain": 5.0
+          "elev_gain": 5.0,
+          "intensity": "REST"
         },
         {
           "km": 0.39,
@@ -1608,7 +1748,8 @@
           "hr": 166.0,
           "cad": 165,
           "power": 371.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         }
       ]
     },
@@ -1638,7 +1779,8 @@
           "hr": 116.0,
           "cad": 163,
           "power": 371.0,
-          "elev_gain": 3.0
+          "elev_gain": 3.0,
+          "intensity": "INTERVAL"
         },
         {
           "km": 1.0,
@@ -1646,7 +1788,8 @@
           "hr": 161.0,
           "cad": 164,
           "power": 390.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "INTERVAL"
         },
         {
           "km": 1.0,
@@ -1654,7 +1797,8 @@
           "hr": 165.0,
           "cad": 164,
           "power": 375.0,
-          "elev_gain": 5.0
+          "elev_gain": 5.0,
+          "intensity": "INTERVAL"
         },
         {
           "km": 1.0,
@@ -1662,7 +1806,8 @@
           "hr": 158.0,
           "cad": 164,
           "power": 373.0,
-          "elev_gain": 5.0
+          "elev_gain": 5.0,
+          "intensity": "INTERVAL"
         },
         {
           "km": 1.0,
@@ -1670,7 +1815,8 @@
           "hr": 165.0,
           "cad": 165,
           "power": 369.0,
-          "elev_gain": 5.0
+          "elev_gain": 5.0,
+          "intensity": "INTERVAL"
         },
         {
           "km": 1.0,
@@ -1678,7 +1824,8 @@
           "hr": 167.0,
           "cad": 163,
           "power": 361.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "INTERVAL"
         }
       ]
     },
@@ -1708,7 +1855,8 @@
           "hr": 133.0,
           "cad": 157,
           "power": 379.0,
-          "elev_gain": 7.0
+          "elev_gain": 7.0,
+          "intensity": "INTERVAL"
         },
         {
           "km": 1.0,
@@ -1716,7 +1864,8 @@
           "hr": 157.0,
           "cad": 159,
           "power": 403.0,
-          "elev_gain": 4.0
+          "elev_gain": 4.0,
+          "intensity": "INTERVAL"
         },
         {
           "km": 1.0,
@@ -1724,7 +1873,8 @@
           "hr": 158.0,
           "cad": 160,
           "power": 385.0,
-          "elev_gain": 6.0
+          "elev_gain": 6.0,
+          "intensity": "INTERVAL"
         },
         {
           "km": 1.0,
@@ -1732,7 +1882,8 @@
           "hr": 154.0,
           "cad": 160,
           "power": 374.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "INTERVAL"
         },
         {
           "km": 1.0,
@@ -1740,7 +1891,8 @@
           "hr": 158.0,
           "cad": 160,
           "power": 379.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "INTERVAL"
         },
         {
           "km": 1.0,
@@ -1748,7 +1900,8 @@
           "hr": 156.0,
           "cad": 160,
           "power": 393.0,
-          "elev_gain": 7.0
+          "elev_gain": 7.0,
+          "intensity": "INTERVAL"
         },
         {
           "km": 1.0,
@@ -1756,7 +1909,8 @@
           "hr": 162.0,
           "cad": 159,
           "power": 406.0,
-          "elev_gain": 7.0
+          "elev_gain": 7.0,
+          "intensity": "INTERVAL"
         },
         {
           "km": 1.0,
@@ -1764,7 +1918,8 @@
           "hr": 162.0,
           "cad": 161,
           "power": 401.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "INTERVAL"
         }
       ]
     },
@@ -1794,7 +1949,8 @@
           "hr": 133.0,
           "cad": 164,
           "power": 428.0,
-          "elev_gain": 11.0
+          "elev_gain": 11.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 1.0,
@@ -1802,7 +1958,8 @@
           "hr": 145.0,
           "cad": 165,
           "power": 399.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 0.87,
@@ -1810,7 +1967,8 @@
           "hr": 150.0,
           "cad": 164,
           "power": 409.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "WARMUP"
         },
         {
           "km": 0.1,
@@ -1818,7 +1976,8 @@
           "hr": 152.0,
           "cad": 171,
           "power": 477.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1826,7 +1985,8 @@
           "hr": 135.0,
           "cad": 118,
           "power": 164.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 0.1,
@@ -1834,7 +1994,8 @@
           "hr": 128.0,
           "cad": 158,
           "power": 406.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1842,7 +2003,8 @@
           "hr": 129.0,
           "cad": 118,
           "power": 178.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 0.1,
@@ -1850,7 +2012,8 @@
           "hr": 132.0,
           "cad": 175,
           "power": 459.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1858,7 +2021,8 @@
           "hr": 131.0,
           "cad": 120,
           "power": 171.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 0.1,
@@ -1866,7 +2030,8 @@
           "hr": 131.0,
           "cad": 169,
           "power": 437.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1874,7 +2039,8 @@
           "hr": 130.0,
           "cad": 116,
           "power": 168.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "REST"
         },
         {
           "km": 0.1,
@@ -1882,7 +2048,8 @@
           "hr": 127.0,
           "cad": 157,
           "power": 414.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -1890,7 +2057,8 @@
           "hr": 127.0,
           "cad": 89,
           "power": 132.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "REST"
         },
         {
           "km": 1.0,
@@ -1898,7 +2066,8 @@
           "hr": 157.0,
           "cad": 173,
           "power": 487.0,
-          "elev_gain": 3.0
+          "elev_gain": 3.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1906,7 +2075,8 @@
           "hr": 163.0,
           "cad": 173,
           "power": 481.0,
-          "elev_gain": 5.0
+          "elev_gain": 5.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1914,7 +2084,8 @@
           "hr": 162.0,
           "cad": 173,
           "power": 451.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1922,7 +2093,8 @@
           "hr": 162.0,
           "cad": 174,
           "power": 454.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1930,7 +2102,8 @@
           "hr": 162.0,
           "cad": 175,
           "power": 450.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1938,7 +2111,8 @@
           "hr": 163.0,
           "cad": 174,
           "power": 451.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1946,7 +2120,8 @@
           "hr": 163.0,
           "cad": 175,
           "power": 448.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1954,7 +2129,8 @@
           "hr": 163.0,
           "cad": 176,
           "power": 447.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1962,7 +2138,8 @@
           "hr": 159.0,
           "cad": 177,
           "power": 451.0,
-          "elev_gain": 2.0
+          "elev_gain": 2.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1970,7 +2147,8 @@
           "hr": 157.0,
           "cad": 179,
           "power": 460.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1978,7 +2156,8 @@
           "hr": 164.0,
           "cad": 181,
           "power": 476.0,
-          "elev_gain": 5.0
+          "elev_gain": 5.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1986,7 +2165,8 @@
           "hr": 161.0,
           "cad": 180,
           "power": 486.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -1994,7 +2174,8 @@
           "hr": 163.0,
           "cad": 179,
           "power": 493.0,
-          "elev_gain": 2.0
+          "elev_gain": 2.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -2002,7 +2183,8 @@
           "hr": 165.0,
           "cad": 179,
           "power": 487.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -2010,7 +2192,8 @@
           "hr": 158.0,
           "cad": 177,
           "power": 483.0,
-          "elev_gain": 4.0
+          "elev_gain": 4.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -2018,7 +2201,8 @@
           "hr": 162.0,
           "cad": 179,
           "power": 490.0,
-          "elev_gain": 2.0
+          "elev_gain": 2.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -2026,7 +2210,8 @@
           "hr": 166.0,
           "cad": 177,
           "power": 473.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -2034,7 +2219,8 @@
           "hr": 166.0,
           "cad": 178,
           "power": 441.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -2042,7 +2228,8 @@
           "hr": 166.0,
           "cad": 179,
           "power": 432.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -2050,7 +2237,8 @@
           "hr": 157.0,
           "cad": 178,
           "power": 459.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 1.0,
@@ -2058,7 +2246,8 @@
           "hr": 165.0,
           "cad": 179,
           "power": 473.0,
-          "elev_gain": 1.0
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
         },
         {
           "km": 0.1,
@@ -2066,7 +2255,8 @@
           "hr": 167.0,
           "cad": 175,
           "power": 475.0,
-          "elev_gain": 0.0
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
         }
       ]
     }
