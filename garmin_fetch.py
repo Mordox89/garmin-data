@@ -885,90 +885,7 @@ def build_long_runs(raw_acts):
     return [v for _, v in sorted(week_longest.items())]
 
 # ── LT runs (drempel runs op basis van HR > 165) ──────────────────────────────
-def build_lt_runs(raw_acts):
-    """Detecteert LT/drempelwerk. Twee methodes:
-    1. Workout laps: intensity_type == ACTIVE met HR 163-178 (primair)
-    2. Aaneengesloten km-splits HR 163-178 (fallback voor vrije runs)
-    """
-    LT_HR_MIN = 163
-    LT_HR_MAX = 178
-    MIN_LT_KM = 2
 
-    runs = [a for a in raw_acts if (a.get("activityType", {}).get("typeKey") or "").lower() in RUN_TYPES]
-    lt_runs = []
-
-    for a in sorted(runs, key=lambda x: x.get("startTimeLocal") or ""):
-        date_str = (a.get("startTimeLocal") or "")[:10]
-        if not date_str:
-            continue
-        date = dt.date.fromisoformat(date_str)
-        if date < PLAN_START - dt.timedelta(days=60):
-            continue
-
-        splits = a.get("splits") or []
-        lt_splits = []
-        method = None
-
-        # Methode 1: workout laps met intensity ACTIVE
-        active_laps = [s for s in splits
-                       if (s.get("intensity") or "").upper() == "ACTIVE"
-                       and LT_HR_MIN <= (s.get("hr") or 0) <= LT_HR_MAX]
-        if len(active_laps) >= MIN_LT_KM:
-            lt_splits = active_laps
-            method = "workout"
-
-        # Methode 2: aaneengesloten km-splits boven LT HR
-        if not lt_splits:
-            best_streak = []
-            current_streak = []
-            for sp in splits:
-                if LT_HR_MIN <= (sp.get("hr") or 0) <= LT_HR_MAX:
-                    current_streak.append(sp)
-                    if len(current_streak) > len(best_streak):
-                        best_streak = list(current_streak)
-                else:
-                    current_streak = []
-            if len(best_streak) >= MIN_LT_KM:
-                lt_splits = best_streak
-                method = "splits"
-
-        # Fallback: geen splits maar gemiddelde HR in LT zone
-        if not lt_splits and not splits:
-            avg_hr = a.get("averageHR") or 0
-            if LT_HR_MIN <= avg_hr <= LT_HR_MAX:
-                lt_splits = [{"hr": avg_hr, "pace": pace_str(a.get("averageSpeed") or 0)}]
-                method = "avg"
-
-        if not lt_splits:
-            continue
-
-        # Bereken gemiddelden over LT-blok
-        hrs   = [s.get("hr")    for s in lt_splits if s.get("hr")]
-        paces = []
-        for s in lt_splits:
-            p = s.get("pace")
-            if p:
-                try:
-                    parts = str(p).split(":")
-                    paces.append(int(parts[0]) * 60 + int(parts[1]))
-                except Exception:
-                    pass
-        lt_avg_hr  = round(sum(hrs) / len(hrs))   if hrs   else None
-        lt_pace    = pace_str(1000 / (sum(paces) / len(paces))) if paces else None
-        lt_km      = sum(s.get("km", 1) for s in lt_splits)
-
-        lt_runs.append({
-            "date":    date_str,
-            "name":    a.get("activityName") or "Run",
-            "avg_hr":  lt_avg_hr,
-            "max_hr":  round(a.get("maxHR") or 0) if a.get("maxHR") else None,
-            "pace":    lt_pace,
-            "lt_km":   round(lt_km, 1),
-            "method":  method,
-            "dist_km": round((a.get("distance") or 0) / 1000, 2),
-        })
-
-    return lt_runs[-8:]
 def build_long_runs(raw_acts):
     """Langste run per week — voor long run progressie tracking."""
     runs = [a for a in raw_acts if (a.get("activityType", {}).get("typeKey") or "").lower() in RUN_TYPES]
@@ -998,83 +915,88 @@ def build_long_runs(raw_acts):
     return [v for _, v in sorted(week_longest.items())]
 
 # ── LT runs (drempel runs op basis van HR > 165) ──────────────────────────────
-def build_lt_runs(raw_acts):
-    """Detecteert LT/drempelwerk op basis van splits, niet gemiddelde HR.
-    Een run telt als LT-run als hij minstens 2 aaneengesloten km-splits
-    heeft met HR >= 163 bpm — pikt zo ook LT-blokken binnen lange runs op.
-    Fallback: gemiddelde HR >= 163 als er geen splits zijn.
+def build_lt_runs(recent_acts):
+    """Detecteert LT/drempelwerk via recent_acts (heeft splits + intensity).
+    Methode 1: workout laps met intensity ACTIVE en HR 163-178 (primair)
+    Methode 2: aaneengesloten km-splits HR 163-178 (fallback vrije runs)
+    Methode 3: avg_hr fallback als geen splits beschikbaar
     """
-    LT_HR     = 163  # ondergrens LT zone (Pfitzinger LT zone start)
-    LT_HR_MAX = 178  # bovengrens: VO2max zone begint bij 179 bpm
-    MIN_LT_KM = 2  # minimaal 2 aaneengesloten km boven LT_HR om te tellen
+    LT_HR_MIN = 163
+    LT_HR_MAX = 178
+    MIN_LT_KM = 2
 
-    runs = [a for a in raw_acts if (a.get("activityType", {}).get("typeKey") or "").lower() in RUN_TYPES]
     lt_runs = []
-    for a in sorted(runs, key=lambda x: x.get("startTimeLocal") or ""):
-        date_str = (a.get("startTimeLocal") or "")[:10]
+    for a in sorted(recent_acts, key=lambda x: x.get("date") or ""):
+        date_str = a.get("date") or ""
         if not date_str:
             continue
-        date = dt.date.fromisoformat(date_str)
+        try:
+            date = dt.date.fromisoformat(date_str)
+        except Exception:
+            continue
         if date < PLAN_START - dt.timedelta(days=60):
             continue
 
         splits = a.get("splits") or []
-        lt_km = 0
-        max_consecutive = 0
-        # Tel aaneengesloten splits boven LT_HR
-        for sp in splits:
-            sp_hr = sp.get("hr") or 0
-            if LT_HR <= sp_hr <= LT_HR_MAX:
-                lt_km += 1
-                max_consecutive = max(max_consecutive, lt_km)
-            else:
-                lt_km = 0
+        lt_splits = []
+        method = None
 
-        # Fallback als splits ontbreken: gebruik gemiddelde HR
-        avg_hr = a.get("averageHR") or 0
-        has_lt_block = (max_consecutive >= MIN_LT_KM) or (not splits and LT_HR <= avg_hr <= LT_HR_MAX)
-        if not has_lt_block:
+        # Methode 1: workout ACTIVE laps
+        active = [s for s in splits
+                  if (s.get("intensity") or "").upper() == "ACTIVE"
+                  and LT_HR_MIN <= (s.get("hr") or 0) <= LT_HR_MAX]
+        if len(active) >= MIN_LT_KM:
+            lt_splits = active
+            method = "workout"
+
+        # Methode 2: aaneengesloten km-splits op HR
+        if not lt_splits:
+            best, cur = [], []
+            for sp in splits:
+                if LT_HR_MIN <= (sp.get("hr") or 0) <= LT_HR_MAX:
+                    cur.append(sp)
+                    if len(cur) > len(best):
+                        best = list(cur)
+                else:
+                    cur = []
+            if len(best) >= MIN_LT_KM:
+                lt_splits = best
+                method = "splits"
+
+        # Methode 3: avg_hr fallback
+        avg_hr = a.get("avg_hr") or 0
+        if not lt_splits and LT_HR_MIN <= avg_hr <= LT_HR_MAX:
+            lt_splits = [{"hr": avg_hr, "pace": a.get("pace")}]
+            method = "avg"
+
+        if not lt_splits:
             continue
 
-        # Pace van het LT-blok zelf (snelste aaneengesloten reeks boven LT_HR)
-        lt_paces = []
-        streak = []
-        for sp in splits:
-            if (sp.get("hr") or 0) >= LT_HR:
-                streak.append(sp)
-            else:
-                if len(streak) >= MIN_LT_KM:
-                    lt_paces.extend(streak)
-                streak = []
-        if len(streak) >= MIN_LT_KM:
-            lt_paces.extend(streak)
-
-        # Gemiddelde pace van LT splits (sec/km) -> pace string
-        if lt_paces:
-            def sp_to_sec(p):
+        # Gemiddelden over LT blok
+        hrs = [s.get("hr") for s in lt_splits if s.get("hr")]
+        secs = []
+        for s in lt_splits:
+            p = s.get("pace")
+            if p:
                 try:
                     parts = str(p).split(":")
-                    return int(parts[0]) * 60 + int(parts[1])
+                    secs.append(int(parts[0]) * 60 + int(parts[1]))
                 except Exception:
-                    return None
-            secs = [sp_to_sec(sp.get("pace")) for sp in lt_paces if sp.get("pace")]
-            secs = [s for s in secs if s]
-            lt_pace = pace_str(1000 / (sum(secs) / len(secs))) if secs else None
-            lt_avg_hr = round(sum(sp.get("hr", 0) for sp in lt_paces) / len(lt_paces))
-        else:
-            lt_pace = pace_str(a.get("averageSpeed") or 0)
-            lt_avg_hr = round(avg_hr)
+                    pass
 
         lt_runs.append({
-            "date":       date_str,
-            "name":       a.get("activityName") or "Run",
-            "avg_hr":     lt_avg_hr,
-            "max_hr":     round(a.get("maxHR") or 0) if a.get("maxHR") else None,
-            "pace":       lt_pace,
-            "lt_km":      max_consecutive,
-            "dist_km":    round((a.get("distance") or 0) / 1000, 2),
+            "date":    date_str,
+            "name":    a.get("name") or "Run",
+            "avg_hr":  round(sum(hrs) / len(hrs)) if hrs else None,
+            "max_hr":  a.get("max_hr"),
+            "pace":    pace_str(1000 / (sum(secs) / len(secs))) if secs else a.get("pace"),
+            "lt_km":   round(sum(s.get("km", 1) for s in lt_splits), 1),
+            "method":  method,
+            "dist_km": a.get("dist_km") or 0,
         })
-    return lt_runs[-8:]  # laatste 8 LT runs
+
+    return lt_runs[-8:]
+
 
 # ── Strength & Mobility tracking ──────────────────────────────────────────────
 def build_strength_mobility(all_acts):
@@ -1197,7 +1119,7 @@ def main():
         "trainingReadiness": readiness,
         "weeks":             {str(k): v for k, v in weeks.items()},
         "longRuns":          build_long_runs(raw_acts),
-        "ltRuns":            build_lt_runs(raw_acts),
+        "ltRuns":            build_lt_runs(recent_acts),
         "strengthMobility":  build_strength_mobility(all_acts),
         "piriformisRisk":    build_piriformis_risk(recent_acts, sleep_data, training_load),
         "sleepDebt":         build_sleep_debt(sleep_data),
