@@ -457,6 +457,63 @@ const builders={
     const rpEl=document.getElementById('race-preds');
     const dists=[['5K','5k'],['10K','10k'],['Half','hm'],['Marathon','fm']];
     rpEl.innerHTML=dists.map(([label,key])=>rp[key]?`<div style="display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line)"><span style="font-size:12px;color:var(--muted)">${label}</span><span style="font-family:var(--mono);font-size:18px;font-weight:500">${rp[key]}</span></div>`:'').join('');
+    // Endurance Score — statische weergave met cijfer + trend + classificatie
+    const endScores=(DATA.enduranceScore||[]);
+    const endDisplayEl=document.getElementById('endurance-display');
+    if(endDisplayEl){
+      if(endScores.length){
+        const last=endScores[endScores.length-1];
+        const first=endScores[0];
+        const score=last.score;
+        const delta=Math.round(score-(first?.score||score));
+        const arrow=delta>0?'▲':delta<0?'▼':'→';
+        const arrowColor=delta>0?'var(--green)':delta<0?'var(--coral)':'var(--muted)';
+        const cls=score>=8800?'Elite':score>=8100?'Superior':score>=7300?'Expert':score>=6600?'Well-trained':score>=5800?'Trained':score>=5100?'Intermediate':'Beginner';
+        const nextThresh=score<5100?5100:score<5800?5800:score<6600?6600:score<7300?7300:score<8100?8100:score<8800?8800:null;
+        const toNext=nextThresh?Math.round(nextThresh-score):null;
+        const levels=[{l:'Trained',v:5800},{l:'Well-trained',v:6600},{l:'Expert',v:7300}];
+        const barsHtml=levels.map(t=>{
+          const active=score>=t.v;
+          return '<span style="font-size:10px;padding:2px 8px;border-radius:3px;background:'+(active?'var(--cyan)':'var(--surface2)')+';color:'+(active?'#000':'var(--dim)')+'">'+t.l+'</span>';
+        }).join('<span style="color:var(--dim);font-size:10px"> › </span>');
+        endDisplayEl.innerHTML=
+          '<div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">'
+          +'<span style="font-size:48px;font-weight:700;color:var(--text);font-family:var(--mono)">'+Math.round(score)+'</span>'
+          +'<span style="font-size:13px;color:var(--muted)">score</span>'
+          +'<span style="font-size:22px;color:'+arrowColor+'">'+arrow+'</span>'
+          +'<span style="font-size:13px;color:'+arrowColor+'">'+(delta!==0?(delta>0?'+':'')+delta+' vs blokstart':'stabiel')+'</span>'
+          +'</div>'
+          +'<div style="margin-top:6px;display:flex;gap:16px;flex-wrap:wrap">'
+          +'<span style="font-size:13px;font-weight:600;color:var(--cyan)">'+cls+'</span>'
+          +(toNext?'<span style="font-size:12px;color:var(--dim)">'+toNext+' punten tot '+(cls==='Trained'?'Well-trained':cls==='Well-trained'?'Expert':'volgende level')+'</span>':'')
+          +'<span style="font-size:11px;color:var(--dim)">Laatste meting: '+last.date+'</span>'
+          +'</div>'
+          +'<div style="margin-top:10px;display:flex;gap:6px;align-items:center">'+barsHtml+'</div>';
+      } else {
+        endDisplayEl.innerHTML='<div style="color:var(--muted);font-size:12px">Geen endurance score data beschikbaar.</div>';
+      }
+    }
+    // Lactate Threshold display
+    const lt2=DATA.lactateThreshold||{};
+    const ltEl=document.getElementById('lactate-display');
+    if(ltEl){
+      if(lt2.lthr){
+        const ref=173.5;
+        const diff=+(lt2.lthr-ref).toFixed(0);
+        const diffColor=diff>1?'var(--green)':diff<-1?'var(--coral)':'var(--muted)';
+        const diffStr=diff>0?'▲ +'+diff+' vs ref':diff<0?'▼ '+diff+' vs ref':'= ref (173–174)';
+        const staleNote=lt2.is_stale?'<span style="color:var(--amber);font-size:10px"> · mogelijk verouderd</span>':'';
+        ltEl.innerHTML='<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px">'
+          +'<span style="font-size:42px;font-weight:700;color:var(--text);font-family:var(--mono)">'+lt2.lthr+'</span>'
+          +'<span style="font-size:13px;color:var(--muted)">bpm</span>'
+          +'<span style="font-size:12px;color:'+diffColor+';margin-left:4px">'+diffStr+'</span>'
+          +'</div>'
+          +'<div style="font-size:11px;color:var(--dim)">Gemeten: '+(lt2.date||'onbekend').slice(0,10)+staleNote+'</div>'
+          +'<div style="font-size:10px;color:var(--muted);margin-top:10px">Stijgende LTHR = aerobe aanpassing. Referentie: 173–174 bpm.</div>';
+      } else {
+        ltEl.innerHTML='<div style="color:var(--muted);font-size:12px">Geen lactaatdrempeldata beschikbaar.</div>';
+      }
+    }
   },
   vol(){
     // Volume chart
@@ -809,63 +866,7 @@ const builders={
     }).join('');
     smEl.innerHTML=hdr+rowHtml+'<div style="margin-top:8px;font-size:10px;color:var(--dim)">Groen = doel gehaald · Geel = gedeeltelijk · Grijs = geen sessie · Doel: kracht 2×, mobiliteit 5× per week</div>';
 
-    // Endurance Score — statische weergave met cijfer + trend + classificatie
-    const endScores=(DATA.enduranceScore||[]);
-    const endDisplayEl=document.getElementById('endurance-display');
-    if(endDisplayEl){
-      if(endScores.length){
-        const last=endScores[endScores.length-1];
-        const first=endScores[0];
-        const score=last.score;
-        const delta=Math.round(score-(first?.score||score));
-        const arrow=delta>0?'▲':delta<0?'▼':'→';
-        const arrowColor=delta>0?'var(--green)':delta<0?'var(--coral)':'var(--muted)';
-        const cls=score>=8800?'Elite':score>=8100?'Superior':score>=7300?'Expert':score>=6600?'Well-trained':score>=5800?'Trained':score>=5100?'Intermediate':'Beginner';
-        const nextThresh=score<5100?5100:score<5800?5800:score<6600?6600:score<7300?7300:score<8100?8100:score<8800?8800:null;
-        const toNext=nextThresh?Math.round(nextThresh-score):null;
-        const levels=[{l:'Trained',v:5800},{l:'Well-trained',v:6600},{l:'Expert',v:7300}];
-        const barsHtml=levels.map(t=>{
-          const active=score>=t.v;
-          return '<span style="font-size:10px;padding:2px 8px;border-radius:3px;background:'+(active?'var(--cyan)':'var(--surface2)')+';color:'+(active?'#000':'var(--dim)')+'">'+t.l+'</span>';
-        }).join('<span style="color:var(--dim);font-size:10px"> › </span>');
-        endDisplayEl.innerHTML=
-          '<div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">'
-          +'<span style="font-size:48px;font-weight:700;color:var(--text);font-family:var(--mono)">'+Math.round(score)+'</span>'
-          +'<span style="font-size:13px;color:var(--muted)">score</span>'
-          +'<span style="font-size:22px;color:'+arrowColor+'">'+arrow+'</span>'
-          +'<span style="font-size:13px;color:'+arrowColor+'">'+(delta!==0?(delta>0?'+':'')+delta+' vs blokstart':'stabiel')+'</span>'
-          +'</div>'
-          +'<div style="margin-top:6px;display:flex;gap:16px;flex-wrap:wrap">'
-          +'<span style="font-size:13px;font-weight:600;color:var(--cyan)">'+cls+'</span>'
-          +(toNext?'<span style="font-size:12px;color:var(--dim)">'+toNext+' punten tot '+(cls==='Trained'?'Well-trained':cls==='Well-trained'?'Expert':'volgende level')+'</span>':'')
-          +'<span style="font-size:11px;color:var(--dim)">Laatste meting: '+last.date+'</span>'
-          +'</div>'
-          +'<div style="margin-top:10px;display:flex;gap:6px;align-items:center">'+barsHtml+'</div>';
-      } else {
-        endDisplayEl.innerHTML='<div style="color:var(--muted);font-size:12px">Geen endurance score data beschikbaar.</div>';
-      }
-    }
-    // Lactate Threshold display
-    const lt2=DATA.lactateThreshold||{};
-    const ltEl=document.getElementById('lactate-display');
-    if(ltEl){
-      if(lt2.lthr){
-        const ref=173.5;
-        const diff=+(lt2.lthr-ref).toFixed(0);
-        const diffColor=diff>1?'var(--green)':diff<-1?'var(--coral)':'var(--muted)';
-        const diffStr=diff>0?'▲ +'+diff+' vs ref':diff<0?'▼ '+diff+' vs ref':'= ref (173–174)';
-        const staleNote=lt2.is_stale?'<span style="color:var(--amber);font-size:10px"> · mogelijk verouderd</span>':'';
-        ltEl.innerHTML='<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px">'
-          +'<span style="font-size:42px;font-weight:700;color:var(--text);font-family:var(--mono)">'+lt2.lthr+'</span>'
-          +'<span style="font-size:13px;color:var(--muted)">bpm</span>'
-          +'<span style="font-size:12px;color:'+diffColor+';margin-left:4px">'+diffStr+'</span>'
-          +'</div>'
-          +'<div style="font-size:11px;color:var(--dim)">Gemeten: '+(lt2.date||'onbekend').slice(0,10)+staleNote+'</div>'
-          +'<div style="font-size:10px;color:var(--muted);margin-top:10px">Stijgende LTHR = aerobe aanpassing. Referentie: 173–174 bpm.</div>';
-      } else {
-        ltEl.innerHTML='<div style="color:var(--muted);font-size:12px">Geen lactaatdrempeldata beschikbaar.</div>';
-      }
-    }
+
   }
 };
 
