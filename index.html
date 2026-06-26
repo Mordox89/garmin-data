@@ -215,9 +215,8 @@
     <div class="card c5"><h2><span class="dot"></span>Race Predictions<span class="info" tabindex="0">i<span class="tip"><b>Garmin's racetijdvoorspellingen op basis van je huidige VO₂max en trainingsdata.</b> Gebaseerd op dezelfde data als je horloge gebruikt voor je dagelijkse statistieken.</span></span></h2><div class="cap">Garmin's voorspellingen op basis van huidige conditie.</div>
       <div id="race-preds" style="margin-top:4px;display:flex;flex-direction:column;gap:10px"></div>
     </div>
-    <div class="card c12"><h2><span class="dot cy"></span>Endurance Score<span class="info" tabindex="0">i<span class="tip"><b>Garmin's maatstaf voor uithoudingsvermogen.</b> Meet je vermogen om langdurige inspanning vol te houden — aanvullend op VO&#x2082;max. Stijgende trend over het blok is het doel.</span></span></h2><div class="cap">Uithoudingsvermogen over het trainingsblok — aanvullend op VO&#x2082;max.</div>
-      <div class="chart-h tall"><canvas id="enduranceChart"></canvas></div>
-      <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px"><span class="big" style="color:var(--cyan)" id="m-endurance">—</span><span class="unit">score</span><span id="m-endurance-trend" class="trend-eq" style="margin-left:6px"></span></div>
+    <div class="card c12"><h2><span class="dot cy"></span>Endurance Score<span class="info" tabindex="0">i<span class="tip"><b>Garmin's maatstaf voor uithoudingsvermogen.</b> Meet je vermogen om langdurige inspanning vol te houden — aanvullend op VO&#x2082;max. Drempels: trained 5800 · well_trained 6600 · expert 7300.</span></span></h2><div class="cap">Uithoudingsvermogen over het trainingsblok — aanvullend op VO&#x2082;max.</div>
+      <div id="endurance-display" style="margin-top:12px"></div>
     </div>
 
   </div></div>
@@ -810,24 +809,43 @@ const builders={
     }).join('');
     smEl.innerHTML=hdr+rowHtml+'<div style="margin-top:8px;font-size:10px;color:var(--dim)">Groen = doel gehaald · Geel = gedeeltelijk · Grijs = geen sessie · Doel: kracht 2×, mobiliteit 5× per week</div>';
 
-    // Endurance Score chart
-    const endScores=(DATA.enduranceScore||[]).filter(d=>d.score&&d.date>=planStart);
-    const endEl=document.getElementById('enduranceChart');
-    const endValEl=document.getElementById('m-endurance');
-    const endTrendEl=document.getElementById('m-endurance-trend');
-    if(endScores.length&&endEl){
-      const lastScore=endScores[endScores.length-1]?.score;
-      const firstScore=endScores[0]?.score;
-      if(endValEl)endValEl.textContent=lastScore??'—';
-      if(endTrendEl&&lastScore&&firstScore){
-        const delta=+(lastScore-firstScore).toFixed(1);
-        endTrendEl.textContent=(delta>=0?'▲':'▼')+Math.abs(delta);
-        endTrendEl.className='trend-'+(delta>=0?'up':'dn');
+    // Endurance Score — statische weergave met cijfer + trend + classificatie
+    const endScores=(DATA.enduranceScore||[]);
+    const endDisplayEl=document.getElementById('endurance-display');
+    if(endDisplayEl){
+      if(endScores.length){
+        const last=endScores[endScores.length-1];
+        const first=endScores[0];
+        const score=last.score;
+        const delta=Math.round(score-(first?.score||score));
+        const arrow=delta>0?'▲':delta<0?'▼':'→';
+        const arrowColor=delta>0?'var(--green)':delta<0?'var(--coral)':'var(--muted)';
+        // Classificatie op basis van Garmin drempels
+        const cls=score>=8800?'Elite':score>=8100?'Superior':score>=7300?'Expert':score>=6600?'Well-trained':score>=5800?'Trained':score>=5100?'Intermediate':'Beginner';
+        const nextThresh=score<5100?5100:score<5800?5800:score<6600?6600:score<7300?7300:score<8100?8100:score<8800?8800:null;
+        const toNext=nextThresh?Math.round(nextThresh-score):null;
+        endDisplayEl.innerHTML=
+          '<div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">'
+          +'<span style="font-size:48px;font-weight:700;color:var(--text);font-family:var(--mono)">'+Math.round(score)+'</span>'
+          +'<span style="font-size:13px;color:var(--muted)">score</span>'
+          +'<span style="font-size:22px;color:'+arrowColor+'">'+arrow+'</span>'
+          +'<span style="font-size:13px;color:'+arrowColor+'">'+(delta!==0?(delta>0?'+':'')+delta+' vs blokstart':'stabiel')+'</span>'
+          +'</div>'
+          +'<div style="margin-top:6px;display:flex;gap:16px;flex-wrap:wrap">'
+          +'<span style="font-size:13px;font-weight:600;color:var(--cyan)">'+cls+'</span>'
+          +(toNext?'<span style="font-size:12px;color:var(--dim)">'+toNext+' punten tot '+(cls==='Trained'?'Well-trained':cls==='Well-trained'?'Expert':'volgende level')+'</span>':'')
+          +'<span style="font-size:11px;color:var(--dim)">Laatste meting: '+last.date+'</span>'
+          +'</div>'
+          +'<div style="margin-top:10px;display:flex;gap:6px;align-items:center">'
+          +[{l:'Trained',v:5800},{l:'Well-trained',v:6600},{l:'Expert',v:7300}].map(t=>{
+            const active=score>=t.v;
+            return '<span style="font-size:10px;padding:2px 8px;border-radius:3px;background:'+(active?'var(--cyan)':'var(--surface2)')+';color:'+(active?'#000':'var(--dim)')+'">'+t.l+'</span>';
+          }).join('<span style="color:var(--dim);font-size:10px">›</span>')
+          +'</div>';
+      } else {
+        endDisplayEl.innerHTML='<div style="color:var(--muted);font-size:12px">Geen endurance score data beschikbaar.</div>';
       }
-      new Chart(endEl,{type:'line',data:{labels:endScores.map(d=>d.date.slice(5)),datasets:[
-        {label:'Endurance Score',data:endScores.map(d=>d.score),borderColor:C.cyan,borderWidth:2.5,tension:.4,pointRadius:3,fill:true,backgroundColor:'rgba(69,200,224,.07)'}
-      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'Score: '+c.raw}}},scales:{x:{...G,grid:{display:false}},y:{...G,suggestedMin:30,ticks:{color:C.cyan}}}}});
-    } else if(endValEl){endValEl.textContent='—';}
+    }
 
     // Lactate Threshold display
     const lt2=DATA.lactateThreshold||{};
