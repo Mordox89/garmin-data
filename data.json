@@ -3,28 +3,28 @@
     "phase": "Week 3/18",
     "week": 3,
     "totalWeeks": 18,
-    "daysToRace": 107,
-    "predicted": "3:44:12",
+    "daysToRace": 106,
+    "predicted": "3:42:53",
     "predictedRange": null,
-    "vo2": 49.1,
-    "updated": "2026-06-26",
+    "vo2": 49.2,
+    "updated": "2026-06-27",
     "live": true,
     "unit": "km",
-    "ctl": 784.0,
-    "atl": 838.0,
-    "form": -54.0,
-    "acwr": 1.0,
+    "ctl": 841.0,
+    "atl": 1090.0,
+    "form": -249.0,
+    "acwr": 1.2,
     "trainingStatus": "PRODUCTIVE_3"
   },
   "kpi": {
     "adherence": "—",
-    "ramp": 52.0,
+    "ramp": 125.0,
     "rampNote": "te hoog",
     "rampSt": "warn",
-    "easyHard": "66% easy",
-    "totalVol": 151.8,
-    "volAvg": 50.6,
-    "readiness": 64
+    "easyHard": "62% easy",
+    "totalVol": 174.8,
+    "volAvg": 58.3,
+    "readiness": 58
   },
   "pmc": {
     "dates": [
@@ -53,7 +53,8 @@
       "2026-06-23",
       "2026-06-24",
       "2026-06-25",
-      "2026-06-26"
+      "2026-06-26",
+      "2026-06-27"
     ],
     "ctl": [
       403.0,
@@ -81,7 +82,8 @@
       754.0,
       800.0,
       785.0,
-      784.0
+      793.0,
+      841.0
     ],
     "atl": [
       695.0,
@@ -109,7 +111,8 @@
       871.0,
       1072.0,
       889.0,
-      838.0
+      891.0,
+      1090.0
     ],
     "form": [
       -292.0,
@@ -137,7 +140,8 @@
       -117.0,
       -272.0,
       -104.0,
-      -54.0
+      -98.0,
+      -249.0
     ],
     "acwr": [
       1.7,
@@ -165,7 +169,8 @@
       1.1,
       1.3,
       1.1,
-      1.0
+      1.1,
+      1.2
     ]
   },
   "volume": {
@@ -177,24 +182,24 @@
     "done": [
       52.0,
       58.8,
-      41.0
+      64.0
     ],
     "plan": []
   },
   "zones": [
     {
       "n": "Recovery",
-      "v": 22,
+      "v": 20,
       "c": "#2f7d52"
     },
     {
       "n": "Easy/Aerobic",
-      "v": 44,
+      "v": 42,
       "c": "#34e07d"
     },
     {
       "n": "Long Run/MP",
-      "v": 27,
+      "v": 32,
       "c": "#45c8e0"
     },
     {
@@ -204,31 +209,23 @@
     },
     {
       "n": "VO2max",
-      "v": 2,
+      "v": 1,
       "c": "#ff5e6c"
     }
   ],
   "week7": [
     {
       "d": "Vandaag",
-      "date": "2026-06-26",
+      "date": "2026-06-27",
       "ds": "Training",
       "t": "run",
       "km": null,
       "completed": true
     },
     {
-      "d": "Za",
-      "date": "2026-06-27",
-      "ds": "Long Run 23km",
-      "t": "run",
-      "km": null,
-      "completed": false
-    },
-    {
       "d": "Ma",
       "date": "2026-06-29",
-      "ds": "Aerobic + Strides 13km",
+      "ds": "Lactate threshold 14km",
       "t": "run",
       "km": null,
       "completed": false
@@ -256,6 +253,14 @@
       "t": "run",
       "km": null,
       "completed": false
+    },
+    {
+      "d": "Za",
+      "date": "2026-07-04",
+      "ds": "Long Run 24km",
+      "t": "run",
+      "km": null,
+      "completed": false
     }
   ],
   "ef": [
@@ -271,9 +276,239 @@
     2.608,
     2.456,
     2.527,
-    2.525
+    2.525,
+    2.389
   ],
   "recentActivities": [
+    {
+      "date": "2026-06-27",
+      "name": "Apeldoorn - Long Run 23km",
+      "activity_id": 23393035132,
+      "dist_km": 23.0,
+      "moving_time_s": 7597,
+      "pace": "5:30/km",
+      "avg_hr": 156,
+      "max_hr": 168,
+      "cadence_spm": 165,
+      "load": 288,
+      "balance_left": 51.2,
+      "gct_ms": 269.8,
+      "vert_osc_cm": 9.3,
+      "stride_cm": 109.0,
+      "vert_ratio": 8.37,
+      "step_speed_loss": 5.4,
+      "elev_gain": 27,
+      "weather": null,
+      "splits": [
+        {
+          "km": 1.0,
+          "pace": "5:23/km",
+          "hr": 143.0,
+          "cad": 166,
+          "power": 374.0,
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:19/km",
+          "hr": 152.0,
+          "cad": 169,
+          "power": 384.0,
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:18/km",
+          "hr": 153.0,
+          "cad": 170,
+          "power": 394.0,
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:17/km",
+          "hr": 155.0,
+          "cad": 171,
+          "power": 391.0,
+          "elev_gain": 4.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:13/km",
+          "hr": 156.0,
+          "cad": 171,
+          "power": 385.0,
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:18/km",
+          "hr": 157.0,
+          "cad": 170,
+          "power": 378.0,
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:21/km",
+          "hr": 155.0,
+          "cad": 169,
+          "power": 373.0,
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:22/km",
+          "hr": 158.0,
+          "cad": 169,
+          "power": 374.0,
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:23/km",
+          "hr": 159.0,
+          "cad": 169,
+          "power": 376.0,
+          "elev_gain": 3.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:24/km",
+          "hr": 157.0,
+          "cad": 168,
+          "power": 370.0,
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:29/km",
+          "hr": 156.0,
+          "cad": 168,
+          "power": 379.0,
+          "elev_gain": 3.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:27/km",
+          "hr": 159.0,
+          "cad": 167,
+          "power": 389.0,
+          "elev_gain": 2.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:19/km",
+          "hr": 160.0,
+          "cad": 169,
+          "power": 384.0,
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:26/km",
+          "hr": 157.0,
+          "cad": 167,
+          "power": 382.0,
+          "elev_gain": 4.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:37/km",
+          "hr": 160.0,
+          "cad": 164,
+          "power": 370.0,
+          "elev_gain": 2.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:29/km",
+          "hr": 152.0,
+          "cad": 164,
+          "power": 367.0,
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:25/km",
+          "hr": 155.0,
+          "cad": 165,
+          "power": 376.0,
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:31/km",
+          "hr": 155.0,
+          "cad": 164,
+          "power": 382.0,
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:51/km",
+          "hr": 155.0,
+          "cad": 158,
+          "power": 356.0,
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:20/km",
+          "hr": 160.0,
+          "cad": 167,
+          "power": 386.0,
+          "elev_gain": 1.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "7:15/km",
+          "hr": 148.0,
+          "cad": 140,
+          "power": 267.0,
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:13/km",
+          "hr": 161.0,
+          "cad": 168,
+          "power": 386.0,
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
+        },
+        {
+          "km": 1.0,
+          "pace": "5:44/km",
+          "hr": 162.0,
+          "cad": 158,
+          "power": 349.0,
+          "elev_gain": 0.0,
+          "intensity": "ACTIVE"
+        }
+      ]
+    },
     {
       "date": "2026-06-26",
       "name": "Apeldoorn - Recovery 6km",
@@ -2255,13 +2490,6 @@
   ],
   "bodyBattery": [
     {
-      "date": "2026-06-12",
-      "charged": 43,
-      "drained": 39,
-      "net": 4,
-      "level": null
-    },
-    {
       "date": "2026-06-13",
       "charged": 72,
       "drained": 84,
@@ -2354,27 +2582,20 @@
     },
     {
       "date": "2026-06-26",
-      "charged": 54,
-      "drained": 21,
-      "net": 33,
+      "charged": 57,
+      "drained": 64,
+      "net": -7,
+      "level": null
+    },
+    {
+      "date": "2026-06-27",
+      "charged": 52,
+      "drained": 47,
+      "net": 5,
       "level": null
     }
   ],
   "sleep": [
-    {
-      "date": "2026-06-12",
-      "duration_h": 5.8,
-      "night_h": 5.8,
-      "nap_h": 0.0,
-      "deep_pct": 10.8,
-      "rem_pct": 2.8,
-      "score": 49,
-      "hrv_avg": 13.0,
-      "quality_score": 49,
-      "dur_ok": false,
-      "deep_ok": false,
-      "rem_ok": false
-    },
     {
       "date": "2026-06-13",
       "duration_h": 7.8,
@@ -2545,29 +2766,34 @@
     },
     {
       "date": "2026-06-26",
-      "duration_h": 6.7,
+      "duration_h": 7.2,
       "night_h": 6.7,
-      "nap_h": 0.0,
+      "nap_h": 0.5,
       "deep_pct": 13.2,
       "rem_pct": 24.5,
       "score": 76,
       "hrv_avg": 13.0,
       "quality_score": 76,
-      "dur_ok": false,
+      "dur_ok": true,
       "deep_ok": false,
       "rem_ok": true
+    },
+    {
+      "date": "2026-06-27",
+      "duration_h": 7.9,
+      "night_h": 7.9,
+      "nap_h": 0.0,
+      "deep_pct": 7.6,
+      "rem_pct": 17.1,
+      "score": 80,
+      "hrv_avg": 13.0,
+      "quality_score": 80,
+      "dur_ok": true,
+      "deep_ok": false,
+      "rem_ok": false
     }
   ],
   "hrv": [
-    {
-      "date": "2026-06-12",
-      "hrv5": 64,
-      "hrv_avg": null,
-      "weekly": 44,
-      "status": "LOW",
-      "baseline_low": 59,
-      "baseline_high": 82
-    },
     {
       "date": "2026-06-13",
       "hrv5": 98,
@@ -2684,13 +2910,18 @@
       "status": "BALANCED",
       "baseline_low": 59,
       "baseline_high": 82
+    },
+    {
+      "date": "2026-06-27",
+      "hrv5": 97,
+      "hrv_avg": null,
+      "weekly": 77,
+      "status": "BALANCED",
+      "baseline_low": 59,
+      "baseline_high": 82
     }
   ],
   "rhr": [
-    {
-      "date": "2026-06-12",
-      "rhr": 49
-    },
     {
       "date": "2026-06-13",
       "rhr": 47
@@ -2746,13 +2977,13 @@
     {
       "date": "2026-06-26",
       "rhr": 46
+    },
+    {
+      "date": "2026-06-27",
+      "rhr": 48
     }
   ],
   "stress": [
-    {
-      "date": "2026-06-12",
-      "avg_stress": 33
-    },
     {
       "date": "2026-06-13",
       "avg_stress": 31
@@ -2807,14 +3038,14 @@
     },
     {
       "date": "2026-06-26",
-      "avg_stress": 12
+      "avg_stress": 20
+    },
+    {
+      "date": "2026-06-27",
+      "avg_stress": 19
     }
   ],
   "weight": [
-    {
-      "date": "2026-05-27",
-      "kg": 88.6
-    },
     {
       "date": "2026-05-28",
       "kg": 88.5
@@ -2910,6 +3141,10 @@
     {
       "date": "2026-06-26",
       "kg": 86.5
+    },
+    {
+      "date": "2026-06-27",
+      "kg": 84.8
     }
   ],
   "vo2": [
@@ -2930,32 +3165,32 @@
       "vo2": 48.8
     },
     {
-      "date": "2026-06-26",
-      "vo2": 49.1
+      "date": "2026-06-27",
+      "vo2": 49.2
     }
   ],
   "racePredictions": {
-    "5k": "0:21:58",
+    "5k": "0:21:57",
     "10k": "0:45:53",
-    "hm": "1:39:58",
-    "fm": "3:44:12"
+    "hm": "1:39:55",
+    "fm": "3:42:53"
   },
   "enduranceScore": [
     {
-      "date": "2026-05-30",
-      "score": 6649.0
+      "date": "2026-05-31",
+      "score": 6647.0
     },
     {
-      "date": "2026-06-06",
-      "score": 6624.0
+      "date": "2026-06-07",
+      "score": 6617.0
     },
     {
-      "date": "2026-06-13",
-      "score": 6558.0
+      "date": "2026-06-14",
+      "score": 6554.0
     },
     {
-      "date": "2026-06-20",
-      "score": 6561.0
+      "date": "2026-06-21",
+      "score": 6566.0
     }
   ],
   "lactateThreshold": {
@@ -2964,7 +3199,7 @@
     "is_stale": false
   },
   "trainingReadiness": {
-    "score": 64,
+    "score": 58,
     "level": "MODERATE",
     "feedback": null
   },
@@ -2980,9 +3215,9 @@
       "load": 794.2507019042969
     },
     "3": {
-      "km": 41.01798095703124,
-      "runs": 4,
-      "load": 648.0676727294922
+      "km": 64.02125048828124,
+      "runs": 5,
+      "load": 935.7377166748047
     }
   },
   "longRuns": [
@@ -3006,12 +3241,12 @@
     },
     {
       "week": 3,
-      "date": "2026-06-22",
-      "dist_km": 16.01,
-      "pace": "5:14/km",
-      "avg_hr": 151,
-      "duration_s": 5030,
-      "name": "Apeldoorn - Aerobic 16km"
+      "date": "2026-06-27",
+      "dist_km": 23.0,
+      "pace": "5:30/km",
+      "avg_hr": 156,
+      "duration_s": 7597,
+      "name": "Apeldoorn - Long Run 23km"
     }
   ],
   "ltRuns": [
@@ -3170,8 +3405,19 @@
       ]
     },
     "3": {
-      "strength": [],
+      "strength": [
+        {
+          "date": "2026-06-26",
+          "name": "Strength",
+          "duration_s": 1447
+        }
+      ],
       "mobility": [
+        {
+          "date": "2026-06-26",
+          "name": "Mobiliteit",
+          "duration_s": 843
+        },
         {
           "date": "2026-06-24",
           "name": "Mobiliteit",
@@ -3191,25 +3437,19 @@
     }
   },
   "piriformisRisk": {
-    "score": 23,
+    "score": 20,
     "level": "laag",
     "color": "go",
     "factors": [
-      "beenbalans 52.1% L (2.1% asymmetrie)",
-      "slaap 6.8u/nacht (tekort)"
+      "beenbalans 52.0% L (2.0% asymmetrie)"
     ]
   },
   "sleepDebt": {
-    "debt_hours": 4.5,
-    "avg_hours": 6.9,
+    "debt_hours": 3.4,
+    "avg_hours": 7.0,
     "days": 7,
     "target": 7.5,
     "daily": [
-      {
-        "date": "2026-06-19",
-        "hours": 7.3,
-        "deficit": 0.2
-      },
       {
         "date": "2026-06-20",
         "hours": 6.9,
@@ -3237,22 +3477,27 @@
       },
       {
         "date": "2026-06-26",
-        "hours": 6.7,
-        "deficit": 0.8
+        "hours": 7.2,
+        "deficit": 0.3
+      },
+      {
+        "date": "2026-06-27",
+        "hours": 7.9,
+        "deficit": -0.4
       }
     ]
   },
   "weekSummary": {
     "week": 3,
-    "km": 41.0,
-    "runs": 4,
-    "avg_sleep_h": 6.8,
-    "avg_deep_pct": 10.3,
+    "km": 64.0,
+    "runs": 5,
+    "avg_sleep_h": 7.0,
+    "avg_deep_pct": 9.8,
     "hrv_status": "BALANCED",
-    "strength_count": 0,
-    "mobility_count": 3,
-    "ctl": 784.0,
-    "form": -54.0
+    "strength_count": 1,
+    "mobility_count": 4,
+    "ctl": 841.0,
+    "form": -249.0
   },
   "gear": []
 }
