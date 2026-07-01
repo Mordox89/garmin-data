@@ -2770,8 +2770,8 @@
     {
       "date": "2026-07-01",
       "charged": 54,
-      "drained": 42,
-      "net": 12,
+      "drained": 45,
+      "net": 9,
       "level": null
     }
   ],
@@ -3356,6 +3356,10 @@
     {
       "date": "2026-06-25",
       "score": 6587.0
+    },
+    {
+      "date": "2026-07-01",
+      "score": 6605.0
     }
   ],
   "lactateThreshold": {

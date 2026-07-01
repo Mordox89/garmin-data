@@ -338,6 +338,19 @@ def fetch_endurance_score(client, days=90):
                 date_val = raw.get("endDate") or today().isoformat()
                 if score:
                     result.append({"date": str(date_val)[:10], "score": round(float(score), 1)})
+        # Voeg dagwaarde van vandaag toe als meest actueel punt (single-day call)
+        try:
+            today_raw = client.get_endurance_score(today().isoformat())
+            if isinstance(today_raw, dict):
+                today_score = (today_raw.get("overallScore") or today_raw.get("score")
+                               or today_raw.get("avg") or today_raw.get("max"))
+                if today_score:
+                    today_date = today().isoformat()
+                    # Vervang of voeg toe
+                    result = [r for r in result if r["date"] != today_date]
+                    result.append({"date": today_date, "score": round(float(today_score), 1)})
+        except Exception:
+            pass
     except Exception as e:
         print(f"Endurance score fout: {e}")
     return sorted(result, key=lambda x: x["date"])
