@@ -380,9 +380,10 @@ function populate(){
   const acwrStatus=(DATA.pmc?.acwr||[]).at(-1);
   document.getElementById('m-acwr-badge').innerHTML=acwrStatus?`<span class="acwr-badge ${acwrStatus}">${acwrStatus}</span>`:'';
   // CTL/ATL/form
-  const ctlArr=DATA.pmc?.ctl||[];
-  const atlArr=DATA.pmc?.atl||[];
-  const formArr=DATA.pmc?.form||[];
+  const G_LOAD_SCALE=10; // Garmin load units -> leesbare waarden (÷10)
+  const ctlArr=(DATA.pmc?.ctl||[]).map(v=>v?+(v/G_LOAD_SCALE).toFixed(0):v);
+  const atlArr=(DATA.pmc?.atl||[]).map(v=>v?+(v/G_LOAD_SCALE).toFixed(0):v);
+  const formArr=(DATA.pmc?.form||[]).map(v=>v?+(v/G_LOAD_SCALE).toFixed(0):v);
   document.getElementById('m-ctl').textContent=ctlArr.at(-1)??'—';
   document.getElementById('m-atl').textContent=atlArr.at(-1)??'—';
   document.getElementById('m-form').textContent=formArr.at(-1)??'—';
@@ -407,7 +408,7 @@ function populate(){
     const acwrArrow=acwrNow&&acwrPrev?(acwrNow>acwrPrev?'↑':'↓'):'';
     return {l:'ACWR',v:(acwrNow||'—').toString()+' <span style="font-size:10px;color:var(--muted)">'+acwrArrow+'</span>',s:'opt. zone 0.8–1.3',st:'var(--cyan)',tip:'<b>Acute:Chronic Workload Ratio.</b> 0.8–1.3 = optimaal. Boven 1.5 = verhoogd blessurerisico.'};
   })(),
-    {l:'ATL Ramp',v:(DATA.pmc?.atl?.at(-1)??'—').toString()+' <span class="unit">atl</span>',s:`CTL ${DATA.pmc?.ctl?.at(-1)??'—'} · Form ${DATA.pmc?.form?.at(-1)??'—'}`,st:'var(--amber)',tip:'<b>Acute trainingsbelasting (ATL).</b> Hoge ATL ten opzichte van CTL = vermoeid. Form (CTL−ATL) negatief = beladen maar opbouwend.'},
+    {l:'ATL Ramp',v:(DATA.pmc?.atl?.at(-1)?+(DATA.pmc.atl.at(-1)/G_LOAD_SCALE).toFixed(0):'—').toString()+' <span class="unit">atl</span>',s:`CTL ${DATA.pmc?.ctl?.at(-1)??'—'} · Form ${DATA.pmc?.form?.at(-1)??'—'}`,st:'var(--amber)',tip:'<b>Acute trainingsbelasting (ATL).</b> Hoge ATL ten opzichte van CTL = vermoeid. Form (CTL−ATL) negatief = beladen maar opbouwend.'},
     {l:'Easy / Hard',v:k.easyHard||'—',s:'80/20 doel (Pfitzinger)',st:'var(--go)',tip:'<b>Aandeel easy vs hard training laatste 28d.</b> Pfitzinger-model: ~80% easy bouwt het aerobe fundament.'},
     {l:'Body Battery',v:bb?`<span style="font-size:14px">+${bb.charged||0} / −${bb.drained||0}</span>`:'—',s:bb?`netto ${(bb.charged||0)-(bb.drained||0)} · ${bb.level||'—'}`:'geen data',st:bb&&(bb.charged||0)-(bb.drained||0)>30?'var(--go)':bb&&(bb.charged||0)-(bb.drained||0)>10?'var(--cyan)':'var(--amber)',tip:'<b>Garmin Body Battery.</b> +opgeladen vannacht / −verbruikt vandaag. Netto positief = je hebt meer hersteld dan verbruikt.'},
     {l:'Readiness',v:`<span style="font-size:18px;color:${rdColor}">${rdScore??'—'}</span>`,s:rdLevel,st:rdColor,tip:'<b>Garmin Training Readiness (0–100).</b> Samengesteld uit HRV-status, slaap, Body Battery, recent herstel en stressniveau.'}
@@ -426,7 +427,10 @@ const builders={
     // PMC chart — ATL/CTL/form
     const pmc=DATA.pmc||{};
     const dates=pmc.dates||[];
-    const ctl=pmc.ctl||[];const atl=pmc.atl||[];const form=pmc.form||[];
+    const S=10; // Garmin load units -> leesbare waarden
+    const ctl=(pmc.ctl||[]).map(v=>v!=null?+(v/S).toFixed(1):null);
+    const atl=(pmc.atl||[]).map(v=>v!=null?+(v/S).toFixed(1):null);
+    const form=(pmc.form||[]).map(v=>v!=null?+(v/S).toFixed(1):null);
     const labels=dates.map(d=>d.slice(5));// MM-DD
     if(ctl.length){
       new Chart(pmcChart,{type:'line',data:{labels,datasets:[
